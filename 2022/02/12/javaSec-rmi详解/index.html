@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="javaSec-rmi详解, wa1ki0g,blog,github">
-    <meta name="description" content="javaSec-rmi详解对于rmi这从很久前就接触到了利用，原理也是只简单的了解了一些，一直没有好好的梳理过，最近正好看到了好多相关的资料，顺便写下。前置知识：RPC理解RPC可以从他的名字开始，RPC的全称是Remote Method ">
+    <meta name="description" content="javaSec-rmi详解前置知识：RPC理解RPC可以从他的名字开始，RPC的全称是Remote Method Call，顾名思义就是远程方法调用，RPC呢他不是一个框架也不是一个协议，是一个概念性的东西，只是远程通信的一种方式，区别其他">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -405,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6.1k
+                    6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    24 分
+                    23 分
                 </div>
                 
 
@@ -427,7 +427,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="javaSec-rmi详解"><a href="#javaSec-rmi详解" class="headerlink" title="javaSec-rmi详解"></a>javaSec-rmi详解</h2><p>对于rmi这从很久前就接触到了利用，原理也是只简单的了解了一些，一直没有好好的梳理过，最近正好看到了好多相关的资料，顺便写下。<br><strong>前置知识：RPC</strong><br>理解RPC可以从他的名字开始，RPC的全称是Remote Method Call，顾名思义就是远程方法调用，RPC呢他不是一个框架也不是一个协议，是一个概念性的东西，只是远程通信的一种方式，区别其他远程通信的方式，他是其中的一种，这种概念性的东西，可能从定义说起来很烦，所以我尽量从代码的方式来理解。</p>
+                <h2 id="javaSec-rmi详解"><a href="#javaSec-rmi详解" class="headerlink" title="javaSec-rmi详解"></a>javaSec-rmi详解</h2><p><strong>前置知识：RPC</strong><br>理解RPC可以从他的名字开始，RPC的全称是Remote Method Call，顾名思义就是远程方法调用，RPC呢他不是一个框架也不是一个协议，是一个概念性的东西，只是远程通信的一种方式，区别其他远程通信的方式，他是其中的一种，这种概念性的东西，可能从定义说起来很烦，所以我尽量从代码的方式来理解。</p>
 <p>从单机到分布式-&gt;分布式通信 ：就是我原先只有一台主机，当时并不能实现我的需求，这时候我又加了一台，还不够，我用了个局域网的，还不够，这时候直接通过网络来建立各个主机之间的需求，来通过传递0和1这些二进制来建立联系，来通过tcpip来通信。</p>
 <h2 id="rpc的迭代过程"><a href="#rpc的迭代过程" class="headerlink" title="rpc的迭代过程"></a><strong>rpc的迭代过程</strong></h2><p><strong>demo1.0</strong><br>User实体类：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>Serializable<span class="token punctuation">;</span>
