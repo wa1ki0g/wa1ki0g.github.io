@@ -398,7 +398,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-02-17
+                    2022-02-24
                 </div>
                 
 
@@ -488,18 +488,24 @@ method<span class="token punctuation">.</span><span class="token function">invok
 <h2 id="java反射常用api"><a href="#java反射常用api" class="headerlink" title="java反射常用api"></a>java反射常用api</h2><p>获取反射中的class对象</p>
 <p>在反射中要获取一个类或调用一个类的方法，我们首先要获取到该类的class对象</p>
 <p>在java API中，获取Class类对象有三种方法：</p>
-<h4 id="第一种，使用Class-forName-静态方法。当你知道该类的全路径名时，你可以使用该方法获取Class类对象"><a href="#第一种，使用Class-forName-静态方法。当你知道该类的全路径名时，你可以使用该方法获取Class类对象" class="headerlink" title="第一种，使用Class.forName 静态方法。当你知道该类的全路径名时，你可以使用该方法获取Class类对象"></a>第一种，使用Class.forName 静态方法。当你知道该类的全路径名时，你可以使用该方法获取Class类对象</h4><pre class=" language-java"><code class="language-java">Class <span class="token class-name">clz</span> <span class="token operator">=</span> Class<span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"java.lang.String"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p><strong>第一种，使用Class.forName</strong> 静态方法。当你知道该类的全路径名时，你可以使用该方法获取Class类对象</p>
+<pre class=" language-java"><code class="language-java">Class <span class="token class-name">clz</span> <span class="token operator">=</span> Class<span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"java.lang.String"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<h4 id="第二种，使用类的-class方法，这种方法只适合在编译前就知道操作的Class"><a href="#第二种，使用类的-class方法，这种方法只适合在编译前就知道操作的Class" class="headerlink" title="第二种，使用类的.class方法，这种方法只适合在编译前就知道操作的Class"></a>第二种，使用类的.class方法，这种方法只适合在编译前就知道操作的Class</h4><pre class=" language-plain"><code class="language-plain">Class clz = String.class;
+<p><strong>第二种，使用类的.class方法，这种方法只适合在编译前就知道操作的Class</strong></p>
+<pre class=" language-plain"><code class="language-plain">Class clz = String.class;
 </code></pre>
-<h4 id="第三种，使用类对象的getClass-方法。"><a href="#第三种，使用类对象的getClass-方法。" class="headerlink" title="第三种，使用类对象的getClass()方法。"></a>第三种，使用类对象的getClass()方法。</h4><pre class=" language-java"><code class="language-java">String str <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p><strong>第三种，使用类对象的getClass()方法。</strong></p>
+<pre class=" language-java"><code class="language-java">String str <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 Class <span class="token class-name">clz</span> <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<h3 id="通过以上任意一种方式就可以获取Class对象了，反射调用内部类的时候需要使用-来代替-如Test类有一个叫做Hello的内部类，那么调用的时候就应该将类名写成：Test-Hello。"><a href="#通过以上任意一种方式就可以获取Class对象了，反射调用内部类的时候需要使用-来代替-如Test类有一个叫做Hello的内部类，那么调用的时候就应该将类名写成：Test-Hello。" class="headerlink" title="通过以上任意一种方式就可以获取Class对象了，反射调用内部类的时候需要使用$来代替.,如Test类有一个叫做Hello的内部类，那么调用的时候就应该将类名写成：Test$Hello。"></a>通过以上任意一种方式就可以获取Class对象了，反射调用内部类的时候需要使用<code>$</code>来代替<code>.</code>,如<code>Test</code>类有一个叫做<code>Hello</code>的内部类，那么调用的时候就应该将类名写成：<code>Test$Hello</code>。</h3><h3 id="通过反射创建类对象"><a href="#通过反射创建类对象" class="headerlink" title="通过反射创建类对象"></a>通过反射创建类对象</h3><p>通过反射创建类对象主要有两种方式：通过Class对象的newInstance()方法，通过Constructor对象的newInstance()方法</p>
-<h4 id="第一种，通过Class对象的newInstance-方法"><a href="#第一种，通过Class对象的newInstance-方法" class="headerlink" title="第一种，通过Class对象的newInstance()方法"></a>第一种，通过Class对象的newInstance()方法</h4><pre class=" language-java"><code class="language-java">Class <span class="token class-name">clz</span> <span class="token operator">=</span>Apple<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+<p>通过以上任意一种方式就可以获取Class对象了，反射调用内部类的时候需要使用<code>$</code>来代替<code>.</code>,如<code>Test</code>类有一个叫做<code>Hello</code>的内部类，那么调用的时候就应该将类名写成：<code>Test$Hello</code>。</p>
+<h2 id="通过反射创建类对象"><a href="#通过反射创建类对象" class="headerlink" title="通过反射创建类对象"></a>通过反射创建类对象</h2><p>通过反射创建类对象主要有两种方式：通过Class对象的newInstance()方法，通过Constructor对象的newInstance()方法</p>
+<p><strong>第一种，通过Class对象的newInstance()方法</strong></p>
+<pre class=" language-java"><code class="language-java">Class <span class="token class-name">clz</span> <span class="token operator">=</span>Apple<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
 Apple apple <span class="token operator">=</span> <span class="token punctuation">(</span>Apple<span class="token punctuation">)</span>clz<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<h4 id="第二种，通过Constructor-对象的newInstance-方法"><a href="#第二种，通过Constructor-对象的newInstance-方法" class="headerlink" title="第二种，通过Constructor 对象的newInstance()方法"></a>第二种，通过Constructor 对象的newInstance()方法</h4><pre class=" language-plain"><code class="language-plain">Class clz = Apple.class;
+<p><strong>第二种，通过Constructor 对象的newInstance()方法</strong></p>
+<pre class=" language-plain"><code class="language-plain">Class clz = Apple.class;
 Constructor sonstructor = clz.getConstructor();
 Apple apple =(Apple)constructor.newInstance();
 </code></pre>
@@ -508,7 +514,7 @@ Apple apple =(Apple)constructor.newInstance();
 Constructor constructor <span class="token operator">=</span> clz<span class="token punctuation">.</span><span class="token function">getConstructor</span><span class="token punctuation">(</span>String<span class="token punctuation">,</span><span class="token keyword">class</span><span class="token punctuation">,</span><span class="token keyword">int</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 Apple apple <span class="token operator">=</span> <span class="token punctuation">(</span>Apple<span class="token punctuation">)</span>constructor<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token string">"红富士"</span>，<span class="token number">15</span><span class="token punctuation">)</span>；
 </code></pre>
-<h3 id="通过反射获取类属性，方法，构造器"><a href="#通过反射获取类属性，方法，构造器" class="headerlink" title="通过反射获取类属性，方法，构造器"></a>通过反射获取类属性，方法，构造器</h3><p>我们通过Class对象的getFields()方法可以获取Class类的属性。但无法获取私有属性。</p>
+<h2 id="通过反射获取类属性，方法，构造器"><a href="#通过反射获取类属性，方法，构造器" class="headerlink" title="通过反射获取类属性，方法，构造器"></a>通过反射获取类属性，方法，构造器</h2><p>我们通过Class对象的getFields()方法可以获取Class类的属性。但无法获取私有属性。</p>
 <pre class=" language-java"><code class="language-java">Class <span class="token class-name">clz</span> <span class="token operator">=</span> Apple<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
 Field <span class="token punctuation">[</span><span class="token punctuation">]</span> fields <span class="token operator">=</span> clz<span class="token punctuation">.</span><span class="token function">getFields</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">for</span> <span class="token punctuation">(</span>Field field <span class="token operator">:</span> fields<span class="token punctuation">)</span><span class="token punctuation">{</span>
@@ -551,11 +557,13 @@ InputStream in <span class="token operator">=</span> process<span class="token p
 <span class="token comment" spellcheck="true">//输出命令执行结果</span>
 System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>IOUtiles<span class="token punctuation">.</span><span class="token function">tostring</span><span class="token punctuation">(</span>in<span class="token punctuation">,</span><span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<p>反射调用Runtime实现本地命令执行的流程如下：<br>1.反射获取Runtime类对象(Class.forName(“java.lang,Runtime”))</p>
-<p>2.使用Runtime类的Class对象获取Runtime类的无参构造方法(getDeclareConstructor()),因为Runtime的构造方法是private的我们无法直接调用，所以我们需要通过反射去修改方法的访问权限（constructor.setAccessible(true)）。</p>
-<p>3.获取Runtime类的exec(string)方法（runtimeClass1.getMethod(“exec”,String.class);）。</p>
-<p>4.调用exec(String)方法（runtimeMethod.invoke(runtimeInstance,cmd)）。</p>
-<h4 id="上面的代码每一步都写了非常清晰的注释，接下来我们将进一步深入的了解下每一步具体含义。"><a href="#上面的代码每一步都写了非常清晰的注释，接下来我们将进一步深入的了解下每一步具体含义。" class="headerlink" title="上面的代码每一步都写了非常清晰的注释，接下来我们将进一步深入的了解下每一步具体含义。"></a>上面的代码每一步都写了非常清晰的注释，接下来我们将进一步深入的了解下每一步具体含义。</h4><h4 id="反射创建类实例："><a href="#反射创建类实例：" class="headerlink" title="反射创建类实例："></a>反射创建类实例：</h4><p>在java的任何一个类都必须有一个或者多个构造方法，如果代码中没有创建构造方法那么在类编译的时候会自动创建一个无参数的构造方法</p>
+<p>反射调用Runtime实现本地命令执行的流程如下：</p>
+<p><strong>1.反射获取Runtime类对象(Class.forName(“java.lang,Runtime”))</strong></p>
+<p><strong>2.使用Runtime类的Class对象获取Runtime类的无参构造方法(getDeclareConstructor()),因为Runtime的构造方法是private的我们无法直接调用，所以我们需要通过反射去修改方法的访问权限（constructor.setAccessible(true)）。</strong></p>
+<p><strong>3.获取Runtime类的exec(string)方法（runtimeClass1.getMethod(“exec”,String.class);）。</strong></p>
+<p><strong>4.调用exec(String)方法（runtimeMethod.invoke(runtimeInstance,cmd)）。</strong></p>
+<p> 上面的代码每一步都写了非常清晰的注释，接下来我们将进一步深入的了解下每一步具体含义。</p>
+<h2 id="反射创建类实例"><a href="#反射创建类实例" class="headerlink" title="反射创建类实例"></a>反射创建类实例</h2><p>在java的任何一个类都必须有一个或者多个构造方法，如果代码中没有创建构造方法那么在类编译的时候会自动创建一个无参数的构造方法</p>
 <p>Runtime类构造方法示例代码片段:</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Runtime</span> <span class="token punctuation">{</span>
 <span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span> <span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token comment" spellcheck="true">/** Don't let anyone else instantiate this class */</span>
@@ -568,15 +576,18 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 <p>clazz.getDeclaredConstructors来获取一个Constructor数组</p>
 <p>获取到Constructor以后我们可以通过constructor.newInstance()来创建类实例，同理如果有参数的情况下我们应该传入对应的参数值。</p>
 <p>如：constructor.new.Instance(“admin”,”123456”).当我们没有权限访问构造方法时，我们应该调用constructor.setAccessible(true)来修改访问权限就可以成功得创建出类的实例了。</p>
-<h3 id="反射调用类方法"><a href="#反射调用类方法" class="headerlink" title="反射调用类方法"></a>反射调用类方法</h3><p>Class对象提供了一个获取某个类的所有的成员方法的方法，也可以通过方法名和方法参数类型来获取指定成员方法：</p>
-<h4 id="获取当前类所有的成员方法："><a href="#获取当前类所有的成员方法：" class="headerlink" title="获取当前类所有的成员方法："></a>获取当前类所有的成员方法：</h4><pre class=" language-java"><code class="language-java">Method<span class="token punctuation">[</span><span class="token punctuation">]</span> methods <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">getDeclaredMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<h2 id="反射调用类方法"><a href="#反射调用类方法" class="headerlink" title="反射调用类方法"></a>反射调用类方法</h2><p>Class对象提供了一个获取某个类的所有的成员方法的方法，也可以通过方法名和方法参数类型来获取指定成员方法：</p>
+<p> <strong>获取当前类所有的成员方法</strong></p>
+<pre class=" language-java"><code class="language-java">Method<span class="token punctuation">[</span><span class="token punctuation">]</span> methods <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">getDeclaredMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
-<h4 id="获取当前指定类方法："><a href="#获取当前指定类方法：" class="headerlink" title="获取当前指定类方法："></a>获取当前指定类方法：</h4><pre class=" language-java"><code class="language-java">Method method <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">getDeclaredMethod</span><span class="token punctuation">(</span><span class="token string">"方法名"</span><span class="token punctuation">)</span>；
+<p><strong>获取当前指定类方法</strong></p>
+<pre class=" language-java"><code class="language-java">Method method <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">getDeclaredMethod</span><span class="token punctuation">(</span><span class="token string">"方法名"</span><span class="token punctuation">)</span>；
 Method method <span class="token operator">=</span> clazz<span class="token punctuation">.</span><span class="token function">getDeclaredMethod</span><span class="token punctuation">(</span><span class="token string">"方法名"</span>，参数类型如string<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span>多个参数用<span class="token string">","</span>隔开<span class="token punctuation">;</span><span class="token punctuation">)</span>
 </code></pre>
-<p><code>getMethod</code>和<code>getDeclaredMethod</code>都能够获取到类成员方法，区别在于<code>getMethod</code>只能获取到<code>当前类和父类</code>的所有有权限的方法(如：<code>public</code>)，而<code>getDeclaredMethod</code>能获取到当前类的所有成员方法(不包含父类)。</p>
-<h4 id="反射调用方法"><a href="#反射调用方法" class="headerlink" title="反射调用方法"></a>反射调用方法</h4><p>获取到<code>java.lang.reflect.Method</code>对象以后我们可以通过<code>Method</code>的<code>invoke</code>方法来调用类方法。</p>
-<h4 id="调用类方法代码片段："><a href="#调用类方法代码片段：" class="headerlink" title="调用类方法代码片段："></a>调用类方法代码片段：</h4><pre class=" language-plain"><code class="language-plain">method.invoke(方法实例对象, 方法参数值，多个参数值用","隔开);
+<p><code>getMethod</code>和<code>getDeclaredMethod</code>都能够获取到类成员方法，区别在于<code>getMethod</code>只能获取到<code>当前类和父类</code>的所有有权限的方法(如：<code>public</code>)，而<code>getDeclaredMethod</code>能获取到当前类的所有成员方法(不包含父类)。<br><strong>反射调用方法</strong></p>
+<p>获取到<code>java.lang.reflect.Method</code>对象以后我们可以通过<code>Method</code>的<code>invoke</code>方法来调用类方法。</p>
+<p><strong>调用类方法代码片段</strong></p>
+<pre class=" language-plain"><code class="language-plain">method.invoke(方法实例对象, 方法参数值，多个参数值用","隔开);
 </code></pre>
 <p><code>method.invoke</code>的第一个参数必须是类实例对象，如果调用的是<code>static</code>方法那么第一个参数值可以传<code>null</code>，因为在java中调用静态方法是不需要有类实例的，因为可以直接<code>类名.方法名(参数)</code>的方式调用。<br><code>method.invoke</code>的第二个参数不是必须的，如果当前调用的方法没有参数，那么第二个参数可以不传，如果有参数那么就必须严格的<code>依次传入对应的参数类型</code>。<br>获取反射中的class对象</p>
 <h2 id="反射调用成员变量"><a href="#反射调用成员变量" class="headerlink" title="反射调用成员变量"></a>反射调用成员变量</h2><p>Java反射不但可以获取类所有的成员变量名称，还可以无视权限修饰符实现修改对应的值。</p>
@@ -603,7 +614,7 @@ modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 // 修改成员变量值
 field.set(类实例对象, 修改后的值);
 </code></pre>
-<p>Java反射机制是Java动态性中最为重要的体现，利用反射机制我们可以轻松的实现Java类的动态调用。Java的大部分框架都是采用了反射机制来实现的(如:<code>Spring MVC</code>、<code>ORM框架</code>等)，Java反射在编写漏洞利用代码、代码审计、绕过RASP方法限制等中起到了至关重要的作用。</p>
+<h2 id="反射总结"><a href="#反射总结" class="headerlink" title="反射总结"></a>反射总结</h2><p>Java反射机制是Java动态性中最为重要的体现，利用反射机制我们可以轻松的实现Java类的动态调用。Java的大部分框架都是采用了反射机制来实现的(如:<code>Spring MVC</code>、<code>ORM框架</code>等)，Java反射在编写漏洞利用代码、代码审计、绕过RASP方法限制等中起到了至关重要的作用。</p>
 
                 
             </div>

