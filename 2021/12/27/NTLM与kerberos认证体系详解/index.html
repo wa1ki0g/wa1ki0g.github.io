@@ -409,21 +409,21 @@ S">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-11-02
+                    2022-11-30
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.6k
+                    2.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    10 分
                 </div>
                 
 
@@ -505,11 +505,11 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 <p><img src="https://img-blog.csdnimg.cn/6db417b0200d497d80d128df1cb84d5d.png"></p>
 <p><strong>域认证流程——粗略流程</strong></p>
 <ol>
-<li>client向kerberos服务（就是我们的域控上的一个服务）请求，希望获得访问server的权限。kerberos服务得到了这个消息，首先判断client是否是可信赖的（就是判断是否是此域内的机器），也就是白名单黑名单的说法。这就是AS服务完成的工作，通过在AD中存储黑名单和白名单来区分client。成功后AS返回TGT给客户端。</li>
-<li>client得到TGT后，继续向kerberos服务请求，希望获得访问server的权限。kerberos服务得到了这个消息，这时通过client消息中的TGT，判断出了client拥有这个权限，于是给了client访问服务端的权限ticket</li>
-<li>client得到ticket后，终于可以访问server。这个ticket只是针对这个server，其他server需要向TGS申请</li>
+<li>client向kerberos服务（就是我们的域控上的一个服务）请求，希望获得访问server的权限。kerberos服务得到了这个消息，首先判断client是否是可信赖的（就是判断是否是此域内的机器），也就是白名单黑名单的说法。这就是AS服务完成的工作，通过在AD中存储黑名单和白名单来区分client。成功后AS返回TGT给客户端。(AS_REQ与AS_REP)</li>
+<li>client得到TGT后，继续向kerberos服务请求，希望获得访问server的权限。kerberos服务得到了这个消息，这时通过client消息中的TGT，判断出了client拥有这个权限，于是给了client访问服务端的权限ticket。(TGS_REQ与TGS_REP)</li>
+<li>client得到ticket后，终于可以访问server。这个ticket只是针对这个server，其他server需要向TGS申请。(AP_REQ与AP_REP)</li>
 </ol>
-<p><strong>域认证流程深入剖析—第一步：TGT的获取</strong></p>
+<p><strong>域认证流程深入剖析—第一步：TGT的获取 (AS_REQ与AS_REP)</strong></p>
 <ol>
 <li>首先我们的客户端会向域控上的kdc服务的AS发送我们客户端的一些信息，比如用户名，主机名等。</li>
 <li>下一步我们的kdc服务上的AS就会进行判断这个主机、用户名等是否在我们的域里面，如果存在，那么我们kdc上的AS就会生成一个session key，这个session key是一串随机字符。</li>
@@ -520,7 +520,7 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 <p>我们再来用两张图详细的剖析下上面所说的”客户端发送”与”KDC返回”这样的两个过程：</p>
 <p>发送：<br><img src="https://img-blog.csdnimg.cn/432bebdcb0904e769431d8cdfc3fcc77.png"></p>
 <p>返回：<br><img src="https://img-blog.csdnimg.cn/cee85d15e5034f8d94026566a093574f.png"><br>大家可以看到这里的TGT的有效性是有时间限制的</p>
-<p><strong>域认证流程深入剖析—第二步：获取ticket</strong></p>
+<p><strong>域认证流程深入剖析—第二步：获取ticket (TGS_REQ与TGS_REP)</strong></p>
 <ol>
 <li>我们的客户端接收到了一个密文和一个TGT </li>
 <li>第一个密文是KDC用我们客户端的用户的密码的NTLM hash加密session key产生的，因为这个客户端的用户的密码的NTLM hash不仅在域控上存在，在我们客户端本机也是存在的，所以的客户端就会使用这个客户端的用户的密码的NTLM hash来对密文进行解密，从而得到session key。</li>
@@ -532,13 +532,22 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 </ol>
 <p>流程图：<br><img src="https://img-blog.csdnimg.cn/cfb8c8a0370249bba3bf1eaf693c4cf1.png"><br>ticket的组成：</p>
 <p><img src="https://img-blog.csdnimg.cn/3ecbd05aa9414bdfb69b99a7bcdf2e20.png"></p>
-<p><strong>域认证流程深入剖析—第三步：client通过ticket访问server</strong></p>
+<p><strong>域认证流程深入剖析—第三步：client通过ticket访问server (AP_REQ与AP_REP)</strong></p>
 <ol>
 <li>客户端通过session key解密得到server session key，并使用server session key来加密客户端的信息和时间戳，并连同ticket一同发给服务端</li>
 <li>因为服务端这台机器上是存着自己的用户hash的，所以我们可以使用Server hash解密ticket，得到ticket里的end time，用他来判断得到ticket是否已经过期，还会得到ticket里的server session key，然后会使用这个server session key来解密1步骤的密文，得到客户端的信息和时间戳，然后他会去校验这个客户端信息和ticket里的客户端信息是否相等，还会验证这个时间戳是否大于某个时间。</li>
 </ol>
 <p>简易流程图：</p>
 <p><img src="https://img-blog.csdnimg.cn/7f5e9470c9a94e80ae95c9bb719d0f4d.png"></p>
+<h2 id="PAC"><a href="#PAC" class="headerlink" title="PAC"></a>PAC</h2><p>在黄金/白银票据的构造分析中，说了开启PAC可以防止白银票据的攻击。</p>
+<p><strong>那么PAC是什么呢？</strong></p>
+<p>我们都知道黄金票价的构造原理就是：掌握KRBTGT用户密码之后可以通过签发一张高权限用户的TGT票据，再利用这个TGT向KDC获取域内服务的ticket来实现对域的控制。那么这里的“高权限用户”是通过什么来判断的呢，答案就是PAC。</p>
+<p><strong>PAC在我们域认证中出现的节点是在哪的呢？</strong></p>
+<p>主要是两个节点</p>
+<ol>
+<li>当我们的客户端第一次向KDC去请求TGT的时候，我们返回的tgt票据中就包含了PAC。(AS_REP)  </li>
+<li>就是最后我们的客户端拿着ticket去与服务端通信的时候，如果一切验证顺利，那么最后我们的服务端就会将解密出来的PAC发送给KDC去进行认证，KDC解密PAC。获取Client的sid，以及所在的组，再根据该服务的ACL，判断Client是否有访问服务的权限。防止白银票据其实主要也是这一步。    (AP_REP)   </li>
+</ol>
 <p><strong>总结</strong><br>kerberos认证流程的本质上就是不停交换密钥，然后采用对称加密算法验证时间戳和身份，来完成的一个安全认证</p>
 
                 
