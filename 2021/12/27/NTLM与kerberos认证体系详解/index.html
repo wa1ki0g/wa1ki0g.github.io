@@ -416,7 +416,7 @@ S">
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.9k
+                    3k
                 </div>
                 
 
@@ -487,7 +487,8 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 <li>challenge:NTLM v1的challenge有8位，NTLM v2的challenge有16位</li>
 <li>Net-NTLM hash:NTLM v1的主要加密算法是DES,NTLM v2的主要加密算法是HMAC-MD5</li>
 </ul>
-<h2 id="域认证体系-kerberos认证"><a href="#域认证体系-kerberos认证" class="headerlink" title="域认证体系-kerberos认证"></a>域认证体系-kerberos认证</h2><ul>
+<h2 id="域认证体系-kerberos认证"><a href="#域认证体系-kerberos认证" class="headerlink" title="域认证体系-kerberos认证"></a>域认证体系-kerberos认证</h2><p><strong>（注：下面所有流程图中的ticket代表ST）</strong></p>
+<ul>
 <li>kerbroes是一种网络认证协议，其目标设计是通过密钥系统为客户机/服务器应用程序提供强大的认证服务。该认证过程的实现不依赖于主机操作系统的认证，无需基于主机地址的信任，不要求网络上所有主机的物理安全，并假定网络上传送的数据包，可以被任意的读取修改。在以上情况下，kerberos作为一种可信任的第三方服务，是通过传统的密码技术（如共享密钥），执行认证服务的</li>
 </ul>
 <p><strong>域认证所参与的三个角色</strong></p>
@@ -500,14 +501,14 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 <ul>
 <li>AD(account database)：储存所有client的白名单，只有存在于白名单的client才能顺利申请到TGT</li>
 <li>AS（Authentication Service）:为client生成TGT的服务</li>
-<li>TGS(Ticket Granting Service)：为client生成某个服务的ticket</li>
+<li>TGS(Ticket Granting Service)：为client生成某个服务的ticket。生成ST的地方</li>
 </ul>
 <p><img src="https://img-blog.csdnimg.cn/6db417b0200d497d80d128df1cb84d5d.png"></p>
 <p><strong>域认证流程——粗略流程</strong></p>
 <ol>
 <li>client向kerberos服务（就是我们的域控上的一个服务）请求，希望获得访问server的权限。kerberos服务得到了这个消息，首先判断client是否是可信赖的（就是判断是否是此域内的机器），也就是白名单黑名单的说法。这就是AS服务完成的工作，通过在AD中存储黑名单和白名单来区分client。成功后AS返回TGT给客户端。(AS_REQ与AS_REP)</li>
-<li>client得到TGT后，继续向kerberos服务请求，希望获得访问server的权限。kerberos服务得到了这个消息，这时通过client消息中的TGT，判断出了client拥有这个权限，于是给了client访问服务端的权限ticket。(TGS_REQ与TGS_REP)</li>
-<li>client得到ticket后，终于可以访问server。这个ticket只是针对这个server，其他server需要向TGS申请。(AP_REQ与AP_REP)</li>
+<li>client得到TGT后，继续向kerberos服务请求，希望获得访问server的权限。kerberos服务得到了这个消息，这时通过client消息中的TGT，判断出了client拥有这个权限，于是给了client访问服务端的权限并返回了ST。(TGS_REQ与TGS_REP)</li>
+<li>client得到ST后，终于可以访问server。这个ST只是针对这个server，其他server需要向TGS申请。(AP_REQ与AP_REP)</li>
 </ol>
 <p><strong>域认证流程深入剖析—第一步：TGT的获取 (AS_REQ与AS_REP)</strong></p>
 <ol>
@@ -520,22 +521,22 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 <p>我们再来用两张图详细的剖析下上面所说的”客户端发送”与”KDC返回”这样的两个过程：</p>
 <p>发送：<br><img src="https://img-blog.csdnimg.cn/432bebdcb0904e769431d8cdfc3fcc77.png"></p>
 <p>返回：<br><img src="https://img-blog.csdnimg.cn/cee85d15e5034f8d94026566a093574f.png"><br>大家可以看到这里的TGT的有效性是有时间限制的</p>
-<p><strong>域认证流程深入剖析—第二步：获取ticket (TGS_REQ与TGS_REP)</strong></p>
+<p><strong>域认证流程深入剖析—第二步：获取ST (TGS_REQ与TGS_REP)</strong></p>
 <ol>
 <li>我们的客户端接收到了一个密文和一个TGT </li>
 <li>第一个密文是KDC用我们客户端的用户的密码的NTLM hash加密session key产生的，因为这个客户端的用户的密码的NTLM hash不仅在域控上存在，在我们客户端本机也是存在的，所以的客户端就会使用这个客户端的用户的密码的NTLM hash来对密文进行解密，从而得到session key。</li>
 <li>下一步我们的客户端就会向KDC上的TGS服务发送TGT，以及用session key加密的当前客户端的一些信息和时间戳，然后还有一些客户端的信息和要访问的服务端的信息这三块内容</li>
 <li>当我们客户端向KDC发送以后，KDC的TGS服务就会开始进行认证，它首先会使用KDC服务对应的用户的NTLM hash去解密TGT得到session key，再通过session key去解密客户端包装加密的信息，得到客户端的一些信息和时间戳，然后会比较这个时间戳和当前的时间戳是不是间隔的太久了，如果间隔超过一定时间则需要他重新从头开始验证，然后他还会通过接收到的这个客户端的信息和服务端的信息来判断当前客户端是否有权限去访问这个服务端</li>
 <li>当KDC上的TGS认证通过以后呢，他又会随机生成一串字符，叫做server session key，这个server session key其实就是用于客户端和服务端进行通信时的密钥。然后TGS会使用session key来加密这个server session key并将这个密文返回给客户端。</li>
-<li>TGS还会提取客户端的所在的域的域名，客户端的用户信息，server session key,到期时间等，来做成ticket</li>
-<li>此时TGS还会提取接收到的要访问的服务端的一些信息，并使用服务器端对应的计算机名对应的NTLM hash来加密ticket，并将这个密文也返回给客户端</li>
+<li>TGS还会提取客户端的所在的域的域名，客户端的用户信息，server session key,到期时间等，来做成ST</li>
+<li>此时TGS还会提取接收到的要访问的服务端的一些信息，并使用服务器端对应的计算机名对应的NTLM hash来加密ST，并将这个密文也返回给客户端</li>
 </ol>
-<p>流程图：<br><img src="https://img-blog.csdnimg.cn/cfb8c8a0370249bba3bf1eaf693c4cf1.png"><br>ticket的组成：</p>
+<p>流程图：<br><img src="https://img-blog.csdnimg.cn/cfb8c8a0370249bba3bf1eaf693c4cf1.png"><br>ST的组成：</p>
 <p><img src="https://img-blog.csdnimg.cn/3ecbd05aa9414bdfb69b99a7bcdf2e20.png"></p>
-<p><strong>域认证流程深入剖析—第三步：client通过ticket访问server (AP_REQ与AP_REP)</strong></p>
+<p><strong>域认证流程深入剖析—第三步：client通过ST访问server (AP_REQ与AP_REP)</strong></p>
 <ol>
-<li>客户端通过session key解密得到server session key，并使用server session key来加密客户端的信息和时间戳，并连同ticket一同发给服务端</li>
-<li>因为服务端这台机器上是存着自己的用户hash的，所以我们可以使用Server hash解密ticket，得到ticket里的end time，用他来判断得到ticket是否已经过期，还会得到ticket里的server session key，然后会使用这个server session key来解密1步骤的密文，得到客户端的信息和时间戳，然后他会去校验这个客户端信息和ticket里的客户端信息是否相等，还会验证这个时间戳是否大于某个时间。</li>
+<li>客户端通过session key解密得到server session key，并使用server session key来加密客户端的信息和时间戳，并连同ST一同发给服务端</li>
+<li>因为服务端这台机器上是存着自己的用户hash的，所以我们可以使用Server hash解密得到ST，并得到ST里的end time，用他来判断得到ST是否已经过期，还会得到ST里的server session key，然后会使用这个server session key来解密1步骤的密文，得到客户端的信息和时间戳，然后他会去校验这个客户端信息和ticket里的客户端信息是否相等，还会验证这个时间戳是否大于某个时间。</li>
 </ol>
 <p>简易流程图：</p>
 <p><img src="https://img-blog.csdnimg.cn/7f5e9470c9a94e80ae95c9bb719d0f4d.png"></p>
@@ -545,8 +546,8 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 <p><strong>PAC在我们域认证中出现的节点是在哪的呢？</strong></p>
 <p>主要是两个节点</p>
 <ol>
-<li>当我们的客户端第一次向KDC去请求TGT的时候，我们返回的tgt票据中就包含了PAC。(AS_REP)  </li>
-<li>就是最后我们的客户端拿着ticket去与服务端通信的时候，如果一切验证顺利，那么最后我们的服务端就会将解密出来的PAC发送给KDC去进行认证，KDC解密PAC。获取Client的sid，以及所在的组，再根据该服务的ACL，判断Client是否有访问服务的权限。防止白银票据其实主要也是这一步。    (AP_REP)   </li>
+<li>当我们的客户端第一次向KDC去请求TGT的时候，我们返回的TGT票据中就包含了PAC。(AS_REP)  </li>
+<li>就是最后我们的客户端拿着ST去与服务端通信的时候，如果一切验证顺利，那么最后我们的服务端就会将解密出来的PAC发送给KDC去进行认证，KDC解密PAC。获取Client的sid，以及所在的组，再根据该服务的ACL，判断Client是否有访问服务的权限。防止白银票据其实主要也是这一步。    (AP_REP)   </li>
 </ol>
 <p><strong>总结</strong><br>kerberos认证流程的本质上就是不停交换密钥，然后采用对称加密算法验证时间戳和身份，来完成的一个安全认证</p>
 
