@@ -4,9 +4,10 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="zerologon漏洞分析, wa1ki0g,blog,github">
-    <meta name="description" content="zerologon漏洞分析windows上比较重量级别的一个漏洞。通过该漏洞，攻击者只需能够访问域控的445端口，在无需任何凭据的情况下能拿到域管的权限。
-该漏洞的产生来源于Netlogon协议认证的加密模块存在缺陷（微软在进行AES加密运">
+    <meta name="keywords" content="MS14-068 漏洞分析—不安全的PAC, wa1ki0g,blog,github">
+    <meta name="description" content="前言这是一个危害较高的漏洞：只需要一个域内的普通用户的账户密码，便可拿到域控的权限
+建议看本文章前，先把之前写的NTLM与kerberos认证体系详解这篇文章看完。
+漏洞原因简述利用伪造的高权限的PAC来获取一个带有高权限PAC的TGT。(">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -18,7 +19,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>zerologon漏洞分析 | wa1ki0g‘s blog</title>
+    <title>MS14-068 漏洞分析—不安全的PAC | wa1ki0g‘s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -259,12 +260,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">zerologon漏洞分析</h1>
+                    <h1 class="description center-align post-title">MS14-068 漏洞分析—不安全的PAC</h1>
                 </div>
             </div>
         </div>
@@ -401,21 +402,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-01-19
+                    2021-12-31
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-11-02
+                    2022-12-01
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    687
+                    773
                 </div>
                 
 
@@ -437,32 +438,32 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="zerologon漏洞分析"><a href="#zerologon漏洞分析" class="headerlink" title="zerologon漏洞分析"></a>zerologon漏洞分析</h2><p>windows上比较重量级别的一个漏洞。通过该漏洞，攻击者只需能够访问域控的445端口，在无需任何凭据的情况下能拿到域管的权限。</p>
-<p>该漏洞的产生来源于Netlogon协议认证的加密模块存在缺陷（微软在进行AES加密运算过程中，使用了AES-CFB8模式并且错误的将IV设置为全零，这使得攻击者在明文、IV等要素可控的情况下，存在较高概率使得产生的密文为全零。），导致攻击者可以在没有凭证的情况情况下通过认证。</p>
-<p>该漏洞的最稳定利用是调用netlogon中RPC函数NetrServerPasswordSet2来重置域控机器的机器用户的密码，从而以域控的身份进行Dcsync获取域管权限。从而接管整个域</p>
-<p><strong>DCSync：</strong></p>
-<p>在DCSync技术没有出现之前，我们想要dump服务器的hash，一般都要先入侵到目标服务器上，然后使用例如mimikizi的工具，对hash来dump,DCSync的最大特点，在于不用登陆域服务器，即可远程通过域数据同步复制的方式获得想要的用户口令信息。DCSync 就是通过 Directory Replication Service（DRS） 服务的 GetNCChanges 接口向域控发起数据同步请求。</p>
-<p><strong>DCSync利用条件：</strong></p>
-<p>获得以下任一用户的权限：<br>· Administrators组内的用户。<br>· Domain Admins组内的用户。<br>· Enterprise Admins组内的用户。<br>· 域控制器的计算机帐户（机器账户）</p>
-<p><strong>漏洞利用：</strong></p>
-<p>第一个参数为目标机器名，第二个为ip</p>
-<pre class=" language-javascript"><code class="language-javascript">工具地址： https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>dirkjanm<span class="token operator">/</span>CVE<span class="token number">-2020</span><span class="token operator">-</span><span class="token number">1472</span>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>这是一个危害较高的漏洞：只需要一个域内的普通用户的账户密码，便可拿到域控的权限</strong></p>
+<p><strong>建议看本文章前，先把之前写的</strong><a target="_blank" rel="noopener" href="https://wa1ki0g.github.io/2021/12/27/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/">NTLM与kerberos认证体系详解</a><strong>这篇文章看完。</strong></p>
+<h2 id="漏洞原因简述"><a href="#漏洞原因简述" class="headerlink" title="漏洞原因简述"></a>漏洞原因简述</h2><p><strong>利用伪造的高权限的PAC来获取一个带有高权限PAC的TGT。<br>(关于pac是什么可以看完上面的那个文章)</strong></p>
+<blockquote>
+<p> 在我们的AS_REQ 请求中如果include-pac被置为 true，那么我们的 AS 会在返回的 TGT 中加入 PAC信息，如果我们在 AS_REQ 数据包中，将include-pac被置为 false，那么 AS_REP 返回的 TGT 中就不会包含 PAC<br>信息。在TGT中没有PAC信息后，我们就可以使用域用户去伪造”恶意”的PAC放入TGS_REQ中，KDC解密PAC后会再次加密到一个新的TGT中并返回给域用户(注意这里KDC返回的是一个TGT并不是一个ticket)，此时的TGT中已经携带了“恶意”PAC，也就达到漏洞利用的目的。</p>
+</blockquote>
+<h2 id="详细原因"><a href="#详细原因" class="headerlink" title="详细原因"></a>详细原因</h2><ol>
+<li>KDC机构对PAC进行验证时，对于PAC尾部的签名算法，理上规定必须是带有Key的签名算法才可以，但实际上却允许任意签名算法，所以只要我们客户端去随便指定一个方便验证通过的签名算法，那么KDC服务器就会使用我们指定的算法来进行签名验证。比如说我们可以规定使用md5算法，将 md5(内容) 来作为签名，这样当KDC接收以后，发现我们在数据包中规定了使用md5算法，那么KDC就会将我们的内容进行md5后与我们的签名进行比对。如此一来我们可以对内容进行伪装。‘</li>
+<li>PAC没有被放在TGT中，而是放在了TGS_REQ数据包的其它地方。但KDC还是能够正确解析出放在其它地方的PAC信息。KDC会使用subkey，将PAC信息解密并利用我们客户端设定的签名算法验证签名</li>
+<li>KDC 验证 (缺少 PAC 的 TGT) 与(不在 TGT 中的 PAC) 这两个成功后，那么会去把 PAC 中的 User SID、Group SID 取出来，重新使用进行签名，签名算法和密钥与设置 inclue-pac 标志位为 TRUE 时一模一样。将新产生的 PAC 加入到解密后的 TGT 中，再重新加密制作全新的 TGT 发送给 Client。(注意这里KDC返回的是一个TGT并不是一个ST)</li>
+</ol>
+<p>通过以上流程我们成功获得了一个高权限的TGT。</p>
+<h2 id="漏洞演示"><a href="#漏洞演示" class="headerlink" title="漏洞演示"></a>漏洞演示</h2><p>攻击机：mac</p>
+<p>域控：win2008 172.16.84.35</p>
+<p>域内普通用户：test/1qaz@WSX</p>
+<p>攻击工具： goldenPac<br>(这个工具最方便，有py与exe两种。是 ms14-068 与 psexec 的结合，可以直接获得一个shell回来)</p>
+<pre class=" language-vbnet"><code class="language-vbnet"># goldenPac.py
+python3 goldenPac.py walking.com/test:1qaz@WSX@DC.walking.com -dc-ip 172.16.84.35 -target-ip 172.16.84.35 -debug
+
+# goldenPac.exe
+goldenPac.exe walking.com/test:1qaz@WSX@DC.walking.com
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/aa3889a9cf464f13ad4da1151419f120.png"></p>
-<p>上一步会把域控DC机器的机器用户的密码置为空，即hash为：<br>31d6cfe0d16ae931b73c59d7e0c089c0</p>
-<p>接下来使用空密码就可以进行Dcsync(这里不可以直接登录的，因为机器用户是不可以登录的。但是域控的机器用户有Dcsync特权，我们就可以利用该特权来利用Dcsync进行hash读取，然后用读取的hash进行登录或者横向攻击)</p>
-<p>下面的工具原理是模仿一个域控制器，从真实的域控制器中请求数据，例如用户的哈希。</p>
-<p>利用机器用户及空密码获取域管administrator用户的hash：</p>
-<pre class=" language-javascript"><code class="language-javascript">proxychains4 secretsdump<span class="token punctuation">.</span>py <span class="token operator">-</span>no<span class="token operator">-</span>pass de1ay<span class="token punctuation">.</span>com<span class="token operator">/</span><span class="token string">"DC$"</span>@<span class="token number">10.10</span><span class="token punctuation">.</span><span class="token number">10.10</span> <span class="token operator">-</span>history <span class="token operator">-</span>just<span class="token operator">-</span>dc<span class="token operator">-</span>user administrator
-</code></pre>
-<pre class=" language-javascript"><code class="language-javascript">工具地址：https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>SecureAuthCorp<span class="token operator">/</span>impacket
-</code></pre>
-<p><img src="https://img-blog.csdnimg.cn/e05d574e52394c00b92acae8f47138de.png"></p>
-<p>利用得到的域控用户administrator的账户密码，进行横向登录拿下域控：<br><img src="https://img-blog.csdnimg.cn/a2a9982cc4754895974588bb148a6219.png"></p>
-<p>拿下域控以后，我们要对我们重置的密码进行恢复，要不然会影响系统业务，这里可以用：</p>
-<pre class=" language-javascript"><code class="language-javascript"> powershell Reset<span class="token operator">-</span>ComputerMachinePassword
-</code></pre>
-<p>这是微软官方给的一种解决方案。</p>
+<p>运行脚本：</p>
+<p><img src="https://img-blog.csdnimg.cn/8889d074e5e048fd9d9a374095741284.png"></p>
+<p>成功获得域控的system权限shell：</p>
+<p><img src="https://img-blog.csdnimg.cn/767240df72ea499799b15dc3e6c91f73.png"></p>
 
                 
             </div>
@@ -489,7 +490,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2022/01/19/zerologon%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">http://example.com/2022/01/19/zerologon%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</a>
+                    <a href="http://example.com/2021/12/31/MS14-068-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E2%80%94%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84PAC/">http://example.com/2021/12/31/MS14-068-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E2%80%94%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84PAC/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -700,13 +701,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/01/23/Thinkphp%202.x%E3%80%813.0-3.1%E7%89%88%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
+                <a href="/2022/01/19/zerologon%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Thinkphp 2.x、3.0-3.1版代码执行漏洞分析">
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="zerologon漏洞分析">
                         
-                        <span class="card-title">Thinkphp 2.x、3.0-3.1版代码执行漏洞分析</span>
+                        <span class="card-title">zerologon漏洞分析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -717,12 +718,16 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-01-23
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-01-19
                         </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            wa1ki0g
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" class="post-category">
+                                    内网安全
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -737,13 +742,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/12/31/MS14-068-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E2%80%94%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84PAC/">
+                <a href="/2021/12/30/%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE%E4%B8%8E%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E6%9E%84%E9%80%A0%E5%88%86%E6%9E%90/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="MS14-068 漏洞分析—不安全的PAC">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="白银票据与黄金票据构造分析">
                         
-                        <span class="card-title">MS14-068 漏洞分析—不安全的PAC</span>
+                        <span class="card-title">白银票据与黄金票据构造分析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -754,7 +759,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-31
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-30
                             </span>
                         <span class="publish-author">
                             
