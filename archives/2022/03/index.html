@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="归档: 2022/8, wa1ki0g,blog,github">
+    <meta name="keywords" content="归档: 2022/3, wa1ki0g,blog,github">
     <meta name="description" content="天行健，君子以自强不息！">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -17,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>归档: 2022/8 | wa1ki0g‘s blog</title>
+    <title>归档: 2022/3 | wa1ki0g‘s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -406,44 +406,46 @@
             
             
             <div class="cd-timeline-img month" data-aos="zoom-in-up">
-                <a href="/archives/2022/08">08</a>
+                <a href="/archives/2022/03">03</a>
             </div>
             
 
             
             <div class="cd-timeline-img day" data-aos="zoom-in-up">
-                <span>31</span>
+                <span>15</span>
             </div>
             <article class="cd-timeline-content" data-aos="fade-up">
                 <div class="article col s12 m6">
                     <div class="card">
-                        <a href="/2022/08/31/SqlServer%E5%B8%B8%E8%A7%81%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95/">
+                        <a href="/2022/03/15/shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E4%B8%8E%E6%97%A0%E4%BE%9D%E8%B5%96CB%E9%93%BE%E5%88%86%E6%9E%90/">
                             <div class="card-image">
                                 
                                 
-                                <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="SqlServer常见攻击手法">
+                                <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="shiro反序列化漏洞与无依赖CB链分析">
                                 
-                                <span class="card-title">SqlServer常见攻击手法</span>
+                                <span class="card-title">shiro反序列化漏洞与无依赖CB链分析</span>
                             </div>
                         </a>
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
-                                    一些基础：Mssql是什么：
-mssql的英文全称是Microsoft SQL Server，一般简称MS-SQL或SQL Server；它是指微软的SQLServer数据库服务器，是一个关系型数据库管理系统。
-mssql的用户权限Mssq
+                                    环境搭建git clone https://github.com/apache/shiro
+cd shiro
+git checkout shiro-root-1.2.4
+
+将 shiro/samples/web/pom.xml 中的jstl
                                 
                             </div>
                             <div class="publish-info">
                                 <span class="publish-date">
-                                    <i class="far fa-clock fa-fw icon-date"></i>2022-08-31
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
                                 </span>
                                 <span class="publish-author">
                                     
                                     <i class="fas fa-bookmark fa-fw icon-category"></i>
                                     
-                                    <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E5%85%A8/" class="post-category">
-                                    数据库安全
+                                    <a href="/categories/Java%E5%AE%89%E5%85%A8/" class="post-category">
+                                    Java安全
                                     </a>
                                     
                                     
@@ -467,36 +469,431 @@ mssql的用户权限Mssq
 
             
             <div class="cd-timeline-img day" data-aos="zoom-in-up">
-                <span>06</span>
+                <span>15</span>
             </div>
             <article class="cd-timeline-content" data-aos="fade-up">
                 <div class="article col s12 m6">
                     <div class="card">
-                        <a href="/2022/08/06/%E5%9F%9F%E6%B8%97%E9%80%8F%E2%80%94%E2%80%94%E7%BB%95%E8%BF%87LSA%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6%E6%80%BB%E7%BB%93/">
+                        <a href="/2022/03/15/fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E5%88%86%E6%9E%90%E4%B8%8Ebypass/">
                             <div class="card-image">
                                 
                                 
-                                <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="域渗透——绕过LSA保护机制总结">
+                                <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="fastjson反序列化链分析与bypass">
                                 
-                                <span class="card-title">域渗透——绕过LSA保护机制总结</span>
+                                <span class="card-title">fastjson反序列化链分析与bypass</span>
                             </div>
                         </a>
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
-                                    lsass最简单的理解：lsass.exe是系统进程，用以当地安全验证网络服务器，她为winlogon服务的用户认证转化成一个进程。假如身份认证取得成功，Lsass将转化成用户的浏览动态口令，用以启动原始机壳程序。该用户启动的别的进程将承继
+                                    走进fastjson我们先通过官方文档来了解一下fastjson是一个什么东西？
+
+fastjson是阿里巴巴的开源JSON解析库，它可以解析JSON格式的字符串，支持将Java Bean序列化为JSON字符串，也可以从JSON字符串反序列
                                 
                             </div>
                             <div class="publish-info">
                                 <span class="publish-date">
-                                    <i class="far fa-clock fa-fw icon-date"></i>2022-08-06
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
                                 </span>
                                 <span class="publish-author">
                                     
                                     <i class="fas fa-bookmark fa-fw icon-category"></i>
                                     
-                                    <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" class="post-category">
-                                    内网安全
+                                    <a href="/categories/Java%E5%AE%89%E5%85%A8/" class="post-category">
+                                    Java安全
+                                    </a>
+                                    
+                                    
+                                </span>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </article>
+        </div>
+        
+        <div class="cd-timeline-block">
+
+            
+            
+
+            
+            
+
+            
+            <div class="cd-timeline-img day" data-aos="zoom-in-up">
+                <span>15</span>
+            </div>
+            <article class="cd-timeline-content" data-aos="fade-up">
+                <div class="article col s12 m6">
+                    <div class="card">
+                        <a href="/2022/03/15/%E6%A2%A6%E6%83%B3cms1-4%E5%AE%A1%E8%AE%A1/">
+                            <div class="card-image">
+                                
+                                
+                                <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="梦想cms1.4审计">
+                                
+                                <span class="card-title">梦想cms1.4审计</span>
+                            </div>
+                        </a>
+                        <div class="card-content article-content">
+                            <div class="summary block-with-text">
+                                
+                                    梦想cms1.4审计一个简单的mvc，直接去看配置文件和控制器,配置文件中无waf：先来后台的，后台的都比较容易
+后台sql注入1BookAction.class.php文件：有传参，跟进下getReply方法：
+进行了字符串拼接操作，并且
+                                
+                            </div>
+                            <div class="publish-info">
+                                <span class="publish-date">
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                                </span>
+                                <span class="publish-author">
+                                    
+                                    <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                    
+                                    <a href="/categories/php%E5%AE%89%E5%85%A8/" class="post-category">
+                                    php安全
+                                    </a>
+                                    
+                                    
+                                </span>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </article>
+        </div>
+        
+        <div class="cd-timeline-block">
+
+            
+            
+
+            
+            
+
+            
+            <div class="cd-timeline-img day" data-aos="zoom-in-up">
+                <span>15</span>
+            </div>
+            <article class="cd-timeline-content" data-aos="fade-up">
+                <div class="article col s12 m6">
+                    <div class="card">
+                        <a href="/2022/03/15/Thinkphp3%E5%85%A8%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
+                            <div class="card-image">
+                                
+                                
+                                <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Thinkphp3全漏洞分析">
+                                
+                                <span class="card-title">Thinkphp3全漏洞分析</span>
+                            </div>
+                        </a>
+                        <div class="card-content article-content">
+                            <div class="summary block-with-text">
+                                
+                                    这里给大家推荐两个phpdebug的docker容器，也是我一直在用的，不用配置很复杂的环境，即开即用：
+框架介绍基本信息ThinkPHP是一个快速、兼容而且简单的轻量级国产PHP开发框架，遵循Apache 2开源协议发布，使用面向对象的开
+                                
+                            </div>
+                            <div class="publish-info">
+                                <span class="publish-date">
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                                </span>
+                                <span class="publish-author">
+                                    
+                                    <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                    
+                                    <a href="/categories/php%E5%AE%89%E5%85%A8/" class="post-category">
+                                    php安全
+                                    </a>
+                                    
+                                    
+                                </span>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </article>
+        </div>
+        
+        <div class="cd-timeline-block">
+
+            
+            
+
+            
+            
+
+            
+            <div class="cd-timeline-img day" data-aos="zoom-in-up">
+                <span>15</span>
+            </div>
+            <article class="cd-timeline-content" data-aos="fade-up">
+                <div class="article col s12 m6">
+                    <div class="card">
+                        <a href="/2022/03/15/BlueCMS-v1-6/">
+                            <div class="card-image">
+                                
+                                
+                                <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="BlueCMS v1.6">
+                                
+                                <span class="card-title">BlueCMS v1.6</span>
+                            </div>
+                        </a>
+                        <div class="card-content article-content">
+                            <div class="summary block-with-text">
+                                
+                                    BlueCMS v1.6审计大致看了下几乎都包含了common.inc.phpok，看一下这个全局配置文件:
+看下deep_addslashes函数就是简单重下了下addslashe函数，这里先看下Seay的自动审计结果，先不考虑利用有单双
+                                
+                            </div>
+                            <div class="publish-info">
+                                <span class="publish-date">
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                                </span>
+                                <span class="publish-author">
+                                    
+                                    <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                    
+                                    <a href="/categories/php%E5%AE%89%E5%85%A8/" class="post-category">
+                                    php安全
+                                    </a>
+                                    
+                                    
+                                </span>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </article>
+        </div>
+        
+        <div class="cd-timeline-block">
+
+            
+            
+
+            
+            
+
+            
+            <div class="cd-timeline-img day" data-aos="zoom-in-up">
+                <span>15</span>
+            </div>
+            <article class="cd-timeline-content" data-aos="fade-up">
+                <div class="article col s12 m6">
+                    <div class="card">
+                        <a href="/2022/03/15/%E5%98%9F%E5%98%9F%E7%89%9Bapp%E7%AE%97%E6%B3%95hook/">
+                            <div class="card-image">
+                                
+                                
+                                <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="嘟嘟牛app算法hook">
+                                
+                                <span class="card-title">嘟嘟牛app算法hook</span>
+                            </div>
+                        </a>
+                        <div class="card-content article-content">
+                            <div class="summary block-with-text">
+                                
+                                    嘟嘟牛app算法hookadb install 安装完后，打开登录界面
+
+手机挂好sock代理，抓到加密后的包：
+
+搜索一下关键字Encrypt，重点看下 com.dodonew下的：
+
+最后都hook一遍发现是在 com.dodonew.
+                                
+                            </div>
+                            <div class="publish-info">
+                                <span class="publish-date">
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                                </span>
+                                <span class="publish-author">
+                                    
+                                    <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                    
+                                    <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
+                                    app安全
+                                    </a>
+                                    
+                                    
+                                </span>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </article>
+        </div>
+        
+        <div class="cd-timeline-block">
+
+            
+            
+
+            
+            
+
+            
+            <div class="cd-timeline-img day" data-aos="zoom-in-up">
+                <span>15</span>
+            </div>
+            <article class="cd-timeline-content" data-aos="fade-up">
+                <div class="article col s12 m6">
+                    <div class="card">
+                        <a href="/2022/03/15/%E5%88%A9%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0%E4%B8%8E%E5%A0%86%E6%A0%88%E5%BF%AB%E9%80%9F%E5%AE%9A%E4%BD%8Dapp%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81/">
+                            <div class="card-image">
+                                
+                                
+                                <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="利用系统函数与堆栈快速定位app关键代码">
+                                
+                                <span class="card-title">利用系统函数与堆栈快速定位app关键代码</span>
+                            </div>
+                        </a>
+                        <div class="card-content article-content">
+                            <div class="summary block-with-text">
+                                
+                                    string.trim这个还是比较关键的，没准可以从这里得到加密方式，或者挖到sql注入，文件上传等漏洞。进一步利用可以打印堆栈来用
+Java.perform(function(){
+
+    function showStack(){
+
+
+                                
+                            </div>
+                            <div class="publish-info">
+                                <span class="publish-date">
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                                </span>
+                                <span class="publish-author">
+                                    
+                                    <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                    
+                                    <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
+                                    app安全
+                                    </a>
+                                    
+                                    
+                                </span>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </article>
+        </div>
+        
+        <div class="cd-timeline-block">
+
+            
+            
+
+            
+            
+
+            
+            <div class="cd-timeline-img day" data-aos="zoom-in-up">
+                <span>15</span>
+            </div>
+            <article class="cd-timeline-content" data-aos="fade-up">
+                <div class="article col s12 m6">
+                    <div class="card">
+                        <a href="/2022/03/15/%E4%B8%80%E4%B8%AA%E9%80%9A%E6%9D%80%E7%9A%84Hook%E8%84%9A%E6%9C%AC%E4%B8%8E%E4%BE%8B%E5%AD%90/">
+                            <div class="card-image">
+                                
+                                
+                                <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="一个通杀的Hook脚本与例子">
+                                
+                                <span class="card-title">一个通杀的Hook脚本与例子</span>
+                            </div>
+                        </a>
+                        <div class="card-content article-content">
+                            <div class="summary block-with-text">
+                                
+                                    一个通杀md5，sha，mac，des，3des，aes，rsa，数字签名 算法的hook脚本。
+原理呢其实就是hook监控了一些加密库会调用到的底层函数。
+先贴代码：
+
+Java.perform(function () {
+
+    fu
+                                
+                            </div>
+                            <div class="publish-info">
+                                <span class="publish-date">
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                                </span>
+                                <span class="publish-author">
+                                    
+                                    <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                    
+                                    <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
+                                    app安全
+                                    </a>
+                                    
+                                    
+                                </span>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </article>
+        </div>
+        
+        <div class="cd-timeline-block">
+
+            
+            
+
+            
+            
+
+            
+            <div class="cd-timeline-img day" data-aos="zoom-in-up">
+                <span>15</span>
+            </div>
+            <article class="cd-timeline-content" data-aos="fade-up">
+                <div class="article col s12 m6">
+                    <div class="card">
+                        <a href="/2022/03/15/app%E4%B8%AD%E7%9A%84%E5%AF%86%E7%A0%81%E5%AD%A6/">
+                            <div class="card-image">
+                                
+                                
+                                <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="浅谈app中的密码学">
+                                
+                                <span class="card-title">浅谈app中的密码学</span>
+                            </div>
+                        </a>
+                        <div class="card-content article-content">
+                            <div class="summary block-with-text">
+                                
+                                    Android基础把java学好因为好多apk是java写的，不然反编译出来的代码都看不懂。把c学好，要不然同样so层看不懂。把linux学好，因为Android系统是基于linux开发的，好多命令都是相通的
+推荐大家准备一个谷歌的那个pi
+                                
+                            </div>
+                            <div class="publish-info">
+                                <span class="publish-date">
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                                </span>
+                                <span class="publish-author">
+                                    
+                                    <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                    
+                                    <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
+                                    app安全
                                     </a>
                                     
                                     

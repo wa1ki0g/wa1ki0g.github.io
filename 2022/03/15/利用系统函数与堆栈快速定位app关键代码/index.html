@@ -1,0 +1,1536 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="利用系统函数与堆栈快速定位app关键代码, wa1ki0g,blog,github">
+    <meta name="description" content="string.trim这个还是比较关键的，没准可以从这里得到加密方式，或者挖到sql注入，文件上传等漏洞。进一步利用可以打印堆栈来用
+Java.perform(function(){
+
+    function showStack(){
+
+">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>利用系统函数与堆栈快速定位app关键代码 | wa1ki0g‘s blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+
+   <style>
+    body{
+       background-image: url(https://s3.bmp.ovh/imgs/2021/11/89588faa2bede843.jpeg);
+       background-repeat:no-repeat;
+       background-size: 100% 100%;
+       background-attachment:fixed;
+    }
+</style>
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/0.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">wa1ki0g‘s blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/0.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">wa1ki0g‘s blog</div>
+        <div class="logo-desc">
+            
+            天行健，君子以自强不息！
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/7.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">利用系统函数与堆栈快速定位app关键代码</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
+                                app安全
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-03-15
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2023-03-15
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    899
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    5 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="string-trim"><a href="#string-trim" class="headerlink" title="string.trim"></a>string.trim</h2><p>这个还是比较关键的，没准可以从这里得到加密方式，或者挖到sql注入，文件上传等漏洞。进一步利用可以打印堆栈来用</p>
+<pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span><span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span><span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">var str= Java<span class="token class">.use</span>("java<span class="token class">.lang.String</span>");
+    str<span class="token class">.trim.implementation</span> = function()</span><span class="token punctuation">{</span>
+
+
+       // <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"str.trim"</span>,this<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        return this<span class="token number">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/08214f3054d14f9c9da1067c0721699f.png" alt="在这里插入图片描述"></p>
+<h2 id="hashmap-put"><a href="#hashmap-put" class="headerlink" title="hashmap.put"></a>hashmap.put</h2><p>hook代码：</p>
+<pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+        var log = Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span>
+        var throwable = Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>log<span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>throwable<span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        
+
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">var hashmap = Java<span class="token class">.use</span>("java<span class="token class">.util.HashMap</span>")
+    hashmap<span class="token class">.put.implementation</span> = function (a,b)</span><span class="token punctuation">{</span>
+        <span class="token selector">if(a<span class="token class">.equals</span>("username"))</span><span class="token punctuation">{</span>
+        
+        <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"hashMap.put: "</span>,a,b<span class="token punctuation">)</span>
+
+        <span class="token punctuation">}</span>
+       
+        return this<span class="token number">.</span><span class="token function">put</span><span class="token punctuation">(</span>a,b<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>结果：<br><img src="https://img-blog.csdnimg.cn/7cd090764fbe4b488fe451ee9d792a04.png" alt="在这里插入图片描述"></p>
+<h2 id="ArrayList-add"><a href="#ArrayList-add" class="headerlink" title="ArrayList.add"></a>ArrayList.add</h2><p>可以先用 console.log打印每一个参数，然后全局搜索敏感参数比如username=15149029981，最后加一个if判断进行打印堆栈：</p>
+<p>hook代码：</p>
+<pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span><span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span><span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">var arrayList= Java<span class="token class">.use</span>("java<span class="token class">.util.ArrayList</span>");
+    arrayList<span class="token class">.add.overload</span>('java<span class="token class">.lang.Object</span>')<span class="token class">.implementation</span> = function (a)</span><span class="token punctuation">{</span>
+        <span class="token selector">if(a<span class="token class">.equals</span>("username=15149029981"))</span><span class="token punctuation">{</span>
+
+            <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"ArrayList.add: "</span>,a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            
+        <span class="token punctuation">}</span>
+        return this<span class="token number">.</span><span class="token function">add</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token selector">// arrayList<span class="token class">.add.overload</span>('int','java<span class="token class">.lang.Object</span>')<span class="token class">.implementation</span> = function (a,b)</span><span class="token punctuation">{</span>
+    //     console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"ArrayList.add: "</span>,a,b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    //     return this<span class="token number">.</span><span class="token function">add</span><span class="token punctuation">(</span>a,b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    // <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>结果：<br><img src="https://img-blog.csdnimg.cn/65469fb3c92148d2a62a594eae899b60.png" alt="在这里插入图片描述"></p>
+<h2 id="textUtils-isEmpty"><a href="#textUtils-isEmpty" class="headerlink" title="textUtils.isEmpty"></a>textUtils.isEmpty</h2><p>同样也是可以先用 console.log打印每一个参数，然后全局搜索敏感参数比如username=15149029981，最后加一个if判断进行打印堆栈：</p>
+<pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span><span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span><span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">var text= Java<span class="token class">.use</span>("android<span class="token class">.text.TextUtils</span>");
+    text<span class="token class">.isEmpty.implementation</span> = function(a)</span><span class="token punctuation">{</span>
+            <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"textUtils："</span>,a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            return this<span class="token number">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/8779a8d967f44a2aa417ed7922d8f6e9.png" alt="在这里插入图片描述"></p>
+<pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span><span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span><span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">var text= Java<span class="token class">.use</span>("android<span class="token class">.text.TextUtils</span>");
+    text<span class="token class">.isEmpty.implementation</span> = function(a)</span><span class="token punctuation">{</span>
+        <span class="token selector">if(a=="2v+DC2gq7RuAC8PE5GZz5wH3/y9ZVcWhFwhDY9L19g9iEd075+Q7xwewvfIN0g0ec/NaaF43/S0=")</span><span class="token punctuation">{</span>
+            <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"textUtils："</span>,a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        return this<span class="token number">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/813b15232dd64957934a70dcab6cd1c7.png" alt="在这里插入图片描述"></p>
+<p>这里的返回结果，应该是我们登陆返回的结果的加密</p>
+<h2 id="log-w"><a href="#log-w" class="headerlink" title="log.w"></a>log.w</h2><pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span><span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span><span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">var wr= Java<span class="token class">.use</span>("android<span class="token class">.util.Log</span>");
+    wr<span class="token class">.w.overload</span>('java<span class="token class">.lang.String</span>','java<span class="token class">.lang.String</span>')<span class="token class">.implementation</span> = function(tag,message)</span><span class="token punctuation">{</span>
+
+
+        //<span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"log.w:"</span>,tag,message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        return this<span class="token number">.</span><span class="token function">w</span><span class="token punctuation">(</span>tag,message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/7af26f7832754045a03ac902c03a75f9.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/582091b2d3674ad9b0711a68080e6581.png" alt="在这里插入图片描述"></p>
+<h2 id="EditText-getText"><a href="#EditText-getText" class="headerlink" title="EditText.getText"></a>EditText.getText</h2><pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span><span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span><span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">var te1= Java<span class="token class">.use</span>("android<span class="token class">.widget.EditText</span>");
+    te1<span class="token class">.getText.overload.implementation</span> = function()</span><span class="token punctuation">{</span>
+        
+        var res<span class="token number">1</span> = this<span class="token number">.</span><span class="token function">getText</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        res<span class="token number">1</span> = Java<span class="token number">.</span><span class="token function">cast</span><span class="token punctuation">(</span>res<span class="token number">1</span>,Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.CharSequence"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"getText:"</span>,res<span class="token number">1.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        //<span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        return res<span class="token number">1</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h2 id="Collections-sort"><a href="#Collections-sort" class="headerlink" title="Collections.sort"></a>Collections.sort</h2><pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span><span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span><span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">var col= Java<span class="token class">.use</span>("java<span class="token class">.util.Collections</span>");
+    col<span class="token class">.sort.overload</span>('java<span class="token class">.util.List</span>', 'java<span class="token class">.util.Comparator</span>')<span class="token class">.implementation</span> = function(a,b)</span><span class="token punctuation">{</span>
+        var res=Java<span class="token number">.</span><span class="token function">cast</span><span class="token punctuation">(</span>a,Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.util.ArrayList"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"sort:"</span>,res<span class="token number">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span>,res<span class="token number">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        return this<span class="token number">.</span><span class="token function">sort</span><span class="token punctuation">(</span>a,b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">col<span class="token class">.sort.overload</span>('java<span class="token class">.util.List</span>')<span class="token class">.implementation</span> = function(a)</span><span class="token punctuation">{</span>
+        var res=Java<span class="token number">.</span><span class="token function">cast</span><span class="token punctuation">(</span>a,Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.util.ArrayList"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"sort:"</span>,res<span class="token number">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        return this<span class="token number">.</span><span class="token function">sort</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/c2da1c6320a14c8a8505e441dc3d546f.png" alt="在这里插入图片描述"></p>
+<h2 id="JSONobject-put与JSONobject-getString"><a href="#JSONobject-put与JSONobject-getString" class="headerlink" title="JSONobject.put与JSONobject.getString"></a>JSONobject.put与JSONobject.getString</h2><pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span><span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span><span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+
+    <span class="token punctuation">}</span>
+    <span class="token selector">// <span class="token class">.overload</span>('java<span class="token class">.lang.String</span>', 'double')
+    // <span class="token class">.overload</span>('java<span class="token class">.lang.String</span>', 'int')
+    // <span class="token class">.overload</span>('java<span class="token class">.lang.String</span>', 'long')
+    // <span class="token class">.overload</span>('java<span class="token class">.lang.String</span>', 'java<span class="token class">.lang.Object</span>')
+    // <span class="token class">.overload</span>('java<span class="token class">.lang.String</span>', 'boolean')
+
+    var json1= Java<span class="token class">.use</span>("org<span class="token class">.json.JSONObject</span>");
+    json1<span class="token class">.put.overload</span>('java<span class="token class">.lang.String</span>', 'java<span class="token class">.lang.Object</span>')<span class="token class">.implementation</span> = function(a,b)</span><span class="token punctuation">{</span>
+        <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"jsonput:"</span>,a,b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        return this<span class="token number">.</span><span class="token function">put</span><span class="token punctuation">(</span>a,b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token selector">json1<span class="token class">.getString.implementation</span> = function(a)</span><span class="token punctuation">{</span>
+        <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"jsongetstring:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        var res = this<span class="token number">.</span><span class="token function">getString</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        return res<span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/c606183da3b64daca34c298b9b19d456.png" alt="在这里插入图片描述"></p>
+<h2 id="toast-show"><a href="#toast-show" class="headerlink" title="toast.show"></a>toast.show</h2><pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span><span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span><span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+
+    <span class="token punctuation">}</span>
+
+
+    <span class="token selector">var toa= Java<span class="token class">.use</span>("android<span class="token class">.widget.Toast</span>");
+    toa<span class="token class">.show.implementation</span> = function()</span><span class="token punctuation">{</span>
+        <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"toastshow:"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        return this<span class="token number">.</span><span class="token function">show</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/6a1ba6f22ac243ddb790abd5c25f95b4.png" alt="在这里插入图片描述"></p>
+<h2 id="Base64-encodeToString"><a href="#Base64-encodeToString" class="headerlink" title="Base64.encodeToString"></a>Base64.encodeToString</h2><pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span><span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span><span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+
+    <span class="token punctuation">}</span>
+
+
+    <span class="token selector">var bas= Java<span class="token class">.use</span>("android<span class="token class">.util.Base64</span>");
+    bas<span class="token class">.encodeToString.overload</span>('[B', 'int')<span class="token class">.implementation</span> = function(a,b)</span><span class="token punctuation">{</span>
+        <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"base64end:"</span>,JSON<span class="token number">.</span><span class="token function">stringify</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        var res = this<span class="token number">.</span><span class="token function">encodeToString</span><span class="token punctuation">(</span>a,b<span class="token punctuation">)</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"base64res:"</span>,res<span class="token punctuation">)</span>
+
+        return res
+
+    <span class="token punctuation">}</span>
+
+
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/0d40e1150d9647179f3d6678bfe9e0f1.png" alt="在这里插入图片描述"></p>
+<h2 id="String-getBytes"><a href="#String-getBytes" class="headerlink" title="String.getBytes"></a>String.getBytes</h2><pre class=" language-css"><code class="language-css"><span class="token selector">Java<span class="token class">.perform</span>(function()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">function showStack()</span><span class="token punctuation">{</span>
+
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"android.util.Log"</span><span class="token punctuation">)</span><span class="token number">.</span><span class="token function">getStackTraceString</span><span class="token punctuation">(</span>Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"java.lang.Throwable"</span><span class="token punctuation">)</span><span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+
+    <span class="token punctuation">}</span>
+
+
+    <span class="token selector">var str = Java<span class="token class">.use</span>("java<span class="token class">.lang.String</span>");
+    str<span class="token class">.getBytes.overload</span>()<span class="token class">.implementation</span> = function () </span><span class="token punctuation">{</span>
+        //<span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        var result = this<span class="token number">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        var newStr = str<span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"str.getBytes result: "</span>, newStr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        return result<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token selector">str<span class="token class">.getBytes.overload</span>('java<span class="token class">.lang.String</span>')<span class="token class">.implementation</span> = function (a) </span><span class="token punctuation">{</span>
+       // <span class="token function">showStack</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        var result = this<span class="token number">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        var newStr = str<span class="token number">.</span>$<span class="token function">new</span><span class="token punctuation">(</span>result, a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"str.getBytes result: "</span>, newStr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        return result<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+
+
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="https://img-blog.csdnimg.cn/37e5b619473d4baead9e8082ef1c67d6.png" alt="在这里插入图片描述"></p>
+<p>打印堆栈：</p>
+<p><img src="https://img-blog.csdnimg.cn/636eb1c429a04071bc48b9ad4819d1f7.png" alt="在这里插入图片描述"></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">wa1ki0g</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="http://example.com/2022/03/15/%E5%88%A9%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0%E4%B8%8E%E5%A0%86%E6%A0%88%E5%BF%AB%E9%80%9F%E5%AE%9A%E4%BD%8Dapp%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81/">http://example.com/2022/03/15/%E5%88%A9%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0%E4%B8%8E%E5%A0%86%E6%A0%88%E5%BF%AB%E9%80%9F%E5%AE%9A%E4%BD%8Dapp%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">wa1ki0g</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2022/03/15/%E5%98%9F%E5%98%9F%E7%89%9Bapp%E7%AE%97%E6%B3%95hook/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="嘟嘟牛app算法hook">
+                        
+                        <span class="card-title">嘟嘟牛app算法hook</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
+                                    app安全
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/03/15/%E4%B8%80%E4%B8%AA%E9%80%9A%E6%9D%80%E7%9A%84Hook%E8%84%9A%E6%9C%AC%E4%B8%8E%E4%BE%8B%E5%AD%90/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="一个通杀的Hook脚本与例子">
+                        
+                        <span class="card-title">一个通杀的Hook脚本与例子</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
+                                    app安全
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+           
+            <br>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+                <script>
+                    var calcSiteTime = function () {
+                        var seconds = 1000;
+                        var minutes = seconds * 60;
+                        var hours = minutes * 60;
+                        var days = hours * 24;
+                        var years = days * 365;
+                        var today = new Date();
+                        var startYear = "2021";
+                        var startMonth = "11";
+                        var startDate = "28";
+                        var startHour = "0";
+                        var startMinute = "0";
+                        var startSecond = "0";
+                        var todayYear = today.getFullYear();
+                        var todayMonth = today.getMonth() + 1;
+                        var todayDate = today.getDate();
+                        var todayHour = today.getHours();
+                        var todayMinute = today.getMinutes();
+                        var todaySecond = today.getSeconds();
+                        var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                        var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                        var diff = t2 - t1;
+                        var diffYears = Math.floor(diff / years);
+                        var diffDays = Math.floor((diff / days) - diffYears * 365);
+
+                        // 区分是否有年份.
+                        var language = 'zh-CN';
+                        if (startYear === String(todayYear)) {
+                            document.getElementById("year").innerHTML = todayYear;
+                            var daysTip = 'This site has been running for ' + diffDays + ' days';
+                            if (language === 'zh-CN') {
+                                daysTip = '本站已运行 ' + diffDays + ' 天';
+                            } else if (language === 'zh-HK') {
+                                daysTip = '本站已運行 ' + diffDays + ' 天';
+                            }
+                            document.getElementById("sitetime").innerHTML = daysTip;
+                        } else {
+                            document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                            var yearsAndDaysTip = 'This site has been running for ' + diffYears + ' years and '
+                                + diffDays + ' days';
+                            if (language === 'zh-CN') {
+                                yearsAndDaysTip = '本站已运行 ' + diffYears + ' 年 ' + diffDays + ' 天';
+                            } else if (language === 'zh-HK') {
+                                yearsAndDaysTip = '本站已運行 ' + diffYears + ' 年 ' + diffDays + ' 天';
+                            }
+                            document.getElementById("sitetime").innerHTML = yearsAndDaysTip;
+                        }
+                    }
+
+                    calcSiteTime();
+                </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+
+    <!-- 雪花特效 -->
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/z16.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true,"react":{"opacity":0.7}}});</script></body>
+
+</html>

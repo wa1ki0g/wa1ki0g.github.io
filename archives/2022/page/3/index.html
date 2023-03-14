@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="归档: 2022/8, wa1ki0g,blog,github">
+    <meta name="keywords" content="归档: 2022, wa1ki0g,blog,github">
     <meta name="description" content="天行健，君子以自强不息！">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -17,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>归档: 2022/8 | wa1ki0g‘s blog</title>
+    <title>归档: 2022 | wa1ki0g‘s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -406,44 +406,43 @@
             
             
             <div class="cd-timeline-img month" data-aos="zoom-in-up">
-                <a href="/archives/2022/08">08</a>
+                <a href="/archives/2022/01">01</a>
             </div>
             
 
             
             <div class="cd-timeline-img day" data-aos="zoom-in-up">
-                <span>31</span>
+                <span>19</span>
             </div>
             <article class="cd-timeline-content" data-aos="fade-up">
                 <div class="article col s12 m6">
                     <div class="card">
-                        <a href="/2022/08/31/SqlServer%E5%B8%B8%E8%A7%81%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95/">
+                        <a href="/2022/01/19/zerologon%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
                             <div class="card-image">
                                 
                                 
-                                <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="SqlServer常见攻击手法">
+                                <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="zerologon漏洞分析">
                                 
-                                <span class="card-title">SqlServer常见攻击手法</span>
+                                <span class="card-title">zerologon漏洞分析</span>
                             </div>
                         </a>
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
-                                    一些基础：Mssql是什么：
-mssql的英文全称是Microsoft SQL Server，一般简称MS-SQL或SQL Server；它是指微软的SQLServer数据库服务器，是一个关系型数据库管理系统。
-mssql的用户权限Mssq
+                                    zerologon漏洞分析windows上比较重量级别的一个漏洞。通过该漏洞，攻击者只需能够访问域控的445端口，在无需任何凭据的情况下能拿到域管的权限。
+该漏洞的产生来源于Netlogon协议认证的加密模块存在缺陷（微软在进行AES加密运
                                 
                             </div>
                             <div class="publish-info">
                                 <span class="publish-date">
-                                    <i class="far fa-clock fa-fw icon-date"></i>2022-08-31
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-01-19
                                 </span>
                                 <span class="publish-author">
                                     
                                     <i class="fas fa-bookmark fa-fw icon-category"></i>
                                     
-                                    <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E5%85%A8/" class="post-category">
-                                    数据库安全
+                                    <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" class="post-category">
+                                    内网安全
                                     </a>
                                     
                                     
@@ -467,36 +466,91 @@ mssql的用户权限Mssq
 
             
             <div class="cd-timeline-img day" data-aos="zoom-in-up">
-                <span>06</span>
+                <span>10</span>
             </div>
             <article class="cd-timeline-content" data-aos="fade-up">
                 <div class="article col s12 m6">
                     <div class="card">
-                        <a href="/2022/08/06/%E5%9F%9F%E6%B8%97%E9%80%8F%E2%80%94%E2%80%94%E7%BB%95%E8%BF%87LSA%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6%E6%80%BB%E7%BB%93/">
+                        <a href="/2022/01/10/java%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8-%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AAClassLoader/">
                             <div class="card-image">
                                 
                                 
-                                <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="域渗透——绕过LSA保护机制总结">
+                                <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="java类加载器-自定义一个ClassLoader">
                                 
-                                <span class="card-title">域渗透——绕过LSA保护机制总结</span>
+                                <span class="card-title">java类加载器-自定义一个ClassLoader</span>
                             </div>
                         </a>
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
-                                    lsass最简单的理解：lsass.exe是系统进程，用以当地安全验证网络服务器，她为winlogon服务的用户认证转化成一个进程。假如身份认证取得成功，Lsass将转化成用户的浏览动态口令，用以启动原始机壳程序。该用户启动的别的进程将承继
+                                    前言：生成字节码可以用Javassist或者我自己写的工具https://github.com/wa1ki0g/ByteCode
+ClassLoader一切的Java类都必须经过JVM加载后才能运行，而ClassLoader的主要作用就是J
                                 
                             </div>
                             <div class="publish-info">
                                 <span class="publish-date">
-                                    <i class="far fa-clock fa-fw icon-date"></i>2022-08-06
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-01-10
                                 </span>
                                 <span class="publish-author">
                                     
                                     <i class="fas fa-bookmark fa-fw icon-category"></i>
                                     
-                                    <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" class="post-category">
-                                    内网安全
+                                    <a href="/categories/Java%E5%AE%89%E5%85%A8/" class="post-category">
+                                    Java安全
+                                    </a>
+                                    
+                                    
+                                </span>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+            </article>
+        </div>
+        
+        <div class="cd-timeline-block">
+
+            
+            
+
+            
+            
+
+            
+            <div class="cd-timeline-img day" data-aos="zoom-in-up">
+                <span>05</span>
+            </div>
+            <article class="cd-timeline-content" data-aos="fade-up">
+                <div class="article col s12 m6">
+                    <div class="card">
+                        <a href="/2022/01/05/java%E7%9A%84%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E4%B8%8EbypassRASP/">
+                            <div class="card-image">
+                                
+                                
+                                <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="java的命令执行与bypassRASP">
+                                
+                                <span class="card-title">java的命令执行与bypassRASP</span>
+                            </div>
+                        </a>
+                        <div class="card-content article-content">
+                            <div class="summary block-with-text">
+                                
+                                    
+|关于php的webshell相信大家已经很了解了，webshell就是相当于可以控制目标服务器的一小段代码。今天讲下java的webshell及bypassRASP。(本来研究了一阵子这想自己写点东西但发现总不如各位师傅想的全面，于是东
+                                
+                            </div>
+                            <div class="publish-info">
+                                <span class="publish-date">
+                                    <i class="far fa-clock fa-fw icon-date"></i>2022-01-05
+                                </span>
+                                <span class="publish-author">
+                                    
+                                    <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                    
+                                    <a href="/categories/Java%E5%AE%89%E5%85%A8/" class="post-category">
+                                    Java安全
                                     </a>
                                     
                                     
@@ -513,6 +567,30 @@ mssql的用户权限Mssq
     </div>
 
 </main>
+
+
+<div class="container paging">
+    <div class="row">
+        <div class="col s6 m4 l4">
+            
+            <a href="/archives/2022/page/2/"
+               class="left btn-floating btn-large waves-effect waves-light bg-color">
+                <i class="fas fa-angle-left"></i>
+            </a>
+            
+        </div>
+        <div class="page-info col m4 l4 hide-on-small-only">
+            <div class="center-align b-text-gray">3 / 3</div>
+        </div>
+        <div class="col s6 m4 l4">
+            
+            <a class="right btn-floating btn-large disabled">
+                <i class="fas fa-angle-right"></i>
+            </a>
+            
+        </div>
+    </div>
+</div>
 
 
 

