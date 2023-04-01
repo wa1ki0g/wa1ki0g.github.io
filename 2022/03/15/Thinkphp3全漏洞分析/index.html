@@ -31,9 +31,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.1">
+<meta name="generator" content="Hexo 5.4.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</head>
 
 
 
@@ -467,17 +467,17 @@ D方法和M方法，这两个方法的区别在于M方法实例化模型无需�
 <pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
 <span class="token keyword">namespace</span> <span class="token package">Home<span class="token punctuation">\</span>Controller</span><span class="token punctuation">;</span>
 <span class="token keyword">use</span> <span class="token package">Think<span class="token punctuation">\</span>Controller</span><span class="token punctuation">;</span>
-<span class="token keyword">class</span> <span class="token class-name">IndexController</span> <span class="token keyword">extends</span> <span class="token class-name">Controller</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+<span class="token keyword">class</span> <span class="token class-name">IndexController</span> <span class="token keyword">extends</span> <span class="token class-name">Controller</span> <span class="token operator">&amp;</span><span class="token shell-comment comment">#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&amp;</span><span class="token shell-comment comment">#123;</span>
         <span class="token variable">$Dao</span><span class="token operator">=</span><span class="token function">M</span><span class="token punctuation">(</span><span class="token string">'users'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token variable">$result</span><span class="token operator">=</span><span class="token variable">$Dao</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">find</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$result</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token variable">$result</span><span class="token operator">=</span><span class="token variable">$Dao</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$result</span><span class="token punctuation">)</span><span class="token operator">&amp;</span><span class="token shell-comment comment">#123;</span>
             <span class="token keyword">echo</span><span class="token string">"connect success"</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token function">var_dump</span><span class="token punctuation">(</span><span class="token variable">$Dao</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">find</span><span class="token punctuation">(</span><span class="token function">I</span><span class="token punctuation">(</span><span class="token string">'GET.id'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span><span class="token shell-comment comment">#125;</span>
+        <span class="token function">var_dump</span><span class="token punctuation">(</span><span class="token variable">$Dao</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token function">I</span><span class="token punctuation">(</span><span class="token string">'GET.id'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span><span class="token shell-comment comment">#125;</span>
+<span class="token operator">&amp;</span><span class="token shell-comment comment">#125;</span>
 </code></pre>
 <p>访问下,我们输入的是id=1’,但是还是对数据库进行了正常查询，我们先简单跟下：<br><img src="https://img-blog.csdnimg.cn/e4ecffb313c240829d0f3293cb2eaf77.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/1019460df692468090449831b31a5271.png" alt="在这里插入图片描述"></p>
 <p>进I方法里面看一眼，这个获取我们get传进去的值：</p>
@@ -505,16 +505,16 @@ D方法和M方法，这两个方法的区别在于M方法实例化模型无需�
 <pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span><span class="token operator">?</span>php
 namespace Home\Controller<span class="token punctuation">;</span>
 use Think\Controller<span class="token punctuation">;</span>
-<span class="token keyword">class</span> <span class="token class-name">IndexController</span> <span class="token keyword">extends</span> <span class="token class-name">Controller</span> <span class="token punctuation">{</span>
+<span class="token keyword">class</span> <span class="token class-name">IndexController</span> <span class="token keyword">extends</span> <span class="token class-name">Controller</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
     <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token punctuation">{</span>
+    <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         $User <span class="token operator">=</span> <span class="token function">D</span><span class="token punctuation">(</span><span class="token string">'Users'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        $map <span class="token operator">=</span> <span class="token function">array</span><span class="token punctuation">(</span><span class="token string">'name'</span> <span class="token operator">=</span><span class="token operator">></span> $_GET<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        $user <span class="token operator">=</span> $User<span class="token operator">-</span><span class="token operator">></span><span class="token function">where</span><span class="token punctuation">(</span>$map<span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">find</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        $map <span class="token operator">=</span> <span class="token function">array</span><span class="token punctuation">(</span><span class="token string">'name'</span> <span class="token operator">=</span><span class="token operator">&gt;</span> $_GET<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        $user <span class="token operator">=</span> $User<span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">where</span><span class="token punctuation">(</span>$map<span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token function">var_dump</span><span class="token punctuation">(</span>$user<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 
-<span class="token punctuation">}</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>这里的写法可以类比一下where注入的那个控制器，where注入的传参方式是I(‘GET.id’)，而这里是 $map = array(‘name’ =&gt; $_GET[‘name’])与where($map)结合，这个原因放到最后说，这可以打个断点，看看where函数主要做了什么：</p>
 <p><img src="https://img-blog.csdnimg.cn/c3aa37d8e1254d639afe8d075a1185f9.png" alt="在这里插入图片描述"></p>
@@ -529,16 +529,16 @@ use Think\Controller<span class="token punctuation">;</span>
 <pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span><span class="token operator">?</span>php
 namespace Home\Controller<span class="token punctuation">;</span>
 use Think\Controller<span class="token punctuation">;</span>
-<span class="token keyword">class</span> <span class="token class-name">IndexController</span> <span class="token keyword">extends</span> <span class="token class-name">Controller</span> <span class="token punctuation">{</span>
+<span class="token keyword">class</span> <span class="token class-name">IndexController</span> <span class="token keyword">extends</span> <span class="token class-name">Controller</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
     <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token punctuation">{</span>
+    <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         $User <span class="token operator">=</span> <span class="token function">M</span><span class="token punctuation">(</span><span class="token string">"users"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         $user<span class="token punctuation">[</span><span class="token string">'id'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">I</span><span class="token punctuation">(</span><span class="token string">'id'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         $data<span class="token punctuation">[</span><span class="token string">'PWD'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">I</span><span class="token punctuation">(</span><span class="token string">'PWD'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        $valu <span class="token operator">=</span> $User<span class="token operator">-</span><span class="token operator">></span><span class="token function">where</span><span class="token punctuation">(</span>$user<span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">></span><span class="token function">save</span><span class="token punctuation">(</span>$data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        $valu <span class="token operator">=</span> $User<span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">where</span><span class="token punctuation">(</span>$user<span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">save</span><span class="token punctuation">(</span>$data<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token function">var_dump</span><span class="token punctuation">(</span>$valu<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>payload : id[0]=bind&amp;id[1]=0 and updatexml(1,concat(0x7e,user(),0x7e),1)&amp;PWD=<br>这里的id[0]=bind可以参考exp注入中的name[0]=exp，主要是为了进到那个if判断：</p>
 <p><img src="https://img-blog.csdnimg.cn/3b271da9a50a4f2f80fdf81557be70f4.png" alt="在这里插入图片描述"><br>而我们这里对比exp注入，为什么要加一个id[1]=0呢，我们先输入id[0]=bind&amp;id[1]=abc&amp;PWD=  试试：</p>

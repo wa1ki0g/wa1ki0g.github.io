@@ -36,9 +36,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.1">
+<meta name="generator" content="Hexo 5.4.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</head>
 
 
 
@@ -424,7 +424,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    347
+                    359
                 </div>
                 
 
@@ -458,24 +458,24 @@
 <p><img src="https://img-blog.csdnimg.cn/00323df33b064386b6d475139706f2fe.png" alt="在这里插入图片描述"><br>hook的代码：</p>
 <p>js：</p>
 <pre class=" language-css"><code class="language-css">
-<span class="token selector">Java<span class="token class">.perform</span>(function ()</span><span class="token punctuation">{</span>
+Java<span class="token number">.</span><span class="token function">perform</span><span class="token punctuation">(</span>function <span class="token punctuation">(</span><span class="token punctuation">)</span>&amp;<span class="token hexcode">#123</span><span class="token punctuation">;</span>
 
-    <span class="token selector">console<span class="token class">.log</span>("start");
-    var jsonRequest = Java<span class="token class">.use</span>("com<span class="token class">.dodonew.online.http.JsonRequest</span>");
-    var requestUtil = Java<span class="token class">.use</span>("com<span class="token class">.dodonew.online.http.RequestUtil</span>");
+    console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"start"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    var jsonRequest = Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"com.dodonew.online.http.JsonRequest"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    var requestUtil = Java<span class="token number">.</span><span class="token function">use</span><span class="token punctuation">(</span><span class="token string">"com.dodonew.online.http.RequestUtil"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    jsonRequest<span class="token class">.addRequestMap.overload</span>('java<span class="token class">.util.Map</span>', 'int')<span class="token class">.implementation</span> = function (addMap, a) </span><span class="token punctuation">{</span>
+    jsonRequest<span class="token number">.</span>addRequestMap<span class="token number">.</span><span class="token function">overload</span><span class="token punctuation">(</span><span class="token string">'java.util.Map'</span>, <span class="token string">'int'</span><span class="token punctuation">)</span><span class="token number">.</span>implementation = function <span class="token punctuation">(</span>addMap, a<span class="token punctuation">)</span> &amp;<span class="token hexcode">#123</span><span class="token punctuation">;</span>
         console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"jsonRequest.addRequestMap is called"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         return this<span class="token number">.</span><span class="token function">addRequestMap</span><span class="token punctuation">(</span>addMap, a<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token selector">requestUtil<span class="token class">.encodeDesMap.overload</span>('java<span class="token class">.lang.String</span>', 'java<span class="token class">.lang.String</span>', 'java<span class="token class">.lang.String</span>')<span class="token class">.implementation</span> = function (data, desKey, desIV) </span><span class="token punctuation">{</span>
+    &amp;<span class="token hexcode">#125</span><span class="token punctuation">;</span>
+    requestUtil<span class="token number">.</span>encodeDesMap<span class="token number">.</span><span class="token function">overload</span><span class="token punctuation">(</span><span class="token string">'java.lang.String'</span>, <span class="token string">'java.lang.String'</span>, <span class="token string">'java.lang.String'</span><span class="token punctuation">)</span><span class="token number">.</span>implementation = function <span class="token punctuation">(</span>data, desKey, desIV<span class="token punctuation">)</span> &amp;<span class="token hexcode">#123</span><span class="token punctuation">;</span>
         console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"data: "</span>, data, desKey, desIV<span class="token punctuation">)</span><span class="token punctuation">;</span>
         var encodeDesMap = this<span class="token number">.</span><span class="token function">encodeDesMap</span><span class="token punctuation">(</span>data, desKey, desIV<span class="token punctuation">)</span><span class="token punctuation">;</span>
         console<span class="token number">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"encodeDesMap: "</span>, encodeDesMap<span class="token punctuation">)</span><span class="token punctuation">;</span>
         return encodeDesMap<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
+    &amp;<span class="token hexcode">#125</span><span class="token punctuation">;</span>
 
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+&amp;<span class="token hexcode">#125</span><span class="token punctuation">;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 <p>py：</p>
 <pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> frida
@@ -818,6 +818,14 @@ sys<span class="token punctuation">.</span>stdin<span class="token punctuation">
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/app%E5%AE%89%E5%85%A8/">
+                        <span class="chip bg-color">app安全</span>
+                    </a>
+                    
                 </div>
                 
             </div>

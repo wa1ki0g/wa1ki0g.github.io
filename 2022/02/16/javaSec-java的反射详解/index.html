@@ -30,9 +30,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.1">
+<meta name="generator" content="Hexo 5.4.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</head>
 
 
 
@@ -425,7 +425,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    11 分
+                    12 分
                 </div>
                 
 
@@ -454,15 +454,15 @@ method<span class="token punctuation">.</span><span class="token function">invok
 </code></pre>
 <p>上面两段代码的执行结果，其实是完全一样的。但是其思路完全不一样，第一段代码在未运行时就已经确定了要运行的类（Apple），而第二段代码则是在运行时通过字符串值才得知要运行的类</p>
 <h2 id="一个简单的例子"><a href="#一个简单的例子" class="headerlink" title="一个简单的例子"></a>一个简单的例子</h2><p>上面提到的示例程序，其完整的程序代码如下：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Apple</span> <span class="token punctuation">{</span>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Apple</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
     <span class="token keyword">private</span> <span class="token keyword">int</span> price<span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getPrice</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getPrice</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span> price<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setPrice</span><span class="token punctuation">(</span><span class="token keyword">int</span> price<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setPrice</span><span class="token punctuation">(</span><span class="token keyword">int</span> price<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         <span class="token keyword">this</span><span class="token punctuation">.</span>price <span class="token operator">=</span> price<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception<span class="token punctuation">{</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception<span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         <span class="token comment" spellcheck="true">//正常的调用</span>
         Apple apple <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Apple</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         apple<span class="token punctuation">.</span><span class="token function">setPrice</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -475,8 +475,8 @@ method<span class="token punctuation">.</span><span class="token function">invok
         setPriceMethod<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>appleObj<span class="token punctuation">,</span> <span class="token number">14</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         Method getPriceMethod <span class="token operator">=</span> clz<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"getPrice"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Apple Price:"</span> <span class="token operator">+</span> getPriceMethod<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>appleObj<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>从代码中可以看到我们使用反射调用了 setPrice 方法，并传递了 14 的值。之后使用反射调用了 getPrice 方法，输出其价格。上面的代码整个的输出结果是：<br>ApplePrice:5</p>
 <p>ApplePrice:14</p>
@@ -530,16 +530,16 @@ Apple apple <span class="token operator">=</span> <span class="token punctuation
 <h2 id="通过反射获取类属性，方法，构造器"><a href="#通过反射获取类属性，方法，构造器" class="headerlink" title="通过反射获取类属性，方法，构造器"></a>通过反射获取类属性，方法，构造器</h2><p>我们通过Class对象的getFields()方法可以获取Class类的属性。但无法获取私有属性。</p>
 <pre class=" language-java"><code class="language-java">Class <span class="token class-name">clz</span> <span class="token operator">=</span> Apple<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
 Field <span class="token punctuation">[</span><span class="token punctuation">]</span> fields <span class="token operator">=</span> clz<span class="token punctuation">.</span><span class="token function">getFields</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">for</span> <span class="token punctuation">(</span>Field field <span class="token operator">:</span> fields<span class="token punctuation">)</span><span class="token punctuation">{</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>Field field <span class="token operator">:</span> fields<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>field<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>输出结果是price<br>而如果使用Class对象的getDeclareFields()方法则可以获取包括私有属性在内的所有属性:</p>
 <pre class=" language-java"><code class="language-java">Class <span class="token class-name">clz</span> <span class="token operator">=</span> Apple<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
 Field <span class="token punctuation">[</span><span class="token punctuation">]</span> fields <span class="token operator">=</span> clz<span class="token punctuation">.</span><span class="token function">getDeclareFields</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token keyword">for</span> <span class="token punctuation">(</span>Field field <span class="token operator">:</span> fields<span class="token punctuation">)</span><span class="token punctuation">{</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>Field field <span class="token operator">:</span> fields<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>field<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>输出结果是<br>name</p>
 <p>price</p>
@@ -578,10 +578,10 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 <p> 上面的代码每一步都写了非常清晰的注释，接下来我们将进一步深入的了解下每一步具体含义。</p>
 <h2 id="反射创建类实例"><a href="#反射创建类实例" class="headerlink" title="反射创建类实例"></a>反射创建类实例</h2><p>在java的任何一个类都必须有一个或者多个构造方法，如果代码中没有创建构造方法那么在类编译的时候会自动创建一个无参数的构造方法</p>
 <p>Runtime类构造方法示例代码片段:</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Runtime</span> <span class="token punctuation">{</span>
-<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span> <span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span><span class="token comment" spellcheck="true">/** Don't let anyone else instantiate this class */</span>
-<span class="token operator">&amp;</span>nbsp<span class="token punctuation">;</span> <span class="token keyword">private</span> <span class="token function">Runtime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Runtime</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+   <span class="token comment" spellcheck="true">/** Don't let anyone else instantiate this class */</span>
+  <span class="token keyword">private</span> <span class="token function">Runtime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span><span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>从上面的Runtime类代码注释我们可以看到他的构造方法是私有方法，看出来其本身是不希往望除了其自身以外的任何人去创建该类实例的，所以我们没办法new一个Runtime类实例即不能实用Runtime aa = new Runtime();的方式去创建Runtime对象，在示例中我们借助了反射机制，修改了方法访问权限从而间接的创建出了Runtime对象。<br>runtimeClass1.getDeclaredConstructor和runtimeClass1.getConstructor都可以获取到类的构造方法，区别在于后者无法获取到私有方法，所以一般在获取某个类的构造方法时侯，我们会去使用前者去获取构造方法。如果构造方法中有一个或多个参数的情况下我们应该在获取构造方法时候传入对应得参数类型数组，如：</p>
 <p>clazz.getDeclaredConstructor(String.class,String.class)。</p>
@@ -623,7 +623,7 @@ Field modifiers = field.getClass().getDeclaredField("modifiers");
 // 设置modifiers修改权限
 modifiers.setAccessible(true);
 // 修改成员变量的Field对象的modifiers值
-modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+modifiers.setInt(field, field.getModifiers() &amp; ~Modifier.FINAL);
 // 修改成员变量值
 field.set(类实例对象, 修改后的值);
 </code></pre>

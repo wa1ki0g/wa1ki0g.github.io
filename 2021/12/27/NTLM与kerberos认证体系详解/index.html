@@ -32,9 +32,9 @@ S">
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.1">
+<meta name="generator" content="Hexo 5.4.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</head>
 
 
 
@@ -451,7 +451,7 @@ S">
 <p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/1.png"></p>
 <p>总结一下，就是用户注销、重启后，操作系统会显示输入框，接收输入后，首先判断输入的用户名是否存在，如果存在将密码交给lsass进程，这个进程中可能会存一份明文密码，将明文密码加密成NTLM Hash，对比SAM数据库中的hash进行验证。</p>
 <p>NTLM hash 的产生：</p>
-<pre class=" language-javascript"><code class="language-javascript">明文<span class="token operator">-</span><span class="token operator">></span>hex编码<span class="token operator">-</span><span class="token operator">></span>Unicode编码<span class="token operator">-</span><span class="token operator">></span>MD4
+<pre class=" language-javascript"><code class="language-javascript">明文<span class="token operator">-</span><span class="token operator">&gt;</span>hex编码<span class="token operator">-</span><span class="token operator">&gt;</span>Unicode编码<span class="token operator">-</span><span class="token operator">&gt;</span>MD4
 </code></pre>
 <p>python实现：<br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/2.png"></p>
 <pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">import</span> hashlib<span class="token punctuation">,</span>binascii

@@ -31,9 +31,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.1">
+<meta name="generator" content="Hexo 5.4.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+</head>
 
 
 
@@ -419,14 +419,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.8k
+                    4.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    20 分
+                    21 分
                 </div>
                 
 
@@ -475,16 +475,16 @@
 
 <span class="token keyword">import</span> java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>charset<span class="token punctuation">.</span>StandardCharsets<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Hex</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Hex</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
 
-    <span class="token annotation punctuation">@SuppressWarnings</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"all"</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception<span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@SuppressWarnings</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span><span class="token string">"all"</span><span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception<span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
             String name <span class="token operator">=</span> <span class="token string">"wa1ki0g"</span><span class="token punctuation">;</span>
             <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> bytes <span class="token operator">=</span> name<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span>StandardCharsets<span class="token punctuation">.</span>UTF_8<span class="token punctuation">)</span><span class="token punctuation">;</span>
             String encode <span class="token operator">=</span> HexBin<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span>bytes<span class="token punctuation">)</span><span class="token punctuation">;</span>
             System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>encode<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 <span class="token comment" spellcheck="true">//输出7761316B693067</span>
 </code></pre>
 <p>上面是用我们java实现的，在安卓开发中，并没有自带的api，如果我们想在安卓开发中使用hex编码，需要用gradle导入外部的包：<br><img src="https://img-blog.csdnimg.cn/2b4ba0053664461381d863ced268911e.png" alt="在这里插入图片描述"><br>安卓java层实现代码：</p>
@@ -498,16 +498,16 @@
 
 <span class="token keyword">import</span> okio<span class="token punctuation">.</span>ByteString<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainActivity</span> <span class="token keyword">extends</span> <span class="token class-name">AppCompatActivity</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainActivity</span> <span class="token keyword">extends</span> <span class="token class-name">AppCompatActivity</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
 
     <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span>Bundle savedInstanceState<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span>Bundle savedInstanceState<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onCreate</span><span class="token punctuation">(</span>savedInstanceState<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token function">setContentView</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>layout<span class="token punctuation">.</span>activity_main<span class="token punctuation">)</span><span class="token punctuation">;</span>
         Log<span class="token punctuation">.</span><span class="token function">d</span><span class="token punctuation">(</span><span class="token string">"wa1ki0g"</span><span class="token punctuation">,</span><span class="token string">"Testwa1ki0g"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>ByteString<span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token string">"wa1ki0g"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">hex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p><img src="https://img-blog.csdnimg.cn/5667624e05654706abba5b9cf59cdba5.png" alt="在这里插入图片描述"><br>调用的包：okio.ByteString.hex</p>
 <p><strong>url编码</strong></p>
@@ -517,11 +517,11 @@
 <pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>charset<span class="token punctuation">.</span>StandardCharsets<span class="token punctuation">;</span>
 <span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Base64<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">base64</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">base64</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>Base64<span class="token punctuation">.</span><span class="token function">getEncoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">encodeToString</span><span class="token punctuation">(</span><span class="token string">"c"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span>StandardCharsets<span class="token punctuation">.</span>UTF_8<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 <span class="token comment" spellcheck="true">//输出Yw==</span>
 </code></pre>
 <p>安卓实现：安卓实现有两种方式，1种就是上面那个自己导入的okhttp3包，他最终调用的是okio.base64，另外一种就是自带的android.util.base64</p>
@@ -536,10 +536,10 @@
 <span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Base64<span class="token punctuation">;</span>
 
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainActivity</span> <span class="token keyword">extends</span> <span class="token class-name">AppCompatActivity</span> <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainActivity</span> <span class="token keyword">extends</span> <span class="token class-name">AppCompatActivity</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
 
     <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span>Bundle savedInstanceState<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span>Bundle savedInstanceState<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onCreate</span><span class="token punctuation">(</span>savedInstanceState<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token function">setContentView</span><span class="token punctuation">(</span>R<span class="token punctuation">.</span>layout<span class="token punctuation">.</span>activity_main<span class="token punctuation">)</span><span class="token punctuation">;</span>
         String s <span class="token operator">=</span> Base64<span class="token punctuation">.</span><span class="token function">getEncoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">encodeToString</span><span class="token punctuation">(</span><span class="token string">"c"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -550,10 +550,10 @@
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"hhhh:"</span><span class="token operator">+</span>s2<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 
-    <span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 
 
-<span class="token punctuation">}</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>输出：<br><img src="https://img-blog.csdnimg.cn/bdae7a82188249fe93a8ebe2bf561c40.png" alt="在这里插入图片描述"></p>
 <p><strong>消息摘要算法</strong></p>
@@ -579,8 +579,8 @@
 
 <span class="token keyword">import</span> okio<span class="token punctuation">.</span>ByteString<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MD5</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> String <span class="token function">getMd5</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MD5</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> String <span class="token function">getMd5</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
        MessageDigest md5 <span class="token operator">=</span>  MessageDigest<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token string">"MD5"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> bytes <span class="token operator">=</span>  md5<span class="token punctuation">.</span><span class="token function">digest</span><span class="token punctuation">(</span>s<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -589,8 +589,8 @@
        String m <span class="token operator">=</span> byteString<span class="token punctuation">.</span><span class="token function">hex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"md5:"</span><span class="token operator">+</span>m<span class="token punctuation">)</span><span class="token punctuation">;</span>
        <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>运行结果：<br><img src="https://img-blog.csdnimg.cn/1ffda9c2fbbb4b3db8ba30ad082e5345.png" alt="在这里插入图片描述"><br>我们可通过MessageDigest.update方法对明文数据进行分段传输，防止我们直接传了一个大文件进行加密而造成程序bug，MessageDigest.reset方法可对我们update进去的分段数据进行清空</p>
 <ol>
@@ -609,8 +609,8 @@
 
 <span class="token keyword">import</span> okio<span class="token punctuation">.</span>ByteString<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SHA</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> String <span class="token function">getSHA</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SHA</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> String <span class="token function">getSHA</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         MessageDigest sha <span class="token operator">=</span> MessageDigest<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token string">"SHA-1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> d <span class="token operator">=</span> sha<span class="token punctuation">.</span><span class="token function">digest</span><span class="token punctuation">(</span>s<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         ByteString byteString <span class="token operator">=</span> ByteString<span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -618,8 +618,8 @@
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"sha1:"</span><span class="token operator">+</span>m<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
 
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>运行结果：</p>
 <p><img src="https://img-blog.csdnimg.cn/48343406f88546ac9c6fb82cd1491b8e.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/b067515e3a324e9fb36844eec541baca.png" alt="在这里插入图片描述"></p>
@@ -640,8 +640,8 @@
 
 <span class="token keyword">import</span> okio<span class="token punctuation">.</span>ByteString<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MAC</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> String <span class="token function">getMAC</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeyException <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MAC</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> String <span class="token function">getMAC</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeyException <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
       SecretKeySpec secretKeySpec <span class="token operator">=</span>  <span class="token keyword">new</span> <span class="token class-name">SecretKeySpec</span><span class="token punctuation">(</span><span class="token string">"key"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token string">"HmacMD5"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
       String key <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>secretKeySpec<span class="token punctuation">.</span><span class="token function">getEncoded</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"密钥为:"</span><span class="token operator">+</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -655,8 +655,8 @@
 
       <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
 
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>运行结果：<br><img src="https://img-blog.csdnimg.cn/186fba6b02c44b14a8d8b4e52edc9567.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/b73ac86426b4492a901b771d6b5a3001.png" alt="在这里插入图片描述"></p>
 <p><strong>对称加密算法</strong></p>
@@ -704,8 +704,8 @@
 
 <span class="token keyword">import</span> okio<span class="token punctuation">.</span>ByteString<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DES</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> String <span class="token function">getDES</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeyException<span class="token punctuation">,</span> NoSuchPaddingException<span class="token punctuation">,</span> IllegalBlockSizeException<span class="token punctuation">,</span> BadPaddingException <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DES</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> String <span class="token function">getDES</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeyException<span class="token punctuation">,</span> NoSuchPaddingException<span class="token punctuation">,</span> IllegalBlockSizeException<span class="token punctuation">,</span> BadPaddingException <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         SecretKeySpec secretKeySpec <span class="token operator">=</span>  <span class="token keyword">new</span> <span class="token class-name">SecretKeySpec</span><span class="token punctuation">(</span><span class="token string">"12345678"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token string">"DES"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         String key <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>secretKeySpec<span class="token punctuation">.</span><span class="token function">getEncoded</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"密钥为:"</span><span class="token operator">+</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -721,8 +721,8 @@
 
         <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
 
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>运行结果：<br><img src="https://img-blog.csdnimg.cn/d2439f1d80c64984b001d76d2815ad16.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/a7c8ada14b274997b8b21d30791a252e.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/95880743a5394a89a29964a2ac6d23d6.png" alt="在这里插入图片描述"><br>cbc模式，要加iv：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>myapplication<span class="token punctuation">;</span>
@@ -740,8 +740,8 @@
 
 <span class="token keyword">import</span> okio<span class="token punctuation">.</span>ByteString<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DES</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> String <span class="token function">getDES</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeyException<span class="token punctuation">,</span> NoSuchPaddingException<span class="token punctuation">,</span> IllegalBlockSizeException<span class="token punctuation">,</span> BadPaddingException<span class="token punctuation">,</span> InvalidAlgorithmParameterException <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DES</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> String <span class="token function">getDES</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeyException<span class="token punctuation">,</span> NoSuchPaddingException<span class="token punctuation">,</span> IllegalBlockSizeException<span class="token punctuation">,</span> BadPaddingException<span class="token punctuation">,</span> InvalidAlgorithmParameterException <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         SecretKeySpec secretKeySpec <span class="token operator">=</span>  <span class="token keyword">new</span> <span class="token class-name">SecretKeySpec</span><span class="token punctuation">(</span><span class="token string">"12345678"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token string">"DES"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         String key <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>secretKeySpec<span class="token punctuation">.</span><span class="token function">getEncoded</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"密钥为:"</span><span class="token operator">+</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -758,8 +758,8 @@
 
         <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
 
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>运行结果：<br><img src="https://img-blog.csdnimg.cn/7a5959348d344c91906e507277d16df0.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/74dd85e9d394475993c96e178801bfa6.png" alt="在这里插入图片描述"></p>
 <p><strong>DESede算法(又名Triple DES，3DES)</strong></p>
@@ -779,8 +779,8 @@
 
 <span class="token keyword">import</span> okio<span class="token punctuation">.</span>ByteString<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DESede</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> String <span class="token function">getDESede</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeyException<span class="token punctuation">,</span> NoSuchPaddingException<span class="token punctuation">,</span> IllegalBlockSizeException<span class="token punctuation">,</span> BadPaddingException<span class="token punctuation">,</span> InvalidAlgorithmParameterException <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DESede</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> String <span class="token function">getDESede</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeyException<span class="token punctuation">,</span> NoSuchPaddingException<span class="token punctuation">,</span> IllegalBlockSizeException<span class="token punctuation">,</span> BadPaddingException<span class="token punctuation">,</span> InvalidAlgorithmParameterException <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         SecretKeySpec secretKeySpec <span class="token operator">=</span>  <span class="token keyword">new</span> <span class="token class-name">SecretKeySpec</span><span class="token punctuation">(</span><span class="token string">"123456781234567812345678"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token string">"DESede"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         String key <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>secretKeySpec<span class="token punctuation">.</span><span class="token function">getEncoded</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"密钥为:"</span><span class="token operator">+</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -796,8 +796,8 @@
 
         <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
 
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>结果：<br><img src="https://img-blog.csdnimg.cn/62a4fbb03b544e2885193ed202f30963.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/f4dcec0844394e7ea2513861b261baf5.png" alt="在这里插入图片描述"></p>
 <p><strong>AES算法</strong></p>
@@ -822,8 +822,8 @@
 
 <span class="token keyword">import</span> okio<span class="token punctuation">.</span>ByteString<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AES</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> String <span class="token function">getAes</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeyException<span class="token punctuation">,</span> NoSuchPaddingException<span class="token punctuation">,</span> IllegalBlockSizeException<span class="token punctuation">,</span> BadPaddingException<span class="token punctuation">,</span> InvalidAlgorithmParameterException <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AES</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> String <span class="token function">getAes</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeyException<span class="token punctuation">,</span> NoSuchPaddingException<span class="token punctuation">,</span> IllegalBlockSizeException<span class="token punctuation">,</span> BadPaddingException<span class="token punctuation">,</span> InvalidAlgorithmParameterException <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         SecretKeySpec secretKeySpec <span class="token operator">=</span>  <span class="token keyword">new</span> <span class="token class-name">SecretKeySpec</span><span class="token punctuation">(</span><span class="token string">"1234567812345678"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token string">"AES"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         String key <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>secretKeySpec<span class="token punctuation">.</span><span class="token function">getEncoded</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"密钥为:"</span><span class="token operator">+</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -839,8 +839,8 @@
 
         <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
 
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>结果：<br><img src="https://img-blog.csdnimg.cn/0c59d67a8e9e4ac08539d47af2ae1ee2.png" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/2fa96d556a9448c1afd944dfd0e8a0a8.png" alt="在这里插入图片描述"></p>
 <p><strong>非对称加密算法</strong></p>
@@ -880,23 +880,23 @@
 
 <span class="token keyword">import</span> okio<span class="token punctuation">.</span>ByteString<span class="token punctuation">;</span>
 
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RSA_B</span><span class="token punctuation">{</span>
-    <span class="token keyword">public</span> PublicKey <span class="token function">pky</span><span class="token punctuation">(</span>String pkey<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeySpecException <span class="token punctuation">{</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RSA_B</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> PublicKey <span class="token function">pky</span><span class="token punctuation">(</span>String pkey<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeySpecException <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> bytes <span class="token operator">=</span> ByteString<span class="token punctuation">.</span><span class="token function">decodeBase64</span><span class="token punctuation">(</span>pkey<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         X509EncodedKeySpec x509EncodedKeySpec <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">X509EncodedKeySpec</span><span class="token punctuation">(</span>bytes<span class="token punctuation">)</span><span class="token punctuation">;</span>
         KeyFactory keyFactory <span class="token operator">=</span> KeyFactory<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token string">"RSA"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         PublicKey publicKey <span class="token operator">=</span> keyFactory<span class="token punctuation">.</span><span class="token function">generatePublic</span><span class="token punctuation">(</span>x509EncodedKeySpec<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span>  publicKey<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> PrivateKey <span class="token function">sky</span><span class="token punctuation">(</span>String skey<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeySpecException <span class="token punctuation">{</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> PrivateKey <span class="token function">sky</span><span class="token punctuation">(</span>String skey<span class="token punctuation">)</span> <span class="token keyword">throws</span> NoSuchAlgorithmException<span class="token punctuation">,</span> InvalidKeySpecException <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> bytes <span class="token operator">=</span> ByteString<span class="token punctuation">.</span><span class="token function">decodeBase64</span><span class="token punctuation">(</span>skey<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         PKCS8EncodedKeySpec pkcs8EncodedKeySpec <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PKCS8EncodedKeySpec</span><span class="token punctuation">(</span>bytes<span class="token punctuation">)</span><span class="token punctuation">;</span>
         KeyFactory keyFactory <span class="token operator">=</span> KeyFactory<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token string">"RSA"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         PrivateKey privateKey <span class="token operator">=</span> keyFactory<span class="token punctuation">.</span><span class="token function">generatePrivate</span><span class="token punctuation">(</span>pkcs8EncodedKeySpec<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span>  privateKey<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 
-    <span class="token keyword">public</span> String <span class="token function">encPky</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> String <span class="token function">encPky</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception<span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         PublicKey publicKey <span class="token operator">=</span> <span class="token function">pky</span><span class="token punctuation">(</span><span class="token string">"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDiT4I2+IXUaUHRm/y9J0vVwuW5\n"</span> <span class="token operator">+</span>
                 <span class="token string">"JgyVRk5VnCxq5OJiEUyQQYqGJcfr0ryvOEDqurB8sWIDWpHdV4h42Va+gqhVb+1D\n"</span> <span class="token operator">+</span>
                 <span class="token string">"S6+nd+1gJeRC39ZDHcnwQ4ihJUalregndEZKG31PBFS2ZLahbj6vNWgHwO5mQ2H2\n"</span> <span class="token operator">+</span>
@@ -912,9 +912,9 @@
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"密文："</span><span class="token operator">+</span>base<span class="token operator">+</span><span class="token string">"\n密文："</span><span class="token operator">+</span>hex<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span> <span class="token string">"密文："</span><span class="token operator">+</span>base<span class="token operator">+</span><span class="token string">"\n密文："</span><span class="token operator">+</span>hex<span class="token punctuation">;</span>
 
-    <span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 
-    <span class="token keyword">public</span> String <span class="token function">dencPky</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> String <span class="token function">dencPky</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception<span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
         PrivateKey privateKey <span class="token operator">=</span> <span class="token function">sky</span><span class="token punctuation">(</span><span class="token string">"MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAOJPgjb4hdRpQdGb\n"</span> <span class="token operator">+</span>
                 <span class="token string">"/L0nS9XC5bkmDJVGTlWcLGrk4mIRTJBBioYlx+vSvK84QOq6sHyxYgNakd1XiHjZ\n"</span> <span class="token operator">+</span>
                 <span class="token string">"Vr6CqFVv7UNLr6d37WAl5ELf1kMdyfBDiKElRqWt6Cd0RkobfU8EVLZktqFuPq81\n"</span> <span class="token operator">+</span>
@@ -938,8 +938,8 @@
 
         <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
 
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
 </code></pre>
 <p>结果：<br><img src="https://img-blog.csdnimg.cn/85703b9482ce48a8874385fdeb9a939b.png" alt="在这里插入图片描述"></p>
 
