@@ -413,7 +413,7 @@ S">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-03-15
+                    2023-03-21
                 </div>
                 
 
@@ -448,12 +448,12 @@ S">
 <p>我们上面说的sam文件是指：</p>
 <pre class=" language-javascript"><code class="language-javascript">C<span class="token punctuation">:</span>\Windows\System32\config\SAM
 </code></pre>
-<p><img src="https://img-blog.csdnimg.cn/d4ecd852954843bc805b08a09ba1905f.png"></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/1.png"></p>
 <p>总结一下，就是用户注销、重启后，操作系统会显示输入框，接收输入后，首先判断输入的用户名是否存在，如果存在将密码交给lsass进程，这个进程中可能会存一份明文密码，将明文密码加密成NTLM Hash，对比SAM数据库中的hash进行验证。</p>
 <p>NTLM hash 的产生：</p>
 <pre class=" language-javascript"><code class="language-javascript">明文<span class="token operator">-</span><span class="token operator">></span>hex编码<span class="token operator">-</span><span class="token operator">></span>Unicode编码<span class="token operator">-</span><span class="token operator">></span>MD4
 </code></pre>
-<p>python实现：<br><img src="https://img-blog.csdnimg.cn/8744fd8fb02e469cab333264f559dda9.png"></p>
+<p>python实现：<br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/2.png"></p>
 <pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">import</span> hashlib<span class="token punctuation">,</span>binascii
 hash <span class="token operator">=</span> hashlib<span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">'md4'</span><span class="token punctuation">,</span> <span class="token string">"password"</span><span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span><span class="token string">'utf-16le'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">digest</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 print binascii<span class="token punctuation">.</span><span class="token function">hexlify</span><span class="token punctuation">(</span>hash<span class="token punctuation">)</span>
@@ -471,7 +471,7 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 </ul>
 <p><strong>挑战（challenge）/响应（response）机制</strong></p>
 <p>主要分为质询-&gt;协商-&gt;验证三个阶段</p>
-<p><img src="https://img-blog.csdnimg.cn/57c739450ba94a1297a5eae3e0a64f06.png"></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/3.png"></p>
 <p><strong>第一步协商</strong></p>
 <p>简单来说就是客户端主要在这一步向服务端确认协议的版本，是NTLM v1还是NTLM v2还是其他的比如LM协议。</p>
 <p><strong>第二步质询</strong></p>
@@ -485,7 +485,7 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 <p><strong>第三步验证</strong></p>
 <p>这一步其实就是上面质询过程中的第4点，为了更方便理解，所以没有拆分</p>
 <p><strong>总结</strong></p>
-<p>这里有一个总结的图示：<br><img src="https://img-blog.csdnimg.cn/1e23b05cd1ba468da5a3607198c34fb8.png"></p>
+<p>这里有一个总结的图示：<br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/4.png"></p>
 <h2 id="NTLM-v1与NTLM-v2的差别"><a href="#NTLM-v1与NTLM-v2的差别" class="headerlink" title="NTLM v1与NTLM v2的差别"></a>NTLM v1与NTLM v2的差别</h2><ul>
 <li>NTLM v1与NTLM v2最大的差别就是challenge与加密算法不同</li>
 <li>challenge:NTLM v1的challenge有8位，NTLM v2的challenge有16位</li>
@@ -507,7 +507,7 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 <li>AS（Authentication Service）:为client生成TGT的服务</li>
 <li>TGS(Ticket Granting Service)：为client生成某个服务的ticket。生成ST的地方</li>
 </ul>
-<p><img src="https://img-blog.csdnimg.cn/6db417b0200d497d80d128df1cb84d5d.png"></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/5.png"></p>
 <p><strong>域认证流程——粗略流程</strong></p>
 <ol>
 <li>client向kerberos服务（就是我们的域控上的一个服务）请求，希望获得访问server的权限。kerberos服务得到了这个消息，首先判断client是否是可信赖的（就是判断是否是此域内的机器），也就是白名单黑名单的说法。这就是AS服务完成的工作，通过在AD中存储黑名单和白名单来区分client。成功后AS返回TGT给客户端。(AS_REQ与AS_REP)</li>
@@ -521,10 +521,10 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 <li>域用户的密码的NTLM hash是可以域控上查到的，然后就会使用这个客户端用户对应的NTLM hash来加密我们的session key，并将加密后的值返回发送给客户端。 </li>
 <li>然后域控这里下一步会使用KDC服务对应的用户的NTLM hash，对session key和一些客户端的信息再进行加密，最后加密出的结果也就是我们常说的TGT，并将他连同3中加密出的值一同返回发送给客户端</li>
 </ol>
-<p><img src="https://img-blog.csdnimg.cn/ed9ba3d2b2924f8f9cab78615e99173c.png"></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/6.png"></p>
 <p>我们再来用两张图详细的剖析下上面所说的”客户端发送”与”KDC返回”这样的两个过程：</p>
-<p>发送：<br><img src="https://img-blog.csdnimg.cn/432bebdcb0904e769431d8cdfc3fcc77.png"></p>
-<p>返回：<br><img src="https://img-blog.csdnimg.cn/cee85d15e5034f8d94026566a093574f.png"><br>大家可以看到这里的TGT的有效性是有时间限制的</p>
+<p>发送：<br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/7.png"></p>
+<p>返回：<br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/8.png"><br>大家可以看到这里的TGT的有效性是有时间限制的</p>
 <p><strong>域认证流程深入剖析—第二步：获取ST (TGS_REQ与TGS_REP)</strong></p>
 <ol>
 <li>我们的客户端接收到了一个密文和一个TGT </li>
@@ -535,15 +535,15 @@ print binascii<span class="token punctuation">.</span><span class="token functio
 <li>TGS还会提取客户端的所在的域的域名，客户端的用户信息，server session key,到期时间等，来做成ST</li>
 <li>此时TGS还会提取接收到的要访问的服务端的一些信息，并使用服务器端对应的计算机名对应的NTLM hash来加密ST，并将这个密文也返回给客户端</li>
 </ol>
-<p>流程图：<br><img src="https://img-blog.csdnimg.cn/cfb8c8a0370249bba3bf1eaf693c4cf1.png"><br>ST的组成：</p>
-<p><img src="https://img-blog.csdnimg.cn/3ecbd05aa9414bdfb69b99a7bcdf2e20.png"></p>
+<p>流程图：<br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/9.png"><br>ST的组成：</p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/10.png"></p>
 <p><strong>域认证流程深入剖析—第三步：client通过ST访问server (AP_REQ与AP_REP)</strong></p>
 <ol>
 <li>客户端通过session key解密得到server session key，并使用server session key来加密客户端的信息和时间戳，并连同ST一同发给服务端</li>
 <li>因为服务端这台机器上是存着自己的用户hash的，所以我们可以使用Server hash解密得到ST，并得到ST里的end time，用他来判断得到ST是否已经过期，还会得到ST里的server session key，然后会使用这个server session key来解密1步骤的密文，得到客户端的信息和时间戳，然后他会去校验这个客户端信息和ticket里的客户端信息是否相等，还会验证这个时间戳是否大于某个时间。</li>
 </ol>
 <p>简易流程图：</p>
-<p><img src="https://img-blog.csdnimg.cn/7f5e9470c9a94e80ae95c9bb719d0f4d.png"></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/11.png"></p>
 <h2 id="PAC"><a href="#PAC" class="headerlink" title="PAC"></a>PAC</h2><p>在黄金/白银票据的构造分析中，说了开启PAC可以防止白银票据的攻击。</p>
 <p><strong>那么PAC是什么呢？</strong></p>
 <p>我们都知道黄金票价的构造原理就是：掌握KRBTGT用户密码之后可以通过签发一张高权限用户的TGT票据，再利用这个TGT向KDC获取域内服务的ticket来实现对域的控制。那么这里的“高权限用户”是通过什么来判断的呢，答案就是PAC。</p>

