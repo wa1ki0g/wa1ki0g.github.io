@@ -190,7 +190,7 @@
 <p>注册⽤户时发现，仅仅可注册普通⽤户，管理员⽤户不可注册，如图：</p>
 <p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_M3aX8obNZr.png"></p>
 <p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_JfQZ-sYt-J.png"></p>
-<p>尝试绕过&#x2F;admin&#x2F;register 路由鉴权，利⽤⾼低版本 spring-boot 对..&#x2F;的不同处理结合 java 的经典权限绕过<br>⽅式，进⾏绕过。使⽤<a target="_blank" rel="noopener" href="https://github.com/wa1ki0g/NoAuth" title="https:&#x2F;&#x2F;github.com&#x2F;wa1ki0g&#x2F;NoAuth">https://github.com/wa1ki0g/NoAuth</a> 进⾏ fuzz，⼿动测试也可</p>
+<p>尝试绕过&#x2F;admin&#x2F;register 路由鉴权，利⽤⾼低版本 spring-boot 对..&#x2F;的不同处理结合 java 的经典权限绕过<br>⽅式，进⾏绕过。使⽤<a target="_blank" rel="noopener" href="https://github.com/wa1ki0g/NoAuth" title="https://github.com/wa1ki0g/NoAuth">https://github.com/wa1ki0g/NoAuth</a> 进⾏ fuzz，⼿动测试也可</p>
 <p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_Ot74jONid-.png"></p>
 <p>发现多个 405 ⽅法，405 代表有权限只是没参数：</p>
 <p><img src="/2025/03/20/%E7%A7%BB%E5%8A%A8%E5%A4%A7%E6%AF%94%E6%AD%A6%E6%9F%90web%E9%A2%98%E5%87%BA%E9%A2%98%E6%96%87%E6%A1%A3%E4%B8%8Ewp%E2%80%94%E4%BB%8E%E5%AE%9E%E6%88%98%E5%87%BA%E5%8F%91/image_vRMY-vaBax.png"></p>

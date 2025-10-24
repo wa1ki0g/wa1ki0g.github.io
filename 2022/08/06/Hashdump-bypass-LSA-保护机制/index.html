@@ -220,11 +220,11 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pypykatz live lsa--method handledup</span><br></pre></td></tr></table></figure>
 
 <p>但是这种方法有点随机。成功的机会很大程度上取决于目标环境</p>
-<h4 id="PPLKiller"><a href="#PPLKiller" class="headerlink" title="PPLKiller"></a><strong>PPLKiller</strong></h4><p><strong>PPLKiller是一个内核模式驱动程序，可以利用他在所有进程上一键禁用 Protected Process Light 保护</strong>：<a target="_blank" rel="noopener" href="https://github.com/Mattiwatti/PPLKiller" title="https:&#x2F;&#x2F;github.com&#x2F;Mattiwatti&#x2F;PPLKiller">https://github.com/Mattiwatti/PPLKiller</a></p>
+<h4 id="PPLKiller"><a href="#PPLKiller" class="headerlink" title="PPLKiller"></a><strong>PPLKiller</strong></h4><p><strong>PPLKiller是一个内核模式驱动程序，可以利用他在所有进程上一键禁用 Protected Process Light 保护</strong>：<a target="_blank" rel="noopener" href="https://github.com/Mattiwatti/PPLKiller" title="https://github.com/Mattiwatti/PPLKiller">https://github.com/Mattiwatti/PPLKiller</a></p>
 <p>原理是通过<strong>遍历，将 Protection.level、SignatureLevel 及 SectionSignatureLevel 都更改为 0 。</strong></p>
 <p><img src="/2022/08/06/Hashdump-bypass-LSA-%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/image_45Y0sdwjFI.png"></p>
 <p><img src="/2022/08/06/Hashdump-bypass-LSA-%E4%BF%9D%E6%8A%A4%E6%9C%BA%E5%88%B6/image_fx_AUXBJZf.png"></p>
-<h4 id="非驱动式绕过"><a href="#非驱动式绕过" class="headerlink" title="非驱动式绕过"></a>非驱动式绕过</h4><p>老外写的可以不使用驱动相关的程序，来进行绕过的文章：<br><a target="_blank" rel="noopener" href="https://blog.scrt.ch/2021/04/22/bypassing-lsa-protection-in-userland/" title="https:&#x2F;&#x2F;blog.scrt.ch&#x2F;2021&#x2F;04&#x2F;22&#x2F;bypassing-lsa-protection-in-userland&#x2F;">https://blog.scrt.ch/2021/04/22/bypassing-lsa-protection-in-userland/</a></p>
+<h4 id="非驱动式绕过"><a href="#非驱动式绕过" class="headerlink" title="非驱动式绕过"></a>非驱动式绕过</h4><p>老外写的可以不使用驱动相关的程序，来进行绕过的文章：<br><a target="_blank" rel="noopener" href="https://blog.scrt.ch/2021/04/22/bypassing-lsa-protection-in-userland/" title="https://blog.scrt.ch/2021/04/22/bypassing-lsa-protection-in-userland/">https://blog.scrt.ch/2021/04/22/bypassing-lsa-protection-in-userland/</a></p>
 
   </div>
 </article>

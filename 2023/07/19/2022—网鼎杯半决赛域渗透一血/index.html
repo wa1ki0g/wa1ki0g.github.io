@@ -263,7 +263,7 @@
 <p>接着我们通过颁发的证书对KDC进行PKINT kerberosr身份验证，并获取域控制器的TGT票据：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains certipy auth -pfx xr-dc01.<span class="property">pfx</span> -dc-ip <span class="number">172.22</span><span class="number">.15</span><span class="number">.13</span> -debug</span><br></pre></td></tr></table></figure>
 
-<p><strong>在执行上面的命令时，报了KDC_ERR_PADATA_TYPE_NOSUPP 错误，显示 KDC 不支持 PADATA 类型，详细内容</strong><a target="_blank" rel="noopener" href="https://whoamianony.top/posts/pass-the-certificate-when-pkinit-is-nosupp/" title="：https:&#x2F;&#x2F;whoamianony.top&#x2F;posts&#x2F;pass-the-certificate-when-pkinit-is-nosupp&#x2F;">：https://whoamianony.top/posts/pass-the-certificate-when-pkinit-is-nosupp/</a></p>
+<p><strong>在执行上面的命令时，报了KDC_ERR_PADATA_TYPE_NOSUPP 错误，显示 KDC 不支持 PADATA 类型，详细内容</strong><a target="_blank" rel="noopener" href="https://whoamianony.top/posts/pass-the-certificate-when-pkinit-is-nosupp/" title="：https://whoamianony.top/posts/pass-the-certificate-when-pkinit-is-nosupp/">：https://whoamianony.top/posts/pass-the-certificate-when-pkinit-is-nosupp/</a></p>
 <p><img src="/2023/07/19/2022%E2%80%94%E7%BD%91%E9%BC%8E%E6%9D%AF%E5%8D%8A%E5%86%B3%E8%B5%9B%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B8%80%E8%A1%80/image_BisYRDfwEH.png"></p>
 <p>直接用文章里的方法：</p>
 <p><img src="/2023/07/19/2022%E2%80%94%E7%BD%91%E9%BC%8E%E6%9D%AF%E5%8D%8A%E5%86%B3%E8%B5%9B%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B8%80%E8%A1%80/image_2SQBfoREeT.png"></p>

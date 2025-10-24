@@ -180,7 +180,7 @@
 <h2 id="实战bypass-出网策略限制"><a href="#实战bypass-出网策略限制" class="headerlink" title="实战bypass-出网策略限制"></a>实战bypass-出网策略限制</h2><p>当你发现poc又打不通的时候，这个时候有可能是出网策略限制。一般政务系统的都会不出网，或者都会设置下出网策略，当你代理到burp见到如下响应包时，想想咋绕吧。之前通过http:&#x2F;&#x2F;domain:443这种域名➕443端口绕过了几个，具体的可以fuzz一下，这也是当时fuzz出的地址，好几个也都能用</p>
 <p><img src="/2025/03/29/%E6%B3%9B%E5%BE%AEE-mobile%E6%9C%AA%E5%85%AC%E5%BC%80%E5%89%8D%E5%8F%B0rce%E4%B8%8E%E6%89%93%E7%82%B9bypass/image_VUh5WKA5Ux.png"></p>
 <h1 id="实战bypass—内存马"><a href="#实战bypass—内存马" class="headerlink" title="实战bypass—内存马"></a>实战bypass—内存马</h1><p>freemarke模版引擎，换下html里的payload就行了，JMG封装好了一把嗦了就行</p>
-<h1 id="poc"><a href="#poc" class="headerlink" title="poc"></a>poc</h1><p><a target="_blank" rel="noopener" href="https://github.com/wa1ki0g/e-Mobile-rce-2024.3" title="https:&#x2F;&#x2F;github.com&#x2F;wa1ki0g&#x2F;e-Mobile-rce-2024.3">https://github.com/wa1ki0g/e-Mobile-rce-2024.3</a></p>
+<h1 id="poc"><a href="#poc" class="headerlink" title="poc"></a>poc</h1><p><a target="_blank" rel="noopener" href="https://github.com/wa1ki0g/e-Mobile-rce-2024.3" title="https://github.com/wa1ki0g/e-Mobile-rce-2024.3">https://github.com/wa1ki0g/e-Mobile-rce-2024.3</a></p>
 <h1 id="彩蛋"><a href="#彩蛋" class="headerlink" title="彩蛋"></a>彩蛋</h1><p>根本没这个洞，能rce是因为上面的poc覆盖掉了原本的error模版文件</p>
 <p><img src="/2025/03/29/%E6%B3%9B%E5%BE%AEE-mobile%E6%9C%AA%E5%85%AC%E5%BC%80%E5%89%8D%E5%8F%B0rce%E4%B8%8E%E6%89%93%E7%82%B9bypass/image_CrB47UsVWe.png"></p>
 
